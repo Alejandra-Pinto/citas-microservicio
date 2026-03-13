@@ -15,11 +15,11 @@ export class CitaRepositoryImpl implements CitaRepository {
     especialistaId: string,
     fecha: string,
   ): Promise<Cita[]> {
-    const resultado = this.citas.filter(
-      (c) =>
-        c.especialistaId === especialistaId &&
-        c.fechaHora.toISOString().startsWith(fecha),
-    );
+    const resultado = this.citas.filter((c) => {
+      const fechaCita = new Date(c.fechaHora).toISOString().split('T')[0];
+
+      return c.especialistaId === especialistaId && fechaCita === fecha;
+    });
 
     return Promise.resolve(resultado);
   }
