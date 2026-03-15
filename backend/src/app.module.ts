@@ -1,4 +1,5 @@
 import { Module } from '@nestjs/common';
+import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { AgendamientoModule } from './modules/agendamiento/agendamiento.module';
@@ -11,6 +12,16 @@ import { AuditoriaModule } from './modules/auditoria/auditoria.module';
 
 @Module({
   imports: [
+    TypeOrmModule.forRoot({
+      type: 'postgres',
+      host: 'localhost',
+      port: 5432,
+      username: 'postgres',
+      password: '020406',
+      database: 'piedra_azul',
+      autoLoadEntities: true,
+      synchronize: true,
+    }),
     AgendamientoModule,
     PacienteModule,
     EspecialistaModule,
