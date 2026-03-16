@@ -1,39 +1,61 @@
 import { Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+
 import { CitaRepository } from '../../domain/repositories/cita.repository';
 import { Cita } from '../../domain/entities/cita.entity';
+import { CitaOrmEntity } from './cita.orm-entity';
 
 @Injectable()
 export class CitaRepositoryImpl implements CitaRepository {
-  private citas: Cita[] = [];
+  constructor(
+    @InjectRepository(CitaOrmEntity)
+    private repo: Repository<CitaOrmEntity>,
+  ) {}
 
-  guardar(cita: Cita): Promise<void> {
-    this.citas.push(cita);
-    return Promise.resolve();
+  async guardar(cita: Cita): Promise<void> {
+    const entity = this.repo.create({
+      id: cita.id,
+      pacienteId: cita.pacienteId,
+      especialistaId: cita.especialistaId,
+      fechaHora: cita.fechaHora,
+      estado: cita.estado,
+    });
+
+    await this.repo.save(entity);
   }
 
-  buscarPorProfesionalYFecha(
+  async buscarPorProfesionalYFecha(
     especialistaId: string,
     fecha: string,
   ): Promise<Cita[]> {
-    const resultado = this.citas.filter((c) => {
-      const fechaCita = new Date(c.fechaHora).toISOString().split('T')[0];
-
-      return c.especialistaId === especialistaId && fechaCita === fecha;
+    const citas = await this.repo.find({
+      where: {
+        especialistaId,
+      },
     });
-
-    return Promise.resolve(resultado);
+    return citas
+      .filter((c) => {
+        const fechaCita = c.fechaHora.toISOString().split('T')[0];
+        return fechaCita === fecha;
+      })
+      .map(
+        (c) =>
+          new Cita(c.id, c.pacienteId, c.especialistaId, c.fechaHora, c.estado),
+      );
   }
 
-  existeCitaEnHorario(
+  async existeCitaEnHorario(
     especialistaId: string,
     fechaHora: Date,
   ): Promise<boolean> {
-    const existe = this.citas.some(
-      (c) =>
-        c.especialistaId === especialistaId &&
-        c.fechaHora.getTime() === fechaHora.getTime(),
-    );
+    const count = await this.repo.count({
+      where: {
+        especialistaId,
+        fechaHora,
+      },
+    });
 
-    return Promise.resolve(existe);
+    return count > 0;
   }
 }
