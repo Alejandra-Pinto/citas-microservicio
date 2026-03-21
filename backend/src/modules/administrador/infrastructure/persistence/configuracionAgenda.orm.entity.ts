@@ -16,7 +16,4 @@ export class ConfiguracionAgendaOrm {
 
   @Column()
   horaFin: string;
-
-  @Column()
-  intervaloMinutos: number;
 }

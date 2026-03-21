@@ -28,7 +28,6 @@ export class ConfiguracionRepositoryImpl implements ConfiguracionRepository {
       data[0].diasAtencion,
       data[0].horaInicio,
       data[0].horaFin,
-      data[0].intervaloMinutos,
     );
   }
 }

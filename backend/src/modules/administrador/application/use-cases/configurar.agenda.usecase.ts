@@ -23,7 +23,6 @@ export class ConfigurarAgendaUseCase {
         dto.diasAtencion,
         dto.horaInicio,
         dto.horaFin,
-        dto.intervaloMinutos,
       );
 
       await this.repo.guardar(config);
@@ -37,7 +36,6 @@ export class ConfigurarAgendaUseCase {
       dto.diasAtencion,
       dto.horaInicio,
       dto.horaFin,
-      dto.intervaloMinutos,
     );
 
     await this.repo.guardar(nueva);

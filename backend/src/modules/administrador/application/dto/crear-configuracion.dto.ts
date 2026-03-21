@@ -3,5 +3,4 @@ export class ConfigurarAgendaDto {
   diasAtencion: string[];
   horaInicio: string;
   horaFin: string;
-  intervaloMinutos: number;
 }
