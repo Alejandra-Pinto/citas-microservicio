@@ -17,6 +17,9 @@ export class EspecialistaRepositoryImpl implements EspecialistaRepository {
   ) {}
 
   async save(especialista: Especialista): Promise<void> {
+    if (!especialista.id) {
+      throw new Error('El id no puede ser null');
+    }
     const entity = this.repo.create({
       id: especialista.id,
       nombres: especialista.nombres,

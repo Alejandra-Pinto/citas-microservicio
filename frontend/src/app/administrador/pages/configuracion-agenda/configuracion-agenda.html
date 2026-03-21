@@ -1,0 +1,61 @@
+<div class="page">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <h2>Piedra Azul</h2>
+    <nav>
+      <a>Inicio</a>
+      <a class="active">Citas</a>
+      <a>Pacientes</a>
+      <a>Perfil</a>
+    </nav>
+  </aside>
+
+  <!-- CONTENIDO -->
+  <main class="content">
+
+    <h1>Configuración de Agenda</h1>
+    <p class="subtitle">Define los horarios de atención médica</p>
+
+    <div class="card">
+
+      <div class="form-grid">
+
+        <div class="form-group">
+          <label>Hora inicio</label>
+          <input type="time" [(ngModel)]="config.horaInicio">
+        </div>
+
+        <div class="form-group">
+          <label>Hora fin</label>
+          <input type="time" [(ngModel)]="config.horaFin">
+        </div>
+
+        <div class="form-group">
+          <label>Semanas disponibles</label>
+          <input type="number" [(ngModel)]="config.semanasDisponibles">
+        </div>
+
+      </div>
+
+      <div class="form-group">
+        <label>Días laborales</label>
+        <div class="dias">
+          <button
+            *ngFor="let dia of ['Lunes','Martes','Miércoles','Jueves','Viernes']"
+            (click)="toggleDia(dia)"
+            [class.active]="config.diasAtencion.includes(dia.toUpperCase())">
+            {{ dia }}
+          </button>
+        </div>
+      </div>
+
+      <button class="btn-primary" (click)="guardar()">
+        Guardar Configuración
+      </button>
+
+    </div>
+
+  </main>
+
+</div>

@@ -1,0 +1,114 @@
+.page {
+  display: flex;
+  height: 100vh;
+  font-family: 'Segoe UI', sans-serif;
+  background: #f5f7fb;
+}
+
+/* SIDEBAR */
+.sidebar {
+  width: 220px;
+  background: #ffffff;
+  padding: 20px;
+  border-right: 1px solid #eee;
+
+  h2 {
+    margin-bottom: 30px;
+    font-size: 20px;
+  }
+
+  nav a {
+    display: block;
+    padding: 10px;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    color: #333;
+    cursor: pointer;
+  }
+
+  nav a.active {
+    background: #e3f0ff;
+    color: #1976d2;
+    font-weight: bold;
+  }
+}
+
+/* CONTENIDO */
+.content {
+  flex: 1;
+  padding: 40px;
+}
+
+h1 {
+  margin-bottom: 5px;
+}
+
+.subtitle {
+  color: #777;
+  margin-bottom: 25px;
+}
+
+/* CARD */
+.card {
+  background: white;
+  padding: 25px;
+  border-radius: 16px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.05);
+}
+
+/* GRID */
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  margin-bottom: 20px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+label {
+  font-weight: 600;
+  margin-bottom: 5px;
+}
+
+input {
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+}
+
+/* DIAS */
+.dias {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.dias button {
+  padding: 10px 15px;
+  border-radius: 8px;
+  border: none;
+  background: #f0f0f0;
+  cursor: pointer;
+}
+
+.dias button.active {
+  background: #1976d2;
+  color: white;
+}
+
+/* BOTON */
+.btn-primary {
+  margin-top: 20px;
+  width: 100%;
+  padding: 12px;
+  border: none;
+  border-radius: 10px;
+  background: linear-gradient(135deg, #1976d2, #42a5f5);
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+}
