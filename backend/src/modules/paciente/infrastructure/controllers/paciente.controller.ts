@@ -22,6 +22,7 @@ export class PacienteController {
     return this.listarPaciente.ejecutar();
   }
 
+  @Get(':documento')
   async buscarPorDocumento(@Param('documento') documento: string) {
     return this.buscarPaciente.ejecutar(documento);
   }

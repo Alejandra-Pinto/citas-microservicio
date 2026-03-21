@@ -6,18 +6,35 @@ import { CrearCitaManualUseCase } from './application/use-cases/crear-cita-manua
 import { ListarCitasProfesionalUseCase } from './application/use-cases/listar-citas-profesional.usecase';
 import { PoliticaAgendamientoService } from './domain/services/politica-agendamiento.service';
 import { CitaRepositoryImpl } from './infrastructure/persistence/cita.repository.impl';
+import { PacienteAdapter } from './infrastructure/adapters/paciente.adapter';
+import { EspecialistaAdapter } from './infrastructure/adapters/especialista.adapter';
+import { PacienteModule } from '../paciente/paciente.module';
+import { EspecialistaModule } from '../especialista/especialista.module';
+import { ObtenerDisponibilidadUseCase } from './application/use-cases/obtener-disponibilidad.usecase';
+import { DisponibilidadAgendamientoService } from './domain/services/disponibilidad-agendamiento.service';
 
 @Module({
+  imports: [
+    TypeOrmModule.forFeature([CitaOrmEntity]),
+    PacienteModule,
+    EspecialistaModule,
+  ],
   controllers: [CitaController],
-  imports: [TypeOrmModule.forFeature([CitaOrmEntity])],
   providers: [
     CrearCitaManualUseCase,
     ListarCitasProfesionalUseCase,
     PoliticaAgendamientoService,
-    {
-      provide: 'CitaRepository',
-      useClass: CitaRepositoryImpl,
-    },
+    ObtenerDisponibilidadUseCase,
+    DisponibilidadAgendamientoService,
+
+    { provide: 'CitaRepository', useClass: CitaRepositoryImpl },
+
+    PacienteAdapter,
+    { provide: 'PacientePort', useExisting: PacienteAdapter },
+
+    EspecialistaAdapter,
+    { provide: 'EspecialistaPort', useExisting: EspecialistaAdapter },
   ],
+  exports: ['PacientePort', 'EspecialistaPort'],
 })
 export class AgendamientoModule {}

@@ -1,7 +1,12 @@
-export type TipoProfesional = 'MEDICO' | 'TERAPISTA';
-
-export type Especialidad = 'TERAPIA_NEURAL' | 'QUIROPRAXIA' | 'FISIOTERAPIA';
-
+export enum TipoProfesional {
+  MEDICO = 'MEDICO',
+  TERAPISTA = 'TERAPISTA',
+}
+export enum Especialidad {
+  TERAPIA_NEURAL = 'TERAPIA_NEURAL',
+  QUIROPRAXIA = 'QUIROPRAXIA',
+  FISIOTERAPIA = 'FISIOTERAPIA',
+}
 export class Especialista {
   constructor(
     public id: string,

@@ -1,4 +1,5 @@
 import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
+import { TipoCita } from '../../domain/entities/cita.entity';
 
 @Entity('citas')
 export class CitaOrmEntity {
@@ -10,6 +11,13 @@ export class CitaOrmEntity {
   especialistaId: string;
   @Column({ type: 'timestamp' })
   fechaHora: Date;
+  @Column()
+  duracion: number;
+  @Column({
+    type: 'enum',
+    enum: TipoCita,
+  })
+  tipo: TipoCita;
   @Column()
   estado: string;
 }

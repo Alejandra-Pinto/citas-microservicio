@@ -1,9 +1,11 @@
+import { GeneroEnum } from '../../infrastructure/persistence/paciente.orm.entity';
+
 export class CrearPacienteDto {
   documento: string;
   nombres: string;
   apellidos: string;
   celular: string;
-  generoP: 'MASCULINO' | 'FEMENINO' | 'OTRO';
+  generoP: GeneroEnum;
   fechaNacimiento?: Date;
   email?: string;
 }

@@ -1,7 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-
 import { CitaRepository } from '../../domain/repositories/cita.repository';
 import { Cita } from '../../domain/entities/cita.entity';
 import { CitaOrmEntity } from './cita.orm-entity';
@@ -19,6 +18,8 @@ export class CitaRepositoryImpl implements CitaRepository {
       pacienteId: cita.pacienteId,
       especialistaId: cita.especialistaId,
       fechaHora: cita.fechaHora,
+      duracion: cita.duracion,
+      tipo: cita.tipo,
       estado: cita.estado,
     });
 
@@ -41,7 +42,15 @@ export class CitaRepositoryImpl implements CitaRepository {
       })
       .map(
         (c) =>
-          new Cita(c.id, c.pacienteId, c.especialistaId, c.fechaHora, c.estado),
+          new Cita(
+            c.id,
+            c.pacienteId,
+            c.especialistaId,
+            c.fechaHora,
+            c.duracion,
+            c.tipo,
+            c.estado,
+          ),
       );
   }
 
