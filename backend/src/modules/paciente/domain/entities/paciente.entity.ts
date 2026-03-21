@@ -1,4 +1,5 @@
 export type generoP = 'MASCULINO' | 'FEMENINO' | 'OTRO';
+import { GeneroEnum } from '../../infrastructure/persistence/paciente.orm.entity';
 
 export class Paciente {
   constructor(
@@ -6,7 +7,7 @@ export class Paciente {
     public nombres: string,
     public apellidos: string,
     public celular: string,
-    public genero: generoP,
+    public genero: GeneroEnum,
     public fechaNacimiento?: Date,
     public email?: string,
     public activo: boolean = true,

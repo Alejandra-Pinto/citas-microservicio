@@ -5,8 +5,12 @@ import { ListarPacientesUseCase } from './application/use-cases/listar-pacientes
 import { PacienteRepositoryImpl } from './infrastructure/persistence/paciente.repository.impl';
 import { ValidacionPacienteService } from './domain/services/validacion-paciente.service';
 import { BuscarPacienteUseCase } from './application/use-cases/buscar-paciente.usecase';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { PacienteOrmEntity } from './infrastructure/persistence/paciente.orm.entity';
 
 @Module({
+  imports: [TypeOrmModule.forFeature([PacienteOrmEntity])],
+
   controllers: [PacienteController],
 
   providers: [
