@@ -1,0 +1,230 @@
+
+<body class="bg-background text-on-background h-full overflow-hidden flex">
+<!-- SideNavBar (Predicted Component) -->
+<aside class="fixed left-0 top-0 h-screen w-64 border-r-0 bg-white dark:bg-slate-900 shadow-xl flex flex-col h-full py-6 z-50">
+<div class="container-fluid">
+      <a class="navbar-brand d-flex align-items-center" href="#" style="color: #1D4ED8;"><i class="fas fa-hospital me-2"></i>
+        <div>
+          <div class="fw-bold text-dark">Piedra Azul</div>
+          <div class="text-muted text-extra-small mt-0 txtRedServiciosNavBar" style="font-size: small;">Red de Servicios</div>
+        </div>
+      </a>
+</div>
+<nav class="flex-1 space-y-1">
+<a class="flex items-center gap-3 px-4 py-3 text-slate-600 hover:text-blue-600 mx-2 hover:bg-slate-100 rounded-lg transition-all hover:translate-x-1 duration-200 font-sans text-sm font-medium tracking-wide" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+                Inicio
+            </a>
+<a class="flex items-center gap-3 px-4 py-3 text-blue-700 bg-blue-50 rounded-lg mx-2 transition-all font-sans text-sm font-medium tracking-wide" href="#">
+<span class="material-symbols-outlined" data-icon="calendar_today" style="font-variation-settings: 'FILL' 1;">calendar_today</span>
+                Citas
+            </a>
+<a class="flex items-center gap-3 px-4 py-3 text-slate-600 hover:text-blue-600 mx-2 hover:bg-slate-100 rounded-lg transition-all hover:translate-x-1 duration-200 font-sans text-sm font-medium tracking-wide" href="#">
+<span class="material-symbols-outlined" data-icon="group">group</span>
+                Pacientes
+            </a>
+<a class="flex items-center gap-3 px-4 py-3 text-slate-600 hover:text-blue-600 mx-2 hover:bg-slate-100 rounded-lg transition-all hover:translate-x-1 duration-200 font-sans text-sm font-medium tracking-wide" href="#">
+<span class="material-symbols-outlined" data-icon="person">person</span>
+                Perfil
+            </a>
+</nav>
+<div class="px-4 mt-auto">
+<button class="w-full py-3 px-4 bg-primary text-white rounded-xl font-bold text-sm shadow-lg shadow-blue-200 hover:bg-primary-container transition-all active:scale-95 flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-sm" data-icon="add">add</span>
+                Nueva Cita
+            </button>
+</div>
+</aside>
+<!-- Main Content Area -->
+<main class="flex-1 ml-64 min-h-screen overflow-y-auto flex flex-col">
+<!-- TopAppBar (Predicted Component) -->
+<header class="w-full sticky top-0 z-40 bg-white/80 backdrop-blur-md shadow-sm flex items-center justify-between px-8 py-4">
+<div class="flex items-center gap-8">
+<h2 class="text-xl font-bold tracking-tight text-slate-900">Agendar Cita</h2>
+<div class="relative">
+<span class="absolute left-3 top-1/2 -translate-y-1/2 material-symbols-outlined text-slate-400 text-sm" data-icon="search">search</span>
+<input class="pl-10 pr-4 py-2 bg-slate-100 border-none rounded-full text-xs w-64 focus:ring-2 focus:ring-blue-500 transition-all" placeholder="Buscar pacientes o expedientes..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<button class="p-2 text-slate-500 hover:bg-slate-50 rounded-full transition-colors relative">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+<span class="absolute top-2 right-2 w-2 h-2 bg-error rounded-full border-2 border-white"></span>
+</button>
+<button class="p-2 text-slate-500 hover:bg-slate-50 rounded-full transition-colors">
+<span class="material-symbols-outlined" data-icon="help">help</span>
+</button>
+<div class="h-8 w-[1px] bg-slate-200 mx-2"></div>
+<div class="flex items-center gap-3 cursor-pointer hover:bg-slate-50 p-1 pr-3 rounded-full transition-colors">
+<div class="w-8 h-8 rounded-full overflow-hidden border border-slate-200">
+<img class="w-full h-full object-cover" data-alt="Portrait of a professional doctor avatar" src="https://lh3.googleusercontent.com/aida-public/AB6AXuClcSPqQCS48GC0J4KE-zQZuRyPDHfQ4jSMfTRUrYJdamA9O3IuGpcHcB8dUzQzvxWy7w2H-G9kaH65472LvHfxUoQClxleMySoVvvSZmdE1n90M2LXDAVBcydhytDmEGjvdK6dAyAYQtshjNlVRXTMkWMRNn2e0kJKJqchKG05QjQsjX6U97g31pWGSXb5WhKTipgV4jnfgHMLkihohjl5wStrWBrVg80sXedS5FXisUQjCk8bu3QzwHJe2dFlEGEKyBpKaXp7cxo"/>
+</div>
+<div class="hidden lg:block">
+<p class="text-xs font-bold text-slate-900 leading-none">Dr. Ricardo Sosa</p>
+<p class="text-[10px] text-slate-500 font-medium">Administrador</p>
+</div>
+</div>
+</div>
+</header>
+<!-- Canvas Area -->
+<section class="p-8 max-w-6xl mx-auto w-full">
+<div class="grid grid-cols-12 gap-8">
+<!-- Left Column: Form -->
+<div class="col-span-12 lg:col-span-8 space-y-8">
+<!-- Appointment Form Card -->
+<div class="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
+<div class="p-8 border-b border-slate-50">
+<h3 class="text-xl font-bold text-on-surface">Detalles de la Cita</h3>
+<p class="text-sm text-on-surface-variant mt-1">Complete la información para registrar una nueva consulta médica.</p>
+</div>
+<div class="p-8 space-y-6">
+<!-- Patient Lookup -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+<div class="space-y-2">
+<label class="text-[10px] uppercase tracking-widest font-bold text-slate-500">Cédula de Identidad</label>
+<div class="relative">
+<input class="w-full px-4 py-3 bg-slate-50 border-slate-200 rounded-xl focus:ring-blue-600 focus:border-blue-600 text-sm font-medium" type="text" value="1.234.567-8"/>
+<div class="absolute right-3 top-1/2 -translate-y-1/2 flex items-center text-blue-600">
+<span class="material-symbols-outlined text-lg" data-icon="check_circle" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+</div>
+</div>
+</div>
+<div class="space-y-2">
+<label class="text-[10px] uppercase tracking-widest font-bold text-slate-500">Nombre del Paciente</label>
+<input class="w-full px-4 py-3 bg-slate-100 border-transparent rounded-xl text-slate-600 text-sm font-medium cursor-not-allowed" readonly="" type="text" value="Elena Maria Rodriguez"/>
+</div>
+</div>
+<!-- Appointment Type Toggle -->
+<div class="space-y-3">
+<label class="text-[10px] uppercase tracking-widest font-bold text-slate-500">Tipo de Consulta</label>
+<div class="flex gap-4">
+<button class="flex-1 flex items-center justify-center gap-2 py-4 rounded-xl border-2 border-primary bg-blue-50 text-primary font-bold transition-all">
+<span class="material-symbols-outlined" data-icon="medical_information">medical_information</span>
+                                        Primera Cita
+                                    </button>
+<button class="flex-1 flex items-center justify-center gap-2 py-4 rounded-xl border-2 border-slate-100 bg-white text-slate-400 hover:border-slate-200 hover:text-slate-600 font-bold transition-all">
+<span class="material-symbols-outlined" data-icon="history">history</span>
+                                        Control
+                                    </button>
+</div>
+</div>
+<!-- Date and Time -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+<div class="space-y-2">
+<label class="text-[10px] uppercase tracking-widest font-bold text-slate-500">Fecha de Cita</label>
+<div class="relative">
+<input class="w-full px-4 py-3 bg-slate-50 border-slate-200 rounded-xl focus:ring-blue-600 focus:border-blue-600 text-sm font-medium" type="date"/>
+</div>
+</div>
+<div class="space-y-2">
+<label class="text-[10px] uppercase tracking-widest font-bold text-slate-500">Horario Disponible</label>
+<select class="w-full px-4 py-3 bg-slate-50 border-slate-200 rounded-xl focus:ring-blue-600 focus:border-blue-600 text-sm font-medium">
+<option>09:00 AM</option>
+<option>10:30 AM</option>
+<option>02:15 PM</option>
+<option>04:00 PM</option>
+</select>
+</div>
+</div>
+<!-- Specialist Selection -->
+<div class="space-y-3">
+<label class="text-[10px] uppercase tracking-widest font-bold text-slate-500">Especialista Asignado</label>
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+<label class="relative flex items-center gap-4 p-4 rounded-xl border-2 border-slate-100 bg-white hover:border-blue-200 transition-all cursor-pointer group">
+<input checked="" class="absolute right-4 top-4 text-blue-600 focus:ring-blue-600" name="specialist" type="radio"/>
+<div class="w-12 h-12 rounded-full overflow-hidden bg-slate-100">
+<img class="w-full h-full object-cover" data-alt="Female doctor Dr. Sofia Gomez portrait" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCu6rQTDoTWc_19wBig-oJ74Ae7qd1N0tpYh6vOOfQGJyD8qr926aPA3OYQElbzzZeW_nz4MP1yVS8Z3Zx6E3njoH674bgSEPJekBSThsfOz8NqVISvgWkm24q6yf56y8stRGKYuLmFP1zj63WmOPzrnCyFkl_6I2eLEePggrVy8_SHvnRmUPZAfUDYiVaXno7eHD1mtfXZ1pe_pP0HRR_WO4seKHvaBMaMLalICfUkWCjmVtFHWKQgwMGKwc01-beh8vr6c1TnWoQ"/>
+</div>
+<div>
+<p class="text-sm font-bold text-slate-900">Dr. Sofia Gomez</p>
+<p class="text-[10px] text-slate-500">Cardiología</p>
+</div>
+</label>
+<label class="relative flex items-center gap-4 p-4 rounded-xl border-2 border-slate-100 bg-white hover:border-blue-200 transition-all cursor-pointer group">
+<input class="absolute right-4 top-4 text-blue-600 focus:ring-blue-600" name="specialist" type="radio"/>
+<div class="w-12 h-12 rounded-full overflow-hidden bg-slate-100">
+<img class="w-full h-full object-cover" data-alt="Male doctor Dr. Luis Martinez portrait" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDxW1yI_P011JZrZJmsCBNghprQFlsRyBQb3u1z4Aciun9p04iZnAtQV-Yu3DeYZ8m8wkqsd3SMuyx2TEqEH_tRuJ3uc7B2h_0Gv2lmpXHU6NlcAA3we5c4BZ17HGbReSdLqBwiVp7u7HyfBZaLEDz46WugeEHePd2pWHYd10o2rMglloZ1S0TJvXLxktgEnNQKvIJbwg7dR998xOC4uKPPIgPGxii7106pl3SQfRz74PycFVNqKhBTqh-hwvEma_fDYJ-1T8fKUA4"/>
+</div>
+<div>
+<p class="text-sm font-bold text-slate-900">Dr. Luis Martinez</p>
+<p class="text-[10px] text-slate-500">Pediatría</p>
+</div>
+</label>
+</div>
+</div>
+</div>
+<div class="p-8 bg-slate-50 border-t border-slate-100 flex justify-end gap-4">
+<button class="px-6 py-3 text-slate-600 font-bold text-sm hover:bg-slate-200 rounded-xl transition-all">Cancelar</button>
+<button class="px-10 py-3 bg-primary text-white font-bold text-sm rounded-xl shadow-lg shadow-blue-200 hover:bg-primary-container transition-all active:scale-95">Confirmar Cita</button>
+</div>
+</div>
+</div>
+<!-- Right Column: Context/Info -->
+<div class="col-span-12 lg:col-span-4 space-y-6">
+<!-- Patient Summary Card (Editorial Style) -->
+<div class="bg-primary text-white p-8 rounded-2xl shadow-xl relative overflow-hidden">
+<div class="relative z-10">
+<span class="text-[9px] font-black uppercase tracking-[0.2em] opacity-80">Expediente Médico</span>
+<h4 class="text-2xl font-bold mt-2">Elena Rodriguez</h4>
+<p class="text-xs opacity-80 mt-1">Última visita: 12 Mayo, 2023</p>
+<div class="mt-8 grid grid-cols-2 gap-4">
+<div class="bg-white/10 backdrop-blur-md p-3 rounded-xl">
+<p class="text-[9px] uppercase font-bold opacity-60">Edad</p>
+<p class="text-lg font-bold">28 años</p>
+</div>
+<div class="bg-white/10 backdrop-blur-md p-3 rounded-xl">
+<p class="text-[9px] uppercase font-bold opacity-60">Tipo Sangre</p>
+<p class="text-lg font-bold">O Positive</p>
+</div>
+</div>
+<button class="mt-8 w-full py-3 bg-white text-primary font-bold text-xs rounded-lg hover:bg-blue-50 transition-colors">
+                                Ver Historial Completo
+                            </button>
+</div>
+<!-- Abstract Gradient Pattern -->
+<div class="absolute -right-10 -bottom-10 w-40 h-40 bg-blue-400/20 rounded-full blur-3xl"></div>
+<div class="absolute -left-10 -top-10 w-40 h-40 bg-blue-300/10 rounded-full blur-3xl"></div>
+</div>
+<!-- Daily Stats Card -->
+<div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
+<h4 class="text-xs font-bold uppercase tracking-widest text-slate-400 mb-6">Disponibilidad Hoy</h4>
+<div class="space-y-4">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-3">
+<div class="w-2 h-2 rounded-full bg-emerald-500"></div>
+<span class="text-sm font-medium text-slate-700">Dr. Gomez</span>
+</div>
+<span class="text-xs font-bold text-slate-400">4 Libres</span>
+</div>
+<div class="w-full bg-slate-100 h-1.5 rounded-full overflow-hidden">
+<div class="bg-emerald-500 h-full w-[65%]"></div>
+</div>
+<div class="flex items-center justify-between mt-6">
+<div class="flex items-center gap-3">
+<div class="w-2 h-2 rounded-full bg-amber-500"></div>
+<span class="text-sm font-medium text-slate-700">Dr. Martinez</span>
+</div>
+<span class="text-xs font-bold text-slate-400">2 Libres</span>
+</div>
+<div class="w-full bg-slate-100 h-1.5 rounded-full overflow-hidden">
+<div class="bg-amber-500 h-full w-[85%]"></div>
+</div>
+</div>
+</div>
+<!-- Notification Card -->
+<div class="bg-surface-container-high p-6 rounded-2xl border border-blue-100">
+<div class="flex items-start gap-4">
+<div class="w-10 h-10 rounded-xl bg-blue-100 flex items-center justify-center text-blue-600">
+<span class="material-symbols-outlined" data-icon="info">info</span>
+</div>
+<div>
+<h5 class="text-sm font-bold text-slate-900">Recordatorio de Protocolo</h5>
+<p class="text-xs text-slate-500 mt-1 leading-relaxed">Asegúrese de validar el seguro médico antes de confirmar citas de control.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+</main>
+</body>

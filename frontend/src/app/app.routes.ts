@@ -2,9 +2,23 @@ import { Routes } from '@angular/router';
 
 export const routes: Routes = [
   {
-    path: 'agendar',
+  path: '',
+  loadComponent: () => import('./features/home/home')
+    .then(m => m.Home)
+  },
+  {
+    path: 'agendarUser',
     loadComponent: () => import('./features/agendamiento/pages/asistente/asistente')
       .then(m => m.AsistenteComponent)
   },
-  { path: '', redirectTo: 'agendar', pathMatch: 'full' }
+  {
+    path: 'mis-citas',
+    loadComponent: () => import('./features/components/consulta-citas/consulta-citas')
+      .then(m => m.ConsultaCitas)
+  },
+  {
+  path: 'agendar',
+  loadComponent: () => import('./features/agendamiento/agendamiento/agendamiento')
+    .then(m => m.Agendamiento)
+  }
 ];
