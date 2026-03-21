@@ -3,6 +3,7 @@ import { EspecialistaController } from './infrastructure/controllers/especialist
 import { CrearEspecialistaUseCase } from './application/use-cases/crear-especialista.usecase';
 import { ListarEspecialistasUseCase } from './application/use-cases/listar-especialista.usecase';
 import { EspecialistaRepositoryImpl } from './infrastructure/persistence/especialista.repository.impl';
+import { PoliticaEspecialistaService } from './domain/services/politica-especialista.service';
 
 @Module({
   controllers: [EspecialistaController],
@@ -10,6 +11,7 @@ import { EspecialistaRepositoryImpl } from './infrastructure/persistence/especia
   providers: [
     CrearEspecialistaUseCase,
     ListarEspecialistasUseCase,
+    PoliticaEspecialistaService,
 
     {
       provide: 'EspecialistaRepository',
