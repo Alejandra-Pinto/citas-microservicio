@@ -4,8 +4,11 @@ import { CrearEspecialistaUseCase } from './application/use-cases/crear-especial
 import { ListarEspecialistasUseCase } from './application/use-cases/listar-especialista.usecase';
 import { EspecialistaRepositoryImpl } from './infrastructure/persistence/especialista.repository.impl';
 import { PoliticaEspecialistaService } from './domain/services/politica-especialista.service';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { EspecialistaOrmEntity } from './infrastructure/persistence/especialista.orm-entity';
 
 @Module({
+  imports: [TypeOrmModule.forFeature([EspecialistaOrmEntity])],
   controllers: [EspecialistaController],
 
   providers: [

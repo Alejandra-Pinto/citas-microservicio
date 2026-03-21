@@ -1,37 +1,76 @@
 import { Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 import { EspecialistaRepository } from '../../domain/repositories/especialista.repository';
 import { Especialista } from '../../domain/entities/especialista.entity';
+import type {
+  Especialidad,
+  TipoProfesional,
+} from '../../domain/entities/especialista.entity';
+import { EspecialistaOrmEntity } from './especialista.orm-entity';
 
 @Injectable()
 export class EspecialistaRepositoryImpl implements EspecialistaRepository {
-  private especialistas: Especialista[] = [];
+  constructor(
+    @InjectRepository(EspecialistaOrmEntity)
+    private repo: Repository<EspecialistaOrmEntity>,
+  ) {}
 
-  save(especialista: Especialista): Promise<void> {
-    this.especialistas.push(especialista);
-    return Promise.resolve();
+  async save(especialista: Especialista): Promise<void> {
+    const entity = this.repo.create({
+      id: especialista.id,
+      nombres: especialista.nombres,
+      tipo: especialista.tipo,
+      especialidad: especialista.especialidad,
+      intervaloAtencion: especialista.intervaloAtencion,
+      activo: especialista.activo,
+    });
+
+    await this.repo.save(entity);
   }
 
-  findAll(): Promise<Especialista[]> {
-    return Promise.resolve(this.especialistas);
+  async findAll(): Promise<Especialista[]> {
+    const especialistas = await this.repo.find();
+
+    return especialistas.map(
+      (e) =>
+        new Especialista(
+          e.id,
+          e.nombres,
+          e.tipo as TipoProfesional,
+          e.especialidad as Especialidad,
+          e.intervaloAtencion,
+          e.activo,
+        ),
+    );
   }
 
-  findById(id: string): Promise<Especialista | null> {
-    const especialista = this.especialistas.find((e) => e.id === id) || null;
-    return Promise.resolve(especialista);
+  async findById(id: string): Promise<Especialista | null> {
+    const e = await this.repo.findOne({ where: { id } });
+
+    if (!e) return null;
+
+    return new Especialista(
+      e.id,
+      e.nombres,
+      e.tipo as TipoProfesional,
+      e.especialidad as Especialidad,
+      e.intervaloAtencion,
+      e.activo,
+    );
   }
 
-  update(especialista: Especialista): Promise<void> {
-    const index = this.especialistas.findIndex((e) => e.id === especialista.id);
-
-    if (index !== -1) {
-      this.especialistas[index] = especialista;
-    }
-
-    return Promise.resolve();
+  async update(especialista: Especialista): Promise<void> {
+    await this.repo.update(especialista.id, {
+      nombres: especialista.nombres,
+      tipo: especialista.tipo,
+      especialidad: especialista.especialidad,
+      intervaloAtencion: especialista.intervaloAtencion,
+      activo: especialista.activo,
+    });
   }
 
-  delete(id: string): Promise<void> {
-    this.especialistas = this.especialistas.filter((e) => e.id !== id);
-    return Promise.resolve();
+  async delete(id: string): Promise<void> {
+    await this.repo.delete(id);
   }
 }
