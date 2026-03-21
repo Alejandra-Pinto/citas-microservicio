@@ -1,39 +1,74 @@
 import { Injectable } from '@nestjs/common';
-import { Paciente } from './../../domain/entities/paciente.entity';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+
 import type { PacienteRepository } from '../../domain/repositories/paciente.repository';
+import { Paciente } from '../../domain/entities/paciente.entity';
+import { PacienteOrmEntity } from './paciente.orm.entity';
 
 @Injectable()
 export class PacienteRepositoryImpl implements PacienteRepository {
-  private pacientes: Paciente[] = [];
+  constructor(
+    @InjectRepository(PacienteOrmEntity)
+    private readonly repo: Repository<PacienteOrmEntity>,
+  ) {}
 
-  save(especialista: Paciente): Promise<void> {
-    this.pacientes.push(especialista);
-    return Promise.resolve();
+  async save(paciente: Paciente): Promise<void> {
+    const entity = this.repo.create({
+      documento: paciente.documento,
+      nombres: paciente.nombres,
+      apellidos: paciente.apellidos,
+      celular: paciente.celular,
+      genero: paciente.genero,
+      fechaNacimiento: paciente.fechaNacimiento,
+      email: paciente.email,
+      activo: true,
+    });
+
+    await this.repo.save(entity);
   }
 
-  findAll(): Promise<Paciente[]> {
-    return Promise.resolve(this.pacientes);
+  async findAll(): Promise<Paciente[]> {
+    const entities = await this.repo.find();
+
+    return entities.map((e) => this.toDomain(e));
   }
 
-  findById(id: string): Promise<Paciente | null> {
-    const pacientes = this.pacientes.find((p) => p.documento === id) || null;
-    return Promise.resolve(pacientes);
+  async findById(id: string): Promise<Paciente | null> {
+    const entity = await this.repo.findOneBy({ documento: id });
+
+    if (!entity) return null;
+
+    return this.toDomain(entity);
   }
 
-  update(paciente: Paciente): Promise<void> {
-    const index = this.pacientes.findIndex(
-      (p) => p.documento === paciente.documento,
+  async update(paciente: Paciente): Promise<void> {
+    await this.repo.update(
+      { documento: paciente.documento },
+      {
+        nombres: paciente.nombres,
+        apellidos: paciente.apellidos,
+        celular: paciente.celular,
+        genero: paciente.genero,
+        fechaNacimiento: paciente.fechaNacimiento,
+        email: paciente.email,
+      },
     );
-
-    if (index !== -1) {
-      this.pacientes[index] = paciente;
-    }
-
-    return Promise.resolve();
   }
 
-  delete(id: string): Promise<void> {
-    this.pacientes = this.pacientes.filter((p) => p.documento !== id);
-    return Promise.resolve();
+  async delete(id: string): Promise<void> {
+    await this.repo.delete({ documento: id });
+  }
+
+  private toDomain(entity: PacienteOrmEntity): Paciente {
+    return new Paciente(
+      entity.documento,
+      entity.nombres,
+      entity.apellidos,
+      entity.celular,
+      entity.genero,
+      entity.fechaNacimiento,
+      entity.email,
+    );
   }
 }
