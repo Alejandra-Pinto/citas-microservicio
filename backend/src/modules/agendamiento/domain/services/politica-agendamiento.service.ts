@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-//Aquí irán reglas como:
+//Reglas:
 
 // evitar duplicados
 // validar intervalos
