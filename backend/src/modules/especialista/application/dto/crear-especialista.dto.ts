@@ -1,6 +1,11 @@
+import {
+  TipoProfesional,
+  Especialidad,
+} from '../../domain/entities/especialista.entity';
+
 export class CrearEspecialistaDto {
   nombres: string;
-  tipo: 'MEDICO' | 'TERAPISTA';
-  especialidad: 'TERAPIA_NEURAL' | 'QUIROPRAXIA' | 'FISIOTERAPIA';
+  tipo: TipoProfesional;
+  especialidad: Especialidad;
   intervaloAtencion: number;
 }
