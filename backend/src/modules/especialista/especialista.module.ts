@@ -6,6 +6,7 @@ import { ListarEspecialistasUseCase } from './application/use-cases/listar-espec
 import { EspecialistaRepositoryImpl } from './infrastructure/persistence/especialista.repository.impl';
 import { PoliticaEspecialistaService } from './domain/services/politica-especialista.service';
 import { EspecialistaOrmEntity } from './infrastructure/persistence/especialista.orm-entity';
+import { ValidacionEspecialistaService } from './domain/services/validacion-especialista.service';
 
 @Module({
   imports: [TypeOrmModule.forFeature([EspecialistaOrmEntity])],
@@ -14,6 +15,7 @@ import { EspecialistaOrmEntity } from './infrastructure/persistence/especialista
     CrearEspecialistaUseCase,
     ListarEspecialistasUseCase,
     PoliticaEspecialistaService,
+    ValidacionEspecialistaService,
     {
       provide: 'EspecialistaRepository',
       useClass: EspecialistaRepositoryImpl,

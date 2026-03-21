@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
+import { Entity, Column, PrimaryColumn } from 'typeorm';
 import {
   Especialidad,
   TipoProfesional,
@@ -6,7 +6,7 @@ import {
 
 @Entity('especialistas')
 export class EspecialistaOrmEntity {
-  @PrimaryGeneratedColumn('uuid')
+  @PrimaryColumn()
   id: string;
 
   @Column()
