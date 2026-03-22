@@ -1,0 +1,40 @@
+header {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      background-color: #1D4ED8;
+      color: white;
+    }
+    body {
+      overflow-x: hidden; /* Evita el desbordamiento horizontal */
+    }
+    .num-correo {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      background-color: #f8f9fa;
+      font-size: 10px;
+      background-color: #1D4ED8;
+    }
+    #barraHorizontal {
+      background-color: #ffff;
+      color: #64748B;
+      font-size: medium;
+    }
+    .navbar-brand {
+      font-size: 30px;
+    }
+
+    .botonAgendar {
+      background-color: #ffffff;
+      color: #1D4ED8;
+    }
+
+    .txtRedServiciosNavBar {
+      margin-top: 0%;
+    }
+
+
+    h1{
+      font-size: 50px;
+    }
