@@ -19,5 +19,6 @@ import { ConfiguracionAgendaOrm } from './infrastructure/persistence/configuraci
       useClass: ConfiguracionRepositoryImpl,
     },
   ],
+  exports: ['ConfiguracionRepository'],
 })
 export class AdministradorModule {}

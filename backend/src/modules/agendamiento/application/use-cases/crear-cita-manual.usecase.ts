@@ -20,7 +20,7 @@ export class CrearCitaManualUseCase {
   ) {}
 
   async ejecutar(dto: CrearCitaDto) {
-    const fechaCita = new Date(dto.fechaHora);
+    const fechaCita = dto.fechaHora;
 
     // No permitir pasado
     if (fechaCita < new Date()) {
@@ -49,7 +49,7 @@ export class CrearCitaManualUseCase {
     // Validar horario dentro del rango permitido (8:00 - 18:00)
     if (!this.disponibilidadService.esHorarioValido(fechaCita, duracionNueva)) {
       throw new BadRequestException(
-        'Las citas solo pueden agendarse entre 8:00 y 18:00',
+        'Las citas solo pueden agendarse entre 8:00 y 11:59',
       );
     }
 
