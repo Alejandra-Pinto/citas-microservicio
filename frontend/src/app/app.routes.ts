@@ -3,32 +3,40 @@ import { Routes } from '@angular/router';
 export const routes: Routes = [
   {
     path: '',
-    loadComponent: () => import('./features/home/home').then((m) => m.Home),
+    redirectTo: 'home',
+    pathMatch: 'full',
+  },
+  {
+    path: 'home',
+    loadComponent: () =>
+      import('./features/home/pages/home').then(m => m.Home),
   },
   {
     path: 'agendarUser',
     loadComponent: () =>
-      import('./features/agendamiento/pages/asistente/asistente').then((m) => m.AsistenteComponent),
-  },
-  {
-    path: 'mis-citas',
-    loadComponent: () =>
-      import('./features/components/consulta-citas/consulta-citas').then((m) => m.ConsultaCitas),
+      import('./features/agendamiento/pages/asistente/asistente')
+        .then(m => m.AsistenteComponent),
   },
   {
     path: 'agendar',
     loadComponent: () =>
-      import('./features/agendamiento/agendamiento/agendamiento').then((m) => m.Agendamiento),
+      import('./features/agendamiento/pages/agendamiento/agendamiento')
+        .then(m => m.Agendamiento),
+  },
+  {
+    path: 'mis-citas',
+    loadComponent: () =>
+      import('./features/consulta-citas/pages/consulta-citas')
+        .then(m => m.ConsultaCitas),
   },
   {
     path: 'administrador',
-    loadChildren: () =>
-      import('./administrador/administrador-module').then((m) => m.AdministradorModule),
+    loadComponent: () =>
+      import('./features/administrador/pages/configuracion-agenda/configuracion-agenda')
+        .then(m => m.ConfiguracionAgendaComponent),
   },
-
   {
-    path: '',
-    redirectTo: 'administrador/configuracion-agenda',
-    pathMatch: 'full',
-  },
+    path: '**',
+    redirectTo: 'home',
+  }
 ];

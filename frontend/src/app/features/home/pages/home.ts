@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { Header } from "../../shared/components/header/header";
+import { Header } from "../../../shared/components/header/header";
 import { RouterLink } from '@angular/router';
 
 @Component({

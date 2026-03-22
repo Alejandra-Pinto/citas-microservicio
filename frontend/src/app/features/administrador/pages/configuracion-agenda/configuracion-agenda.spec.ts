@@ -1,4 +1,4 @@
-import { ConfiguracionAgenda } from './../../../../../../backend/src/modules/administrador/domain/entities/configuracion-agenda.entity';
+import { ConfiguracionAgenda } from '../../../../../../../backend/src/modules/administrador/domain/entities/configuracion-agenda.entity';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 describe('ConfiguracionAgenda', () => {

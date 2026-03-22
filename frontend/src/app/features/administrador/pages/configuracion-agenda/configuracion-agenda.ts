@@ -1,8 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { AdministradorService } from '../../services/administrador';
+import { FormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common';
 
 @Component({
-  standalone: false,
+  standalone: true,
+  imports: [CommonModule, FormsModule],
   selector: 'app-configuracion-agenda',
   templateUrl: './configuracion-agenda.html',
   styleUrls: ['./configuracion-agenda.scss']
