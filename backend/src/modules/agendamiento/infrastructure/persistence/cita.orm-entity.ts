@@ -1,5 +1,6 @@
 import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
 import { TipoCita } from '../../domain/entities/cita.entity';
+import { EstadoCita } from '../../domain/entities/cita.entity';
 
 @Entity('citas')
 export class CitaOrmEntity {
@@ -18,6 +19,9 @@ export class CitaOrmEntity {
     enum: TipoCita,
   })
   tipo: TipoCita;
-  @Column()
-  estado: string;
+  @Column({
+    type: 'enum',
+    enum: EstadoCita,
+  })
+  estadoCita: EstadoCita;
 }
