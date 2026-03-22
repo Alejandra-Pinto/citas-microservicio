@@ -3,10 +3,9 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class CitasService {
-
   private api = 'http://localhost:3000';
 
   constructor(private http: HttpClient) {}
@@ -22,10 +21,13 @@ export class CitasService {
   }
 
   //Disponibilidad
-  getDisponibilidad(especialistaId: string, fecha: string): Observable<any[]> {
-    return this.http.get<any[]>(
-      `${this.api}/citas/disponibilidad?especialistaId=${especialistaId}&fecha=${fecha}`
-    );
+  getDisponibilidad(especialistaId: any, fecha: string): Observable<any[]> {
+    return this.http.get<any[]>(`${this.api}/citas/disponibilidad`, {
+      params: {
+        especialistaId: Number(especialistaId), // Forzar a número
+        fecha: fecha,
+      },
+    });
   }
 
   //Crear cita

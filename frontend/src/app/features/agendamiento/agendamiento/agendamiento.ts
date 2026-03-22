@@ -37,16 +37,31 @@ export class Agendamiento implements OnInit {
     });
   }
 
+  pacienteEncontrado: any = null;
+
   buscarPaciente() {
     if (!this.formData.cedula) return;
 
-    this.citasService.getPaciente(this.formData.cedula).subscribe((data) => {
-      if (data) {
-        this.formData.nombre = data.nombres + ' ' + data.apellidos;
-      } else {
-        this.formData.nombre = '';
-        alert('Paciente no encontrado');
-      }
+    this.citasService.getPaciente(this.formData.cedula).subscribe({
+      next: (data) => {
+        if (data) {
+          // Guardamos todo el objeto para usarlo en la tarjeta lateral
+          this.pacienteEncontrado = data;
+
+          // Esto es lo que ya tenías para el input del formulario
+          this.formData.nombre = `${data.nombres} ${data.apellidos}`;
+
+          console.log('Datos del paciente cargados:', this.pacienteEncontrado);
+        } else {
+          this.pacienteEncontrado = null;
+          this.formData.nombre = '';
+          alert('Paciente no registrado en Piedra Azul');
+        }
+      },
+      error: () => {
+        this.pacienteEncontrado = null;
+        alert('Error al buscar los datos del paciente');
+      },
     });
   }
 
@@ -89,5 +104,17 @@ export class Agendamiento implements OnInit {
     if (!this.formData.hora) return (alert('Seleccione hora'), false);
 
     return true;
+  }
+
+  getEdad(): string {
+    if (!this.pacienteEncontrado?.fechaNacimiento) return '--';
+
+    const nacimiento = new Date(this.pacienteEncontrado.fechaNacimiento);
+    const hoy = new Date();
+    let edad = hoy.getFullYear() - nacimiento.getFullYear();
+    if (hoy < new Date(hoy.getFullYear(), nacimiento.getMonth(), nacimiento.getDate())) {
+      edad--;
+    }
+    return `${edad} años`;
   }
 }

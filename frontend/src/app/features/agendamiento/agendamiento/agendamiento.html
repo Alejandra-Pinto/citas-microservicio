@@ -247,26 +247,6 @@
                       <p class="text-[10px] text-slate-500">{{ esp.especialidad }}</p>
                     </div>
                   </label>
-                  <label
-                    class="relative flex items-center gap-4 p-4 rounded-xl border-2 border-slate-100 bg-white hover:border-blue-200 transition-all cursor-pointer group"
-                  >
-                    <input
-                      class="absolute right-4 top-4 text-blue-600 focus:ring-blue-600"
-                      name="specialist"
-                      type="radio"
-                    />
-                    <div class="w-12 h-12 rounded-full overflow-hidden bg-slate-100">
-                      <img
-                        class="w-full h-full object-cover"
-                        data-alt="Male doctor Dr. Luis Martinez portrait"
-                        src="https://lh3.googleusercontent.com/aida-public/AB6AXuDxW1yI_P011JZrZJmsCBNghprQFlsRyBQb3u1z4Aciun9p04iZnAtQV-Yu3DeYZ8m8wkqsd3SMuyx2TEqEH_tRuJ3uc7B2h_0Gv2lmpXHU6NlcAA3we5c4BZ17HGbReSdLqBwiVp7u7HyfBZaLEDz46WugeEHePd2pWHYd10o2rMglloZ1S0TJvXLxktgEnNQKvIJbwg7dR998xOC4uKPPIgPGxii7106pl3SQfRz74PycFVNqKhBTqh-hwvEma_fDYJ-1T8fKUA4"
-                      />
-                    </div>
-                    <div>
-                      <p class="text-sm font-bold text-slate-900">Dr. Luis Martinez</p>
-                      <p class="text-[10px] text-slate-500">Pediatría</p>
-                    </div>
-                  </label>
                 </div>
               </div>
             </div>
@@ -291,18 +271,28 @@
           <div class="bg-primary text-white p-8 rounded-2xl shadow-xl relative overflow-hidden">
             <div class="relative z-10">
               <span class="text-[9px] font-black uppercase tracking-[0.2em] opacity-80"
-                >Expediente Médico</span
+                >Información del Paciente</span
               >
-              <h4 class="text-2xl font-bold mt-2">Elena Rodriguez</h4>
-              <p class="text-xs opacity-80 mt-1">Última visita: 12 Mayo, 2023</p>
+              <h4 class="text-2xl font-bold mt-2">
+                {{
+                  pacienteEncontrado
+                    ? pacienteEncontrado.nombres + ' ' + pacienteEncontrado.apellidos
+                    : 'Seleccione Paciente'
+                }}
+              </h4>
+              <p class="text-xs opacity-80 mt-1">
+                Estado: {{ pacienteEncontrado?.activo ? 'Activo' : 'Inactivo' }}
+              </p>
               <div class="mt-8 grid grid-cols-2 gap-4">
                 <div class="bg-white/10 backdrop-blur-md p-3 rounded-xl">
                   <p class="text-[9px] uppercase font-bold opacity-60">Edad</p>
-                  <p class="text-lg font-bold">28 años</p>
+                  <p class="text-lg font-bold">
+                    {{ getEdad() }}
+                  </p>
                 </div>
                 <div class="bg-white/10 backdrop-blur-md p-3 rounded-xl">
-                  <p class="text-[9px] uppercase font-bold opacity-60">Tipo Sangre</p>
-                  <p class="text-lg font-bold">O Positive</p>
+                  <p class="text-[9px] uppercase font-bold opacity-60">Genero</p>
+                  <p class="text-lg font-bold">{{ pacienteEncontrado?.genero || '--' }}</p>
                 </div>
               </div>
               <button

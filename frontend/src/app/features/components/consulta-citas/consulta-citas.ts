@@ -7,10 +7,6 @@ import { RouterLink } from '@angular/router';
   standalone: true,
   imports: [CommonModule, RouterLink],
   templateUrl: './consulta-citas.html',
-  styleUrl: './consulta-citas.scss'
+  styleUrl: './consulta-citas.scss',
 })
-export class ConsultaCitas {
-  citas = signal([
-    { id: 1, doctor: 'Dr. Sofia Mendez', fecha: '17 Mar, 2026', hora: '09:00 AM', estado: 'Confirmada' }
-  ]);
-}
+export class ConsultaCitas {}

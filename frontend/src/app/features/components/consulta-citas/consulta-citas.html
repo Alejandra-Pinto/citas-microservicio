@@ -1,50 +1,477 @@
-<div class="min-h-screen bg-slate-50 pb-20">
-  <header class="bg-white border-b p-4 flex items-center justify-between sticky top-0 z-10">
-    <button routerLink="/" class="p-2 hover:bg-slate-100 rounded-full transition-colors">
-      <span class="material-symbols-outlined text-slate-600">arrow_back</span>
-    </button>
-    <h1 class="text-lg font-bold text-slate-800">Mis Citas Médicas</h1>
-    <div class="w-10"></div>
-  </header>
-
-  <main class="max-w-3xl mx-auto p-4 space-y-4">
-    <div class="relative mt-2">
-      <span class="material-symbols-outlined absolute left-3 top-3 text-slate-400">search</span>
-      <input type="text" placeholder="Buscar por doctor o especialidad..."
-             class="w-full pl-10 pr-4 py-3 rounded-2xl border-none shadow-sm focus:ring-2 focus:ring-blue-600">
+<body class="bg-surface text-on-surface antialiased min-h-screen">
+  <!-- SideNavBar -->
+  <aside
+    class="fixed left-0 top-0 h-screen w-[280px] bg-slate-50 flex flex-col py-8 px-4 border-r border-slate-200 z-50"
+  >
+    <div class="container-fluid">
+      <a class="navbar-brand d-flex align-items-center" href="#" style="color: #1d4ed8"
+        ><i class="fas fa-hospital me-2"></i>
+        <div>
+          <div class="fw-bold text-dark">Piedra Azul</div>
+          <div
+            class="text-muted text-extra-small mt-0 txtRedServiciosNavBar"
+            style="font-size: small"
+          >
+            Red de Servicios
+          </div>
+        </div>
+      </a>
     </div>
-
-    <h2 class="text-sm font-bold text-slate-500 uppercase tracking-wider mt-6">Próximas Citas</h2>
-
-    <div class="bg-white rounded-2xl p-5 shadow-sm border border-slate-100 flex flex-col gap-4">
-      <div class="flex justify-between items-start">
-        <div class="flex gap-4">
-          <div class="w-12 h-12 bg-blue-100 text-blue-600 rounded-xl flex items-center justify-center">
-            <span class="material-symbols-outlined">calendar_today</span>
-          </div>
-          <div>
-            <h3 class="font-bold text-slate-800">Dr. Sofia Mendez</h3>
-            <p class="text-xs text-slate-500 font-medium text-blue-600">Cardiología</p>
-          </div>
-        </div>
-        <span class="px-3 py-1 bg-green-100 text-green-700 text-[10px] font-bold rounded-full uppercase">Confirmada</span>
+    <nav class="flex-1 space-y-2">
+      <a
+        class="flex items-center gap-3 px-4 py-3 text-slate-500 hover:text-blue-500 hover:bg-blue-50/50 transition-all duration-200 rounded-lg"
+        href="#"
+      >
+        <span class="material-symbols-outlined" data-icon="grid_view">grid_view</span>
+        <span class="font-sans font-bold text-[14px]">Inicio</span>
+      </a>
+      <a
+        class="flex items-center gap-3 px-4 py-3 text-blue-600 bg-white rounded-lg shadow-sm font-bold transition-all duration-200"
+        href="#"
+      >
+        <span class="material-symbols-outlined" data-icon="calendar_today">calendar_today</span>
+        <span class="font-sans font-bold text-[14px]">Citas</span>
+      </a>
+      <a
+        class="flex items-center gap-3 px-4 py-3 text-slate-500 hover:text-blue-500 hover:bg-blue-50/50 transition-all duration-200 rounded-lg"
+        href="#"
+      >
+        <span class="material-symbols-outlined" data-icon="medical_services">medical_services</span>
+        <span class="font-sans font-bold text-[14px]">Professionals</span>
+      </a>
+      <a
+        class="flex items-center gap-3 px-4 py-3 text-slate-500 hover:text-blue-500 hover:bg-blue-50/50 transition-all duration-200 rounded-lg"
+        href="#"
+      >
+        <span class="material-symbols-outlined" data-icon="settings">settings</span>
+        <span class="font-sans font-bold text-[14px]">Settings</span>
+      </a>
+    </nav>
+    <div class="mt-auto pt-8 border-t border-slate-200 space-y-2">
+      <button
+        class="w-full bg-blue-600 text-white rounded-lg py-3 px-4 font-bold text-[14px] flex items-center justify-center gap-2 shadow-lg shadow-blue-600/20 active:scale-95 transition-all"
+      >
+        <span class="material-symbols-outlined text-[20px]" data-icon="add">add</span> Nueva Cita
+      </button>
+      <div class="pt-4 space-y-1">
+        <a
+          class="flex items-center gap-3 px-4 py-2 text-slate-500 hover:text-blue-500 transition-colors"
+          href="#"
+        >
+          <span class="material-symbols-outlined" data-icon="contact_support">contact_support</span>
+          <span class="font-sans font-bold text-[14px]">Soporte</span>
+        </a>
+        <a
+          class="flex items-center gap-3 px-4 py-2 text-slate-500 hover:text-red-500 transition-colors"
+          href="#"
+        >
+          <span class="material-symbols-outlined" data-icon="logout">logout</span>
+          <span class="font-sans font-bold text-[14px]">Cerrar Sesión</span>
+        </a>
       </div>
-
-      <div class="bg-slate-50 rounded-xl p-3 flex justify-around items-center">
-        <div class="text-center border-r border-slate-200 pr-4">
-          <p class="text-[10px] text-slate-400 font-bold uppercase">Fecha</p>
-          <p class="text-sm font-bold text-slate-700">17 Mar, 2026</p>
+    </div>
+  </aside>
+  <!-- TopAppBar -->
+  <header
+    class="fixed top-0 right-0 w-[calc(100%-280px)] h-16 bg-white/80 backdrop-blur-md flex items-center justify-between px-8 z-40 ml-auto shadow-sm no-line"
+  >
+    <div class="flex items-center gap-4 flex-1">
+      <div class="relative w-full max-w-md">
+        <span
+          class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-[20px]"
+          data-icon="search"
+          >search</span
+        >
+        <input
+          class="w-full bg-slate-50 border-none rounded-full py-2 pl-10 pr-4 text-sm focus:ring-2 focus:ring-blue-500/20 transition-all outline-none"
+          placeholder="Buscar citas o pacientes..."
+          type="text"
+        />
+      </div>
+    </div>
+    <div class="flex items-center gap-6">
+      <button
+        class="relative p-2 text-slate-500 hover:bg-slate-50 rounded-full transition-all active:scale-95"
+      >
+        <span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+        <span class="absolute top-2 right-2 w-2 h-2 bg-error rounded-full"></span>
+      </button>
+      <button
+        class="p-2 text-slate-500 hover:bg-slate-50 rounded-full transition-all active:scale-95"
+      >
+        <span class="material-symbols-outlined" data-icon="help_outline">help_outline</span>
+      </button>
+      <div class="h-8 w-[1px] bg-slate-200 mx-2"></div>
+      <div class="flex items-center gap-3">
+        <div class="text-right">
+          <p class="text-xs font-bold text-on-surface">Dr. Julian Rossi</p>
+          <p class="text-[10px] text-slate-400 uppercase tracking-wider">Experto en Oncología</p>
         </div>
-        <div class="text-center">
-          <p class="text-[10px] text-slate-400 font-bold uppercase">Hora</p>
-          <p class="text-sm font-bold text-slate-700">09:00 AM</p>
+        <img
+          alt="User Profile Avatar"
+          class="w-10 h-10 rounded-full border-2 border-white shadow-sm"
+          data-alt="Professional doctor profile headshot"
+          src="https://lh3.googleusercontent.com/aida-public/AB6AXuChKmtz7g4HJhGtLV9CHOVqBuImpK0EvszaWUEXVF9FJcv397jMO7alVRoSpgj8RlavLBBFVk2-hENodXpk9L0kvk7rRJbT0QOMtaha-DnFUJM_Bl2n3FrP0CtEvbXH8zsLYbwMrueQTuvLnEZY77NivfTqF0j4ZgihEYvV0mKWSjsNLLrsPYu3sqGL5opnDBTPnvfrQfL1rENMd_u0VFoDxvcwYd-hSYmVsQgJBOU-xjjAOgnhv4xHc5DOHYxgdKBhuFq0efAw1c8"
+        />
+      </div>
+    </div>
+  </header>
+  <!-- Main Content -->
+  <main class="ml-[280px] pt-24 pb-12 px-10 min-h-screen">
+    <!-- Header Section -->
+    <div class="flex flex-col md:flex-row md:items-end justify-between mb-10 gap-6">
+      <div>
+        <span class="text-[10px] font-black text-blue-600 uppercase tracking-[0.3em] mb-2 block"
+          >Gestión de Salud</span
+        >
+        <h2 class="text-[36px] font-extrabold text-on-surface tracking-tight leading-none">
+          Citas de Hoy
+        </h2>
+        <div class="flex items-center gap-2 mt-2 text-slate-500">
+          <span class="material-symbols-outlined text-[18px]" data-icon="calendar_month"
+            >calendar_month</span
+          >
+          <p class="text-sm font-medium">Lunes, 24 de Julio, 2024</p>
         </div>
       </div>
-
-      <div class="flex gap-2">
-        <button class="flex-1 py-2 text-xs font-bold text-red-500 border border-red-100 rounded-lg hover:bg-red-50">Cancelar</button>
-        <button class="flex-1 py-2 text-xs font-bold text-blue-600 bg-blue-50 rounded-lg hover:bg-blue-100">Reagendar</button>
+      <div class="flex items-center gap-3">
+        <button
+          class="flex items-center gap-2 px-5 py-2.5 bg-white text-slate-700 font-bold text-sm rounded-lg border border-slate-200 hover:bg-slate-50 transition-all shadow-sm active:scale-95"
+        >
+          <span class="material-symbols-outlined text-[20px]" data-icon="picture_as_pdf"
+            >picture_as_pdf</span
+          >
+          Exportar PDF
+        </button>
+        <button
+          class="flex items-center gap-2 px-6 py-2.5 bg-primary text-white font-bold text-sm rounded-lg hover:bg-primary-container transition-all shadow-xl shadow-blue-600/20 active:scale-95"
+        >
+          <span class="material-symbols-outlined text-[20px]" data-icon="add_circle"
+            >add_circle</span
+          >
+          Nueva Cita
+        </button>
       </div>
+    </div>
+    <!-- Metrics Bento Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
+      <!-- Metric 1 -->
+      <div
+        class="bg-white p-6 rounded-xl shadow-sm border border-slate-100 flex items-center gap-5 transition-transform hover:-translate-y-1 duration-300"
+      >
+        <div class="w-14 h-14 bg-blue-50 rounded-xl flex items-center justify-center text-blue-600">
+          <span class="material-symbols-outlined text-[32px]" data-icon="assignment_ind"
+            >assignment_ind</span
+          >
+        </div>
+        <div>
+          <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest">
+            Total de Citas
+          </p>
+          <h3 class="text-3xl font-black text-on-surface">24</h3>
+        </div>
+      </div>
+      <!-- Metric 2 -->
+      <div
+        class="bg-white p-6 rounded-xl shadow-sm border border-slate-100 flex items-center gap-5 transition-transform hover:-translate-y-1 duration-300"
+      >
+        <div
+          class="w-14 h-14 bg-amber-50 rounded-xl flex items-center justify-center text-amber-600"
+        >
+          <span class="material-symbols-outlined text-[32px]" data-icon="pending_actions"
+            >pending_actions</span
+          >
+        </div>
+        <div>
+          <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Pendientes</p>
+          <h3 class="text-3xl font-black text-on-surface">08</h3>
+        </div>
+      </div>
+      <!-- Metric 3 -->
+      <div
+        class="bg-white p-6 rounded-xl shadow-sm border border-slate-100 flex items-center gap-5 transition-transform hover:-translate-y-1 duration-300"
+      >
+        <div
+          class="w-14 h-14 bg-emerald-50 rounded-xl flex items-center justify-center text-emerald-600"
+        >
+          <span class="material-symbols-outlined text-[32px]" data-icon="task_alt">task_alt</span>
+        </div>
+        <div>
+          <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Completadas</p>
+          <h3 class="text-3xl font-black text-on-surface">14</h3>
+        </div>
+      </div>
+    </div>
+    <!-- Patients List Section -->
+    <section class="bg-white rounded-xl shadow-sm border border-slate-100 overflow-hidden">
+      <div class="px-8 py-6 border-b border-slate-100 flex items-center justify-between">
+        <h3 class="text-lg font-bold text-on-surface">Pacientes Agendados</h3>
+        <div class="flex gap-2">
+          <button
+            class="p-2 text-slate-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-all"
+          >
+            <span class="material-symbols-outlined" data-icon="filter_list">filter_list</span>
+          </button>
+          <button
+            class="p-2 text-slate-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-all"
+          >
+            <span class="material-symbols-outlined" data-icon="more_vert">more_vert</span>
+          </button>
+        </div>
+      </div>
+      <div class="overflow-x-auto">
+        <table class="w-full text-left">
+          <thead>
+            <tr class="bg-slate-50/50">
+              <th class="px-8 py-4 text-[10px] font-black text-slate-400 uppercase tracking-widest">
+                Detalles del Paciente
+              </th>
+              <th class="px-8 py-4 text-[10px] font-black text-slate-400 uppercase tracking-widest">
+                Hora / Duración
+              </th>
+              <th class="px-8 py-4 text-[10px] font-black text-slate-400 uppercase tracking-widest">
+                Especialidad
+              </th>
+              <th class="px-8 py-4 text-[10px] font-black text-slate-400 uppercase tracking-widest">
+                Estado
+              </th>
+              <th
+                class="px-8 py-4 text-[10px] font-black text-slate-400 uppercase tracking-widest text-right"
+              >
+                Acciones
+              </th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-slate-100">
+            <!-- Patient Row 1 -->
+            <tr class="hover:bg-slate-50/50 transition-colors">
+              <td class="px-8 py-5">
+                <div class="flex items-center gap-4">
+                  <img
+                    alt="Patient Avatar"
+                    class="w-11 h-11 rounded-lg object-cover"
+                    data-alt="Professional female patient portrait"
+                    src="https://lh3.googleusercontent.com/aida-public/AB6AXuD_N7x9klZPZXLKdICiAK5y7a7cxGNIUj93gjp6DiC7ohhI87jdoQ16myjcceCktigfm6vr2CeB9pnoSyeAn_a8txRpT6ezmOYZgPaH3QLfGoc18LcQFOrJ4dEvA8yuWkTDRdTaWkyN3nf-_UToAEW_sX7BEuvBUfKuPl_9SG2DYmq4i9BXNSGy8rdrmooN2sMB2uzDRArzhh5TM3iawBmqNXcd6a5WpGFFLTalYaSAde-tkn9vNoMokHcNTIdsqRIQyiaggsfi1LE"
+                  />
+                  <div>
+                    <p class="font-bold text-on-surface">Valentina Mendoza</p>
+                    <p class="text-xs text-slate-400 font-medium">ID: #AZ-9921</p>
+                  </div>
+                </div>
+              </td>
+              <td class="px-8 py-5">
+                <div class="flex flex-col">
+                  <span class="font-bold text-on-surface text-sm">08:30 AM</span>
+                  <span class="text-[11px] text-slate-400">45 Minutes</span>
+                </div>
+              </td>
+              <td class="px-8 py-5">
+                <span
+                  class="px-3 py-1 bg-blue-100/50 text-blue-700 text-[11px] font-bold rounded-full uppercase tracking-wide"
+                  >Chequeo General</span
+                >
+              </td>
+              <td class="px-8 py-5">
+                <div class="flex items-center gap-2">
+                  <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+                  <span class="text-sm font-semibold text-slate-600">Completada</span>
+                </div>
+              </td>
+              <td class="px-8 py-5 text-right">
+                <button
+                  class="text-blue-600 font-bold text-xs hover:underline uppercase tracking-wider"
+                >
+                  Ver Ficha
+                </button>
+              </td>
+            </tr>
+            <!-- Patient Row 2 -->
+            <tr class="hover:bg-slate-50/50 transition-colors">
+              <td class="px-8 py-5">
+                <div class="flex items-center gap-4">
+                  <img
+                    alt="Patient Avatar"
+                    class="w-11 h-11 rounded-lg object-cover"
+                    data-alt="Professional male patient portrait"
+                    src="https://lh3.googleusercontent.com/aida-public/AB6AXuANPetVlh8OJEcX9dKnKFtjXM7QGt1XiAPwRG1NXVBLRDax48S3hmi20Pn1HQsPBsYlg0rCnQYRjfa_lcXhvvhBHgRvutjxL7P2nxJAFGsWX0vCYruRhuCY27l4XJJ_1P4DDPYLDEVzOoCLmoV_ZcC6WYTcOcTOuajCj2PKcK55Bp9WX5QZLP1XxBLj21QhV98WkktH7s7S4NtkzyneKcuuHGbgYZsa2biliFtyGKUdWBLfOmiaXUOEYfY_OY1i1361dJ_pGijaOiQ"
+                  />
+                  <div>
+                    <p class="font-bold text-on-surface">Ricardo Sanchez</p>
+                    <p class="text-xs text-slate-400 font-medium">ID: #AZ-1044</p>
+                  </div>
+                </div>
+              </td>
+              <td class="px-8 py-5">
+                <div class="flex flex-col">
+                  <span class="font-bold text-on-surface text-sm">09:15 AM</span>
+                  <span class="text-[11px] text-slate-400">30 Minutes</span>
+                </div>
+              </td>
+              <td class="px-8 py-5">
+                <span
+                  class="px-3 py-1 bg-purple-100/50 text-purple-700 text-[11px] font-bold rounded-full uppercase tracking-wide"
+                  >Consulta Inicial</span
+                >
+              </td>
+              <td class="px-8 py-5">
+                <div class="flex items-center gap-2">
+                  <span class="w-2 h-2 rounded-full bg-amber-500"></span>
+                  <span class="text-sm font-semibold text-slate-600">En Espera</span>
+                </div>
+              </td>
+              <td class="px-8 py-5 text-right">
+                <button
+                  class="text-blue-600 font-bold text-xs hover:underline uppercase tracking-wider"
+                >
+                  Llamar
+                </button>
+              </td>
+            </tr>
+            <!-- Patient Row 3 -->
+            <tr class="hover:bg-slate-50/50 transition-colors">
+              <td class="px-8 py-5">
+                <div class="flex items-center gap-4">
+                  <img
+                    alt="Patient Avatar"
+                    class="w-11 h-11 rounded-lg object-cover"
+                    data-alt="Professional elderly patient portrait"
+                    src="https://lh3.googleusercontent.com/aida-public/AB6AXuBc7rH8s8e4S5Dy8DGmVi07NqUYomHlMjdxycSNQ0x5ONn3SD3dzn7rO-Bo6X-2tUd6hcQZRsC_De0h3iiSd_pj_iUPEW1ZygOrgJd7ZYiu7FjMfDwMLXy_1__MmgHYCLNxkYU9Q9HO0W4BWfcLiQ7iesl7dF1_jb5cml0hYKWtsp6Kqk41QUhaBwDWLMrHnnlVKA6kueueEj8a6KvZKErusmgCaO4iOx8yTzDepe0TIoY7CUgJ0ZQNKNGhLNQ9Yq66nuHK59ASTMI"
+                  />
+                  <div>
+                    <p class="font-bold text-on-surface">Elena Rodriguez</p>
+                    <p class="text-xs text-slate-400 font-medium">ID: #AZ-0872</p>
+                  </div>
+                </div>
+              </td>
+              <td class="px-8 py-5">
+                <div class="flex flex-col">
+                  <span class="font-bold text-on-surface text-sm">10:00 AM</span>
+                  <span class="text-[11px] text-slate-400">60 Minutes</span>
+                </div>
+              </td>
+              <td class="px-8 py-5">
+                <span
+                  class="px-3 py-1 bg-rose-100/50 text-rose-700 text-[11px] font-bold rounded-full uppercase tracking-wide"
+                  >Seguimiento</span
+                >
+              </td>
+              <td class="px-8 py-5">
+                <div class="flex items-center gap-2">
+                  <span class="w-2 h-2 rounded-full bg-slate-300"></span>
+                  <span class="text-sm font-semibold text-slate-600">Próxima</span>
+                </div>
+              </td>
+              <td class="px-8 py-5 text-right">
+                <button
+                  class="text-slate-400 font-bold text-xs hover:text-blue-600 transition-colors uppercase tracking-wider"
+                >
+                  Gestionar
+                </button>
+              </td>
+            </tr>
+            <!-- Patient Row 4 -->
+            <tr class="hover:bg-slate-50/50 transition-colors">
+              <td class="px-8 py-5">
+                <div class="flex items-center gap-4">
+                  <img
+                    alt="Patient Avatar"
+                    class="w-11 h-11 rounded-lg object-cover"
+                    data-alt="Young professional patient portrait"
+                    src="https://lh3.googleusercontent.com/aida-public/AB6AXuBQmlBErtb2za5qIdXtHoH1lL5-CUwVC8harr-P23-bp1i3Ap75J6uJLs2cl61hMEZVgjisZaDOifcEcoUzUh9cSppsU9CxtmpqBlg2RivFaJhTtCStOwdnn30nACk4497Vxol_YfiQ_xrWQzvz-nkwlnFI6ApIKU_bfYLYysVzp_lp-bKu3FCNvEBfvI78HfnPuoRLzKN57KeZShlGQaA8qIcdwu6Kj1RGbepVjdR7TnU88NM6XTrFDAVOVVWzFkFzrigKEN-E7RQ"
+                  />
+                  <div>
+                    <p class="font-bold text-on-surface">Mateo Duarte</p>
+                    <p class="text-xs text-slate-400 font-medium">ID: #AZ-2115</p>
+                  </div>
+                </div>
+              </td>
+              <td class="px-8 py-5">
+                <div class="flex flex-col">
+                  <span class="font-bold text-on-surface text-sm">11:00 AM</span>
+                  <span class="text-[11px] text-slate-400">20 Minutes</span>
+                </div>
+              </td>
+              <td class="px-8 py-5">
+                <span
+                  class="px-3 py-1 bg-emerald-100/50 text-emerald-700 text-[11px] font-bold rounded-full uppercase tracking-wide"
+                  >Cardiología</span
+                >
+              </td>
+              <td class="px-8 py-5">
+                <div class="flex items-center gap-2">
+                  <span class="w-2 h-2 rounded-full bg-slate-300"></span>
+                  <span class="text-sm font-semibold text-slate-600">Próxima</span>
+                </div>
+              </td>
+              <td class="px-8 py-5 text-right">
+                <button
+                  class="text-slate-400 font-bold text-xs hover:text-blue-600 transition-colors uppercase tracking-wider"
+                >
+                  Gestionar
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <!-- Footer Pagination -->
+      <div
+        class="px-8 py-4 bg-slate-50 border-t border-slate-100 flex items-center justify-between"
+      >
+        <p class="text-xs text-slate-500 font-medium">Mostrando 1-4 de 24 pacientes</p>
+        <div class="flex gap-1">
+          <button
+            class="w-8 h-8 flex items-center justify-center rounded border border-slate-200 bg-white text-slate-400 hover:text-blue-600 transition-all"
+          >
+            <span class="material-symbols-outlined text-[18px]" data-icon="chevron_left"
+              >chevron_left</span
+            >
+          </button>
+          <button
+            class="w-8 h-8 flex items-center justify-center rounded border border-blue-600 bg-blue-600 text-white text-xs font-bold"
+          >
+            1
+          </button>
+          <button
+            class="w-8 h-8 flex items-center justify-center rounded border border-slate-200 bg-white text-slate-600 text-xs font-bold hover:bg-slate-100"
+          >
+            2
+          </button>
+          <button
+            class="w-8 h-8 flex items-center justify-center rounded border border-slate-200 bg-white text-slate-600 text-xs font-bold hover:bg-slate-100"
+          >
+            3
+          </button>
+          <button
+            class="w-8 h-8 flex items-center justify-center rounded border border-slate-200 bg-white text-slate-400 hover:text-blue-600 transition-all"
+          >
+            <span class="material-symbols-outlined text-[18px]" data-icon="chevron_right"
+              >chevron_right</span
+            >
+          </button>
+        </div>
+      </div>
+    </section>
+    <!-- Floating Quick Action Dual Grid -->
+    <div class="fixed bottom-10 right-10 flex gap-4 z-50">
+      <button
+        class="w-14 h-14 bg-white shadow-xl rounded-xl flex items-center justify-center text-slate-600 hover:text-blue-600 transition-all active:scale-95 border border-slate-100 group"
+      >
+        <span
+          class="material-symbols-outlined group-hover:rotate-12 transition-transform"
+          data-icon="chat"
+          >chat</span
+        >
+      </button>
+      <button
+        class="w-14 h-14 bg-blue-600 shadow-xl shadow-blue-600/30 rounded-xl flex items-center justify-center text-white hover:bg-blue-700 transition-all active:scale-95 group"
+      >
+        <span
+          class="material-symbols-outlined group-hover:scale-110 transition-transform"
+          data-icon="video_call"
+          >video_call</span
+        >
+      </button>
     </div>
   </main>
-</div>
+</body>
