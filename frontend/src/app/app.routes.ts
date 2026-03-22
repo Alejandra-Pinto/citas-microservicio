@@ -20,5 +20,16 @@ export const routes: Routes = [
   path: 'agendar',
   loadComponent: () => import('./features/agendamiento/agendamiento/agendamiento')
     .then(m => m.Agendamiento)
+  },
+  {
+    path: 'administrador',
+    loadChildren: () => import('./administrador/administrador-module')
+      .then(m => m.AdministradorModule)
+  },
+
+  {
+    path: '',
+    redirectTo: 'administrador/configuracion-agenda',
+    pathMatch: 'full'
   }
 ];
