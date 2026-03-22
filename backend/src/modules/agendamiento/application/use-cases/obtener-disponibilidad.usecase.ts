@@ -1,7 +1,8 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { BadRequestException, Inject, Injectable } from '@nestjs/common';
 import type { CitaRepository } from '../../domain/repositories/cita.repository';
 import type { EspecialistaPort } from '../../domain/ports/especialista.port';
 import { DisponibilidadAgendamientoService } from '../../domain/services/disponibilidad-agendamiento.service';
+import type { ConfiguracionPort } from '../../domain/ports/configuracionAgenda.port';
 
 @Injectable()
 export class ObtenerDisponibilidadUseCase {
@@ -12,6 +13,9 @@ export class ObtenerDisponibilidadUseCase {
     @Inject('EspecialistaPort')
     private readonly especialistaPort: EspecialistaPort,
 
+    @Inject('ConfiguracionPort')
+    private readonly configPort: ConfiguracionPort,
+
     private readonly disponibilidadService: DisponibilidadAgendamientoService,
   ) {}
 
@@ -21,7 +25,7 @@ export class ObtenerDisponibilidadUseCase {
       await this.especialistaPort.obtenerPorId(especialistaId);
 
     if (!especialista) {
-      throw new Error('Especialista no existe');
+      throw new BadRequestException('Especialista no existe');
     }
 
     if (!especialista.activo) {
@@ -34,13 +38,15 @@ export class ObtenerDisponibilidadUseCase {
       fecha,
     );
 
+    const config = await this.configPort.obtenerConfiguracion();
+
     //3.Calcular disponibilidad
     return this.disponibilidadService.calcularHorariosDisponibles(
       especialista.intervaloAtencion,
       citas,
       fecha,
-      8, // 8 AM
-      18, // 6 PM
+      config.horaInicio,
+      config.horaFin,
     );
   }
 }

@@ -1,4 +1,4 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { Inject, Injectable, BadRequestException } from '@nestjs/common';
 import type { EspecialistaRepository } from '../../domain/repositories/especialista.repository';
 import { CrearEspecialistaDto } from '../dto/crear-especialista.dto';
 import { Especialista } from '../../domain/entities/especialista.entity';
@@ -32,12 +32,12 @@ export class CrearEspecialistaUseCase {
       true,
     );
 
-    //Comprobar existencia
+    // Comprobar existencia
     const existente = await this.especialistaRepository.findById(dto.id);
-    if (existente) {
-      throw new Error('El especialista ya existe');
-    }
 
+    if (existente) {
+      throw new BadRequestException('El especialista ya existe');
+    }
     //Guardar en repositorio
     await this.especialistaRepository.save(especialista);
 

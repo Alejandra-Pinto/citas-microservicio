@@ -12,12 +12,16 @@ import { PacienteModule } from '../paciente/paciente.module';
 import { EspecialistaModule } from '../especialista/especialista.module';
 import { ObtenerDisponibilidadUseCase } from './application/use-cases/obtener-disponibilidad.usecase';
 import { DisponibilidadAgendamientoService } from './domain/services/disponibilidad-agendamiento.service';
+import { ConfiguracionAdapter } from './infrastructure/adapters/configuracionAgenda.adapter';
+
+import { AdministradorModule } from '../administrador/administrador.module';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([CitaOrmEntity]),
     PacienteModule,
     EspecialistaModule,
+    AdministradorModule,
   ],
   controllers: [CitaController],
   providers: [
@@ -34,6 +38,9 @@ import { DisponibilidadAgendamientoService } from './domain/services/disponibili
 
     EspecialistaAdapter,
     { provide: 'EspecialistaPort', useExisting: EspecialistaAdapter },
+
+    ConfiguracionAdapter,
+    { provide: 'ConfiguracionPort', useExisting: ConfiguracionAdapter },
   ],
   exports: ['PacientePort', 'EspecialistaPort'],
 })

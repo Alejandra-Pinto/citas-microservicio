@@ -1,4 +1,5 @@
 import { Inject, Injectable } from '@nestjs/common';
+import { BadRequestException } from '@nestjs/common';
 import type { PacienteRepository } from '../../domain/repositories/paciente.repository';
 import { CrearPacienteDto } from '../dto/crear-paciente.dto';
 import { Paciente } from '../../domain/entities/paciente.entity';
@@ -20,7 +21,7 @@ export class CrearPacienteUseCase {
     const existente = await this.pacienteRepository.findById(dto.documento);
 
     if (existente) {
-      throw new Error('El paciente ya existe');
+      throw new BadRequestException('El paciente ya existe');
     }
 
     const paciente = new Paciente(

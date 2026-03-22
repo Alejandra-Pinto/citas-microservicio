@@ -1,9 +1,5 @@
-export enum GeneroEnum {
-  MASCULINO = 'MASCULINO',
-  FEMENINO = 'FEMENINO',
-  OTRO = 'OTRO',
-}
 import { Entity, Column, PrimaryColumn } from 'typeorm';
+import { GeneroEnum } from '../../domain/entities/paciente.entity';
 
 @Entity('pacientes')
 export class PacienteOrmEntity {

@@ -1,5 +1,6 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { Cita } from '../entities/cita.entity';
+import { ConfiguracionPort } from '../ports/configuracionAgenda.port';
 
 @Injectable()
 export class DisponibilidadAgendamientoService {
@@ -53,13 +54,20 @@ export class DisponibilidadAgendamientoService {
     return disponibles;
   }
 
-  esHorarioValido(inicio: Date, duracion: number): boolean {
+  constructor(
+    @Inject('ConfiguracionPort')
+    private readonly configuracionPort: ConfiguracionPort,
+  ) {}
+
+  async esHorarioValido(inicio: Date, duracion: number): Promise<boolean> {
+    const config = await this.configuracionPort.obtenerConfiguracion();
+
     const inicioMs = inicio.getTime();
     const finMs = inicioMs + duracion * 60000;
 
     const horaInicio = inicio.getHours();
     const horaFin = new Date(finMs).getHours();
 
-    return horaInicio >= 8 && horaFin < 18;
+    return horaInicio >= config.horaInicio && horaFin < config.horaFin;
   }
 }

@@ -1,5 +1,10 @@
 export type generoP = 'MASCULINO' | 'FEMENINO' | 'OTRO';
-import { GeneroEnum } from '../../infrastructure/persistence/paciente.orm.entity';
+
+export enum GeneroEnum {
+  MASCULINO = 'MASCULINO',
+  FEMENINO = 'FEMENINO',
+  OTRO = 'OTRO',
+}
 
 export class Paciente {
   constructor(
