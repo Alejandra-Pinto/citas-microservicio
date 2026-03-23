@@ -35,8 +35,4 @@ export class CitasService {
     return this.http.get(`http://localhost:3000/pacientes/${documento}`);
   }
 
-  // Especialistas
-  getEspecialistas(): Observable<any[]> {
-    return this.http.get<any[]>(`http://localhost:3000/especialistas`);
-  }
 }

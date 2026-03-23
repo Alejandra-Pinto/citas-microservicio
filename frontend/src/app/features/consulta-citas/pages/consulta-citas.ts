@@ -18,8 +18,18 @@ export class ConsultaCitas {
   estadoSeleccionado = 'TODAS'; // Nuevo: rastrea qué filtro de métrica está activo
   loading = false;
   error = '';
+  fechaActual = new Date();
 
   constructor(private citasService: CitasService) {}
+
+  get fechaFormateada(): string {
+    return this.fechaActual.toLocaleDateString('es-ES', {
+      weekday: 'long',
+      day: 'numeric',
+      month: 'long',
+      year: 'numeric'
+    });
+  }
 
   // Esta función calcula qué enviar a la tabla basado en el clic de la métrica
   get citasFiltradas(): Cita[] {
