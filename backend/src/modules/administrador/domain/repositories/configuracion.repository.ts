@@ -1,6 +1,6 @@
-import { ConfiguracionAgenda } from '../entities/configuracion-agenda.entity';
+import { ConfiguracionSistema } from '../entities/configuracion-sistema.entity';
 
-export interface ConfiguracionRepository {
-  guardar(config: ConfiguracionAgenda): Promise<void>;
-  obtener(): Promise<ConfiguracionAgenda | null>;
+export abstract class ConfiguracionRepository {
+  abstract obtenerConfiguracionGlobal(): Promise<ConfiguracionSistema | null>;
+  abstract save(configuracion: ConfiguracionSistema): Promise<void>;
 }

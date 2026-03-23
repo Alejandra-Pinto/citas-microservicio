@@ -3,6 +3,7 @@ import {
   Especialidad,
   TipoProfesional,
 } from '../../domain/entities/especialista.entity';
+import type { HorarioAtencion } from '../../domain/entities/especialista.entity';
 
 @Entity('especialistas')
 export class EspecialistaOrmEntity {
@@ -26,6 +27,12 @@ export class EspecialistaOrmEntity {
 
   @Column()
   intervaloAtencion: number;
+
+  @Column({
+    type: 'jsonb',
+    nullable: true,
+  })
+  horarioAtencion: HorarioAtencion;
 
   @Column()
   activo: boolean;

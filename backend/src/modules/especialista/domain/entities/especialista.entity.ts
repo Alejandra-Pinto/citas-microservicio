@@ -7,6 +7,12 @@ export enum Especialidad {
   QUIROPRAXIA = 'QUIROPRAXIA',
   FISIOTERAPIA = 'FISIOTERAPIA',
 }
+export interface HorarioAtencion {
+  diaSemana: string[];
+  horaInicio: string; // "08:00"
+  horaFin: string; // "12:00"
+}
+
 export class Especialista {
   constructor(
     public id: string,
@@ -14,6 +20,7 @@ export class Especialista {
     public tipo: TipoProfesional,
     public especialidad: Especialidad,
     public intervaloAtencion: number,
+    public horarioAtencion: HorarioAtencion,
     public activo: boolean = true,
   ) {}
 
@@ -23,5 +30,13 @@ export class Especialista {
 
   activar() {
     this.activo = true;
+  }
+
+  actualizarConfiguracionAgenda(
+    nuevoIntervalo: number,
+    nuevosHorarios: HorarioAtencion,
+  ) {
+    this.intervaloAtencion = nuevoIntervalo;
+    this.horarioAtencion = nuevosHorarios;
   }
 }

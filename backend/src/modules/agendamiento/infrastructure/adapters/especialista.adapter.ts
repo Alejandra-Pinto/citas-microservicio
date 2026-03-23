@@ -13,6 +13,7 @@ export class EspecialistaAdapter implements EspecialistaPort {
   async obtenerPorId(id: string): Promise<{
     id: string;
     intervaloAtencion: number;
+    horarioAtencion: any;
     activo: boolean;
   } | null> {
     const especialista: Especialista | null =
@@ -22,6 +23,7 @@ export class EspecialistaAdapter implements EspecialistaPort {
     return {
       id: especialista.id,
       intervaloAtencion: especialista.intervaloAtencion,
+      horarioAtencion: especialista.horarioAtencion,
       activo: especialista.activo,
     };
   }
