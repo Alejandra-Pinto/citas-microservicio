@@ -4,10 +4,6 @@ import { Workbook } from 'exceljs';
 import { ExportadorCitasPort } from '../../domain/ports/exportador-citas.port';
 import { Cita, EstadoCita } from '../../domain/entities/cita.entity';
 
-/**
- * Definimos una interfaz que extiende la funcionalidad de PDFKit
- * para que el linter reconozca que .fillColor acepta strings.
- */
 interface PDFKitDocCustom extends PDFKit.PDFDocument {
   fillColor(
     color: string | string[] | PDFKit.Mixins.ColorValue,
@@ -32,7 +28,11 @@ export class ExportadorCitasAdapter extends ExportadorCitasPort {
             options?: PDFKit.PDFDocumentOptions,
           ) => PDFKitDocCustom);
 
-        const doc = new ActualConstructor({ margin: 40, size: 'A4' });
+        const doc = new ActualConstructor({
+          margin: 40,
+          size: 'A4',
+          bufferPages: true,
+        });
         const chunks: Buffer[] = [];
 
         doc.on('data', (chunk: Buffer) => chunks.push(chunk));
@@ -41,7 +41,17 @@ export class ExportadorCitasAdapter extends ExportadorCitasPort {
           reject(err instanceof Error ? err : new Error(String(err)));
         });
 
-        // --- ENCABEZADO PIEDRA AZUL ---
+        const dibujarCabeceraTabla = (posTop: number) => {
+          doc.rect(40, posTop, 520, 20).fillColor('#F1F5F9').fill();
+          doc.fillColor('#1D4ED8').fontSize(9);
+          doc.text('HORA', 50, posTop + 6);
+          doc.text('PACIENTE', 110, posTop + 6);
+          doc.text('TIPO', 280, posTop + 6);
+          doc.text('DURACIÓN', 380, posTop + 6);
+          doc.text('ESTADO', 470, posTop + 6);
+        };
+
+        // --- ENCABEZADO ---
         doc.rect(0, 0, 612, 80).fillColor('#1D4ED8').fill();
         doc.fillColor('#FFFFFF').fontSize(22).text('PIEDRA AZUL', 40, 30);
         doc.fontSize(10).text('SISTEMA DE GESTIÓN DE CITAS MÉDICAS', 40, 55);
@@ -62,7 +72,6 @@ export class ExportadorCitasAdapter extends ExportadorCitasPort {
           .fillColor('#1E293B')
           .text(especialista || 'No especificado');
 
-        // --- CANTIDAD DE CITAS ---
         doc
           .fontSize(10)
           .fillColor('#64748B')
@@ -70,20 +79,20 @@ export class ExportadorCitasAdapter extends ExportadorCitasPort {
           .fillColor('#1D4ED8')
           .text(`${totalCitas}`, { oblique: true });
 
-        // --- TABLA ---
-        // Bajamos el tableTop a 170 para dar espacio al contador
+        // --- INICIO DE TABLA ---
         const tableTop = 170;
-        doc.rect(40, tableTop, 520, 20).fillColor('#F1F5F9').fill();
-        doc.fillColor('#1D4ED8').fontSize(9);
-        doc.text('HORA', 50, tableTop + 6);
-        doc.text('PACIENTE', 110, tableTop + 6);
-        doc.text('TIPO', 280, tableTop + 6);
-        doc.text('DURACIÓN', 380, tableTop + 6);
-        doc.text('ESTADO', 470, tableTop + 6);
-
+        dibujarCabeceraTabla(tableTop);
         let y = tableTop + 30;
 
-        citas.forEach((cita) => {
+        citas.forEach((cita, index) => {
+          // Bajamos un poco el límite de y (de 730 a 700) para asegurar espacio al pie
+          if (y > 700 && index < citas.length - 1) {
+            doc.addPage();
+            y = 50;
+            dibujarCabeceraTabla(y);
+            y += 30;
+          }
+
           const hora = new Date(cita.fechaHora).toLocaleTimeString([], {
             hour: '2-digit',
             minute: '2-digit',
@@ -108,12 +117,32 @@ export class ExportadorCitasAdapter extends ExportadorCitasPort {
             .lineTo(560, y - 5)
             .strokeColor('#F1F5F9')
             .stroke();
-
-          if (y > 750) {
-            doc.addPage();
-            y = 50;
-          }
         });
+
+        // --- PIE DE PÁGINA CORREGIDO ---
+        const fechaDescarga = new Date().toLocaleString();
+        const range = doc.bufferedPageRange();
+
+        for (let i = range.start; i < range.start + range.count; i++) {
+          doc.switchToPage(i);
+
+          // Subimos el pie de página de 805 a 780 para que no "desborde" la hoja
+          const pieY = 780;
+
+          doc
+            .moveTo(40, pieY)
+            .lineTo(560, pieY)
+            .strokeColor('#E2E8F0')
+            .stroke();
+
+          doc
+            .fontSize(8)
+            .fillColor('#94A3B8')
+            .text(`Generado el: ${fechaDescarga}`, 40, pieY + 5)
+            .text(`Página ${i + 1} de ${range.count}`, 40, pieY + 5, {
+              align: 'right',
+            });
+        }
 
         doc.end();
       } catch (error: unknown) {
@@ -136,7 +165,6 @@ export class ExportadorCitasAdapter extends ExportadorCitasPort {
     sheet.getCell('A2').value = `Especialista: ${medico}`;
     sheet.getCell('A2').font = { bold: true };
 
-    // Fila con el total de citas
     sheet.getCell('A3').value = `Cantidad total de citas: ${citas.length}`;
     sheet.getCell('A3').font = { italic: true, color: { argb: 'FF475569' } };
 
@@ -183,6 +211,28 @@ export class ExportadorCitasAdapter extends ExportadorCitasPort {
           };
         });
     });
+
+    const lastRow = 4 + citas.length;
+    if (citas.length > 0) {
+      sheet.addConditionalFormatting({
+        ref: `A5:E${lastRow}`,
+        rules: [
+          {
+            priority: 1,
+            type: 'expression',
+            formulae: ['$E5="CANCELADA"'],
+            style: {
+              fill: {
+                type: 'pattern',
+                pattern: 'solid',
+                fgColor: { argb: 'FFFEE2E2' },
+              },
+              font: { color: { argb: 'FFB91C1C' }, bold: true },
+            },
+          },
+        ],
+      });
+    }
 
     sheet.autoFilter = 'A4:E4';
     const buffer = await workbook.xlsx.writeBuffer();
