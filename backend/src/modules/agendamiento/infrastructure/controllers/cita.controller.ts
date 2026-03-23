@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-return */
 import { Body, Controller, Get, Post, Query } from '@nestjs/common';
 import { CrearCitaManualUseCase } from '../../application/use-cases/crear-cita-manual.usecase';
 import { ListarCitasProfesionalUseCase } from '../../application/use-cases/listar-citas-profesional.usecase';
@@ -29,7 +30,7 @@ export class CitaController {
     return this.crearCita.ejecutar(dto);
   }
 
-  @Get('/profesional')
+  @Get()
   async listar(
     @Query('especialistaId') especialistaId: string,
     @Query('fecha') fecha: string,

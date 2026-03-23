@@ -5,6 +5,7 @@ import { CommonModule } from '@angular/common';
 import { PacienteResumenComponent } from './paciente-resumen-component/paciente-resumen-component';
 import { HeaderComponent } from './header/header';
 import { EspecialistaSelectorComponent } from '../especialista-selector/especialista-selector';
+import { EspecialistaService } from '../../../../core/services/especialista.service';
 
 @Component({
   selector: 'app-agendamiento',
@@ -32,7 +33,7 @@ export class Agendamiento implements OnInit {
     tipo: '',
   };
 
-  constructor(private citasService: CitasService) {}
+  constructor(private citasService: CitasService , private especialistaService: EspecialistaService) {}
 
   ngOnInit(): void {
     console.log('AGENDAMIENTO CARGADO');
@@ -40,7 +41,7 @@ export class Agendamiento implements OnInit {
   }
 
   cargarEspecialistas() {
-    this.citasService.getEspecialistas().subscribe((data) => {
+    this.especialistaService.listarEspecialistas().subscribe((data) => {
       console.log('Datos recibidos del Back:', data);
       this.especialistas = data;
     });
