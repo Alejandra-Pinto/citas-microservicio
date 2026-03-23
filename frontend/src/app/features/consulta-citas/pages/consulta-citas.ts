@@ -6,6 +6,8 @@ import { TablaCitas } from '../components/tabla-citas/tabla-citas';
 import { MetricasCitas } from '../components/metricas-citas/metricas-citas';
 import { Cita } from '../../../core/models/cita.model';
 import { RouterLink } from "@angular/router";
+import { PacienteService } from '../../../core/services/paciente.service';
+import { catchError, forkJoin, map, of, switchMap } from 'rxjs';
 
 @Component({
   standalone: true,
@@ -14,18 +16,19 @@ import { RouterLink } from "@angular/router";
   templateUrl: './consulta-citas.html',
 })
 export class ConsultaCitas {
-  citas: Cita[] = [];
+  citas: any[] = []; // Cambiado a any[] temporalmente para aceptar la propiedad pacienteNombre
   estadoSeleccionado = 'TODAS';
   loading = false;
-  exporting = false; // Estado para los botones de descarga
+  exporting = false;
   error = '';
   fechaActual = new Date();
-  
-  // Guardamos el último filtro para que la exportación sea coherente
   ultimoFiltro: { especialistaId: string; fecha: string } | null = null;
 
-  constructor(private citasService: CitasService) {}
-
+  // Inyectamos ambos servicios
+  constructor(
+    private citasService: CitasService,
+    private pacienteService: PacienteService
+  ) {}
   get fechaFormateada(): string {
     return this.fechaActual.toLocaleDateString('es-ES', {
       weekday: 'long',
@@ -47,21 +50,42 @@ export class ConsultaCitas {
   }
 
   onBuscar(filtro: { especialistaId: string; fecha: string }) {
-    this.ultimoFiltro = filtro; 
+    this.ultimoFiltro = filtro;
     this.loading = true;
     this.error = '';
     this.estadoSeleccionado = 'TODAS';
 
-    this.citasService.listarCitas(filtro.especialistaId, filtro.fecha).subscribe({
-      next: (data) => {
-        this.citas = data;
-        this.loading = false;
-      },
-      error: () => {
-        this.error = 'Error al cargar citas';
-        this.loading = false;
-      },
-    });
+    this.citasService.listarCitas(filtro.especialistaId, filtro.fecha)
+      .pipe(
+        switchMap(citasBusqueda => {
+          if (citasBusqueda.length === 0) return of([]);
+
+          // Por cada cita, creamos una petición al servicio de pacientes
+          const peticionesEnriquecidas = citasBusqueda.map(cita =>
+            this.pacienteService.getPaciente(cita.pacienteId).pipe(
+              map(paciente => ({
+                ...cita,
+                pacienteNombre: `${paciente.nombres} ${paciente.apellidos}` // Ajusta según tu modelo de paciente
+              })),
+              // En caso de que un paciente falle, devolvemos la cita con "Desconocido"
+              // para no romper toda la lista
+              catchError(() => of({ ...cita, pacienteNombre: 'Paciente no encontrado' }))
+            )
+          );
+          return forkJoin(peticionesEnriquecidas);
+        })
+      )
+      .subscribe({
+        next: (data) => {
+          this.citas = data;
+          this.loading = false;
+        },
+        error: (err) => {
+          this.error = 'Error al cargar citas o datos de pacientes';
+          this.loading = false;
+          console.error(err);
+        },
+      });
   }
 
   onExportar(formato: 'pdf' | 'excel') {

@@ -30,11 +30,7 @@ export class CitasService {
     });
   }
 
-  // Paciente
-  getPaciente(documento: string): Observable<any> {
-    return this.http.get(`http://localhost:3000/pacientes/${documento}`);
-  }
-
+  
   buscarSugerencias(termino: string) {
     return this.http.get<any[]>(`${this.api}/pacientes/buscar?q=${termino}`);
   }

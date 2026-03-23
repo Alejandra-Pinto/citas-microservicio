@@ -10,6 +10,7 @@ import { HorarioSelectorComponent } from './horario-selector/horario-selector';
 import { FormActionsComponent } from '../../../../components/form-actions/form-actions';
 import Swal from 'sweetalert2';
 import { NgModel } from '@angular/forms';
+import { PacienteService } from '../../../../core/services/paciente.service';
 
 @Component({
   selector: 'app-agendamiento',
@@ -44,6 +45,7 @@ export class Agendamiento implements OnInit {
   constructor(
     private citasService: CitasService,
     private especialistaService: EspecialistaService,
+    private pacienteService: PacienteService
   ) {}
 
   sugerencias: any[] = []; // Array para guardar los resultados temporales
@@ -102,7 +104,7 @@ export class Agendamiento implements OnInit {
     }
 
     // 2. Llamada al servicio
-    this.citasService.getPaciente(cedula).subscribe({
+    this.pacienteService.getPaciente(cedula).subscribe({
       next: (data) => {
         if (data) {
           // ¡Éxito! Guardamos los datos
