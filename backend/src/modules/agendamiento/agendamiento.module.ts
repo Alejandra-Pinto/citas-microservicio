@@ -13,6 +13,7 @@ import { ReagendarCitaUseCase } from './application/use-cases/reagendar-cita.use
 import { FinalizarCitaUseCase } from './application/use-cases/finalizar-cita.usecase';
 import { MarcarNoAsistioUseCase } from './application/use-cases/noAsistida-cita.usecase';
 import { ExportarCitasUseCase } from './application/use-cases/exportar-citas.usecase';
+import { ListarTodasLasCitasUseCase } from './application/use-cases/listar-citas-general-citas.usecase';
 
 //Services
 import { PoliticaAgendamientoService } from './domain/services/politica-agendamiento.service';
@@ -52,6 +53,7 @@ import { ConfiguracionSistemaPort } from './domain/ports/configuracionSistema.po
     ExportarCitasUseCase,
     PoliticaAgendamientoService,
     DisponibilidadAgendamientoService,
+    ListarTodasLasCitasUseCase,
 
     //Repositories & Ports
     { provide: 'CitaRepository', useClass: CitaRepositoryImpl },
