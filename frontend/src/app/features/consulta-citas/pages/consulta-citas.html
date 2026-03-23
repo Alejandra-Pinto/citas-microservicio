@@ -23,7 +23,13 @@
     </div>
   </div>
 
-  <app-metricas-citas [citas]="citas" class="block mb-10"></app-metricas-citas>
+  <app-metricas-citas 
+    [citas]="citas" 
+    (filtrarEstado)="onFiltrarPorMetrica($event)"
+    class="block mb-10">
+  </app-metricas-citas>
+
+  
 
   <app-filtro-citas (buscar)="onBuscar($event)" class="block mb-6"></app-filtro-citas>
 
@@ -47,7 +53,7 @@
   }
 
   @if (citas.length > 0) {
-    <app-tabla-citas [citas]="citas"></app-tabla-citas>
+    <app-tabla-citas [citas]="citasFiltradas"></app-tabla-citas>
   }
 
   
