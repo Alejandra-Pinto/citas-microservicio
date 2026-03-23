@@ -7,7 +7,6 @@ export const routes: Routes = [
     redirectTo: 'home',
     pathMatch: 'full',
   },
-  //RUTA INDEPENDIENTE (Sin Sidebar)
   {
     path: 'home',
     loadComponent: () =>
@@ -16,7 +15,7 @@ export const routes: Routes = [
   //RUTAS PROTEGIDAS / CON SIDEBAR (Hijas del Layout)
   {
     path: '',
-    component: DashboardLayoutComponent, // Este componente ya tiene el Sidebar en su HTML
+    component: DashboardLayoutComponent,
     children: [
       {
         path: 'agendarUser',
@@ -40,11 +39,10 @@ export const routes: Routes = [
         path: 'administrador',
         loadComponent: () =>
           import('./features/administrador/pages/configuracion-agenda/configuracion-agenda')
-            .then(m => m.ConfiguracionAgendaComponent),
+            .then(m => m.ConfiguracionAdmin),
       },
     ]
   },
-  //Si la ruta no existe, vuelve al Home
   {
     path: '**',
     redirectTo: 'home',
