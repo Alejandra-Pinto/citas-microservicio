@@ -187,6 +187,8 @@ export class Agendamiento implements OnInit {
     if (!this.validar()) return;
 
     const fechaHoraStr = `${this.formData.fecha}T${this.formData.hora}:00`;
+    console.log("Hora seleccionada:", this.formData.hora);
+    console.log("Fecha final enviada:", fechaHoraStr);
 
     const dto = {
       pacienteId: this.formData.cedula,
