@@ -2,11 +2,20 @@ import { Component, OnInit } from '@angular/core';
 import { CitasService } from '../../../../core/services/citas-service';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { PacienteResumenComponent } from './paciente-resumen-component/paciente-resumen-component';
+import { HeaderComponent } from './header/header';
+import { EspecialistaSelectorComponent } from '../especialista-selector/especialista-selector';
 
 @Component({
   selector: 'app-agendamiento',
   standalone: true,
-  imports: [FormsModule, CommonModule],
+  imports: [
+    FormsModule,
+    CommonModule,
+    PacienteResumenComponent,
+    HeaderComponent,
+    EspecialistaSelectorComponent,
+  ],
   templateUrl: './agendamiento.html',
   styleUrl: './agendamiento.scss',
 })
@@ -73,6 +82,10 @@ export class Agendamiento implements OnInit {
       .subscribe((data) => {
         this.horarios = data;
       });
+  }
+  manejarCambioEspecialista(id: number) {
+    this.formData.especialistaid = id.toString();
+    this.cargarDisponibilidad(); // Refrescamos horarios de inmediato
   }
 
   agendar() {

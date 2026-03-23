@@ -1,56 +1,8 @@
 <body class="bg-background text-on-background h-full overflow-hidden flex">
-  
   <!-- Main Content Area -->
-  <main class="flex-1  min-h-screen overflow-y-auto flex flex-col">
+  <main class="flex-1 min-h-screen overflow-y-auto flex flex-col">
     <!-- TopAppBar (Predicted Component) -->
-    <header
-      class="w-full sticky top-0 z-40 bg-white/80 backdrop-blur-md shadow-sm flex items-center justify-between px-8 py-4"
-    >
-      <div class="flex items-center gap-8">
-        <h2 class="text-xl font-bold tracking-tight text-slate-900">Agendar Cita</h2>
-        <div class="relative">
-          <span
-            class="absolute left-3 top-1/2 -translate-y-1/2 material-symbols-outlined text-slate-400 text-sm"
-            data-icon="search"
-            >search</span
-          >
-          <input
-            class="pl-10 pr-4 py-2 bg-slate-100 border-none rounded-full text-xs w-64 focus:ring-2 focus:ring-blue-500 transition-all"
-            placeholder="Buscar pacientes o expedientes..."
-            type="text"
-          />
-        </div>
-      </div>
-      <div class="flex items-center gap-4">
-        <button
-          class="p-2 text-slate-500 hover:bg-slate-50 rounded-full transition-colors relative"
-        >
-          <span class="material-symbols-outlined" data-icon="notifications">notifications</span>
-          <span
-            class="absolute top-2 right-2 w-2 h-2 bg-error rounded-full border-2 border-white"
-          ></span>
-        </button>
-        <button class="p-2 text-slate-500 hover:bg-slate-50 rounded-full transition-colors">
-          <span class="material-symbols-outlined" data-icon="help">help</span>
-        </button>
-        <div class="h-8 w-[1px] bg-slate-200 mx-2"></div>
-        <div
-          class="flex items-center gap-3 cursor-pointer hover:bg-slate-50 p-1 pr-3 rounded-full transition-colors"
-        >
-          <div class="w-8 h-8 rounded-full overflow-hidden border border-slate-200">
-            <img
-              class="w-full h-full object-cover"
-              data-alt="Portrait of a professional doctor avatar"
-              src="https://lh3.googleusercontent.com/aida-public/AB6AXuClcSPqQCS48GC0J4KE-zQZuRyPDHfQ4jSMfTRUrYJdamA9O3IuGpcHcB8dUzQzvxWy7w2H-G9kaH65472LvHfxUoQClxleMySoVvvSZmdE1n90M2LXDAVBcydhytDmEGjvdK6dAyAYQtshjNlVRXTMkWMRNn2e0kJKJqchKG05QjQsjX6U97g31pWGSXb5WhKTipgV4jnfgHMLkihohjl5wStrWBrVg80sXedS5FXisUQjCk8bu3QzwHJe2dFlEGEKyBpKaXp7cxo"
-            />
-          </div>
-          <div class="hidden lg:block">
-            <p class="text-xs font-bold text-slate-900 leading-none">Dr. Ricardo Sosa</p>
-            <p class="text-[10px] text-slate-500 font-medium">Administrador</p>
-          </div>
-        </div>
-      </div>
-    </header>
+    <app-header></app-header>
     <!-- Canvas Area -->
     <section class="p-8 max-w-6xl mx-auto w-full">
       <div class="grid grid-cols-12 gap-8">
@@ -157,36 +109,12 @@
               </div>
               <!-- Specialist Selection -->
               <div class="space-y-3">
-                <label class="text-[10px] uppercase tracking-widest font-bold text-slate-500"
-                  >Especialista Asignado</label
+                <app-especialista-selector
+                  [especialistas]="especialistas"
+                  [seleccionadoId]="formData.especialistaid"
+                  (cambioEspecialista)="manejarCambioEspecialista($event)"
                 >
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <label
-                    *ngFor="let esp of especialistas"
-                    class="relative flex items-center gap-4 p-4 rounded-xl border-2 border-slate-100 bg-white hover:border-blue-200 transition-all cursor-pointer group"
-                  >
-                    <input
-                      checked=""
-                      class="absolute right-4 top-4 text-blue-600 focus:ring-blue-600"
-                      type="radio"
-                      [value]="esp.id"
-                      [(ngModel)]="formData.especialistaid"
-                      name="specialist"
-                      (change)="cargarDisponibilidad()"
-                    />
-                    <div class="w-12 h-12 rounded-full overflow-hidden bg-slate-100">
-                      <img
-                        class="w-full h-full object-cover"
-                        data-alt="Female doctor Dr. Sofia Gomez portrait"
-                        src="https://lh3.googleusercontent.com/aida-public/AB6AXuCu6rQTDoTWc_19wBig-oJ74Ae7qd1N0tpYh6vOOfQGJyD8qr926aPA3OYQElbzzZeW_nz4MP1yVS8Z3Zx6E3njoH674bgSEPJekBSThsfOz8NqVISvgWkm24q6yf56y8stRGKYuLmFP1zj63WmOPzrnCyFkl_6I2eLEePggrVy8_SHvnRmUPZAfUDYiVaXno7eHD1mtfXZ1pe_pP0HRR_WO4seKHvaBMaMLalICfUkWCjmVtFHWKQgwMGKwc01-beh8vr6c1TnWoQ"
-                      />
-                    </div>
-                    <div>
-                      <p class="text-sm font-bold text-slate-900">{{ esp.nombres }}</p>
-                      <p class="text-[10px] text-slate-500">{{ esp.especialidad }}</p>
-                    </div>
-                  </label>
-                </div>
+                </app-especialista-selector>
               </div>
             </div>
             <div class="p-8 bg-slate-50 border-t border-slate-100 flex justify-end gap-4">
@@ -207,46 +135,10 @@
         <!-- Right Column: Context/Info -->
         <div class="col-span-12 lg:col-span-4 space-y-6">
           <!-- Patient Summary Card (Editorial Style) -->
-          <div class="bg-primary text-white p-8 rounded-2xl shadow-xl relative overflow-hidden">
+          <div>
             <div class="relative z-10">
-              <span class="text-[9px] font-black uppercase tracking-[0.2em] opacity-80"
-                >Información del Paciente</span
-              >
-              <h4 class="text-2xl font-bold mt-2">
-                {{
-                  pacienteEncontrado
-                    ? pacienteEncontrado.nombres + ' ' + pacienteEncontrado.apellidos
-                    : 'Seleccione Paciente'
-                }}
-              </h4>
-              <p class="text-xs opacity-80 mt-1">
-                Estado: {{ pacienteEncontrado?.activo ? 'Activo' : 'Inactivo' }}
-              </p>
-              <div class="mt-8 grid grid-cols-2 gap-4">
-                <div class="bg-white/10 backdrop-blur-md p-3 rounded-xl">
-                  <p class="text-[9px] uppercase font-bold opacity-60">Edad</p>
-                  <p class="text-lg font-bold">
-                    {{ getEdad() }}
-                  </p>
-                </div>
-                <div class="bg-white/10 backdrop-blur-md p-3 rounded-xl">
-                  <p class="text-[9px] uppercase font-bold opacity-60">Genero</p>
-                  <p class="text-lg font-bold">{{ pacienteEncontrado?.genero || '--' }}</p>
-                </div>
-              </div>
-              <button
-                class="mt-8 w-full py-3 bg-white text-primary font-bold text-xs rounded-lg hover:bg-blue-50 transition-colors"
-              >
-                Ver Historial Completo
-              </button>
+              <app-paciente-resumen [paciente]="pacienteEncontrado"></app-paciente-resumen>
             </div>
-            <!-- Abstract Gradient Pattern -->
-            <div
-              class="absolute -right-10 -bottom-10 w-40 h-40 bg-blue-400/20 rounded-full blur-3xl"
-            ></div>
-            <div
-              class="absolute -left-10 -top-10 w-40 h-40 bg-blue-300/10 rounded-full blur-3xl"
-            ></div>
           </div>
           <!-- Daily Stats Card -->
           <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">

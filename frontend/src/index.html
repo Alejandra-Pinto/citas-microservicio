@@ -1,86 +1,101 @@
 <!doctype html>
 <html lang="en">
-<head>
-  <meta charset="utf-8">
-  <title>AgendamientoCitasPiedraAzul</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
-  <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
-  <base href="/">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="icon" type="image/x-icon" href="favicon.ico">
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
-  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
-  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
-  <script>
-    tailwind.config = {
-          darkMode: "class",
-          theme: {
-            extend: {
-              colors: {
-                "on-tertiary-fixed": "#3a0a00",
-                "tertiary": "#8a2400",
-                "surface-container-lowest": "#ffffff",
-                "outline": "#cbd5e1",
-                "surface-tint": "#0052eb",
-                "surface-container": "#f5f6f8",
-                "secondary": "#475b9d",
-                "surface": "#f5f6f8",
-                "on-tertiary": "#ffffff",
-                "on-error-container": "#93000a",
-                "error-container": "#ffdad6",
-                "surface-bright": "#ffffff",
-                "on-primary-container": "#ffffff",
-                "inverse-primary": "#b6c4ff",
-                "surface-container-high": "#ededfa",
-                "on-primary": "#ffffff",
-                "tertiary-fixed": "#ffdbd1",
-                "surface-container-highest": "#e1e1ee",
-                "on-primary-fixed-variant": "#003baf",
-                "primary": "#0052eb",
-                "error": "#ba1a1a",
-                "background": "#f5f6f8",
-                "on-secondary-fixed": "#00164e",
-                "surface-container-low": "#ffffff",
-                "tertiary-container": "#b43200",
-                "on-error": "#ffffff",
-                "on-surface-variant": "#1e293b",
-                "on-secondary-container": "#314586",
-                "on-background": "#0c121d",
-                "inverse-surface": "#0f1623",
-                "primary-fixed-dim": "#b6c4ff",
-                "outline-variant": "#e2e8f0",
-                "secondary-fixed": "#dce1ff",
-                "on-primary-fixed": "#00164e",
-                "primary-container": "#1e4cd6",
-                "inverse-on-surface": "#f0f0fc",
-                "secondary-container": "#a2b6ff",
-                "surface-variant": "#e1e1ee",
-                "on-tertiary-fixed-variant": "#862300",
-                "on-secondary-fixed-variant": "#2e4384",
-                "tertiary-fixed-dim": "#ffb59f",
-                "on-tertiary-container": "#ffd4c7",
-                "on-surface": "#0c121d",
-                "on-secondary": "#ffffff",
-                "surface-dim": "#d9d9e5",
-                "secondary-fixed-dim": "#b6c4ff",
-                "primary-fixed": "#dce1ff"
-              },
-              fontFamily: {
-                "headline": ["Inter"],
-                "body": ["Inter"],
-                "label": ["Inter"]
-              },
-              borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+  <head>
+    <meta charset="utf-8" />
+    <title>AgendamientoCitasPiedraAzul</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css" />
+    <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+    <base href="/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" type="image/x-icon" href="favicon.ico" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+      rel="stylesheet"
+    />
+    <script>
+      tailwind.config = {
+        darkMode: 'class',
+        theme: {
+          extend: {
+            colors: {
+              'on-tertiary-fixed': '#3a0a00',
+              tertiary: '#8a2400',
+              'surface-container-lowest': '#ffffff',
+              outline: '#cbd5e1',
+              'surface-tint': '#0052eb',
+              'surface-container': '#f5f6f8',
+              secondary: '#475b9d',
+              surface: '#f5f6f8',
+              'on-tertiary': '#ffffff',
+              'on-error-container': '#93000a',
+              'error-container': '#ffdad6',
+              'surface-bright': '#ffffff',
+              'on-primary-container': '#ffffff',
+              'inverse-primary': '#b6c4ff',
+              'surface-container-high': '#ededfa',
+              'on-primary': '#ffffff',
+              'tertiary-fixed': '#ffdbd1',
+              'surface-container-highest': '#e1e1ee',
+              'on-primary-fixed-variant': '#003baf',
+              primary: '#0052eb',
+              error: '#ba1a1a',
+              background: '#f5f6f8',
+              'on-secondary-fixed': '#00164e',
+              'surface-container-low': '#ffffff',
+              'tertiary-container': '#b43200',
+              'on-error': '#ffffff',
+              'on-surface-variant': '#1e293b',
+              'on-secondary-container': '#314586',
+              'on-background': '#0c121d',
+              'inverse-surface': '#0f1623',
+              'primary-fixed-dim': '#b6c4ff',
+              'outline-variant': '#e2e8f0',
+              'secondary-fixed': '#dce1ff',
+              'on-primary-fixed': '#00164e',
+              'primary-container': '#1e4cd6',
+              'inverse-on-surface': '#f0f0fc',
+              'secondary-container': '#a2b6ff',
+              'surface-variant': '#e1e1ee',
+              'on-tertiary-fixed-variant': '#862300',
+              'on-secondary-fixed-variant': '#2e4384',
+              'tertiary-fixed-dim': '#ffb59f',
+              'on-tertiary-container': '#ffd4c7',
+              'on-surface': '#0c121d',
+              'on-secondary': '#ffffff',
+              'surface-dim': '#d9d9e5',
+              'secondary-fixed-dim': '#b6c4ff',
+              'primary-fixed': '#dce1ff',
             },
+            fontFamily: {
+              headline: ['Inter'],
+              body: ['Inter'],
+              label: ['Inter'],
+            },
+            borderRadius: { DEFAULT: '0.25rem', lg: '0.5rem', xl: '0.75rem', full: '9999px' },
           },
-        }
-  </script>
-</head>
-<body>
-  <app-root></app-root>
-</body>
+        },
+      };
+    </script>
+  </head>
+  <body>
+    <app-root></app-root>
+  </body>
 </html>
