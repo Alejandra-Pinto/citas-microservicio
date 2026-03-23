@@ -20,30 +20,26 @@
               <!-- Patient Lookup -->
               <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div class="space-y-2">
-                  <label class="text-[10px] uppercase tracking-widest font-bold text-slate-500"
-                    >Cédula de Identidad</label
+                  <label class="text-[10px] uppercase tracking-widest font-bold text-slate-500">
+                    Cédula del Paciente
+                  </label>
+                  <input
+                    type="text"
+                    [(ngModel)]="formData.cedula"
+                    (blur)="buscarPaciente()"
+                    (keyup.enter)="buscarPaciente()"
+                    [ngClass]="{ 'border-red-500 bg-red-50': intentoEnvio && !formData.cedula }"
+                    class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-blue-600 focus:border-blue-600 text-sm font-medium transition-all outline-none"
+                    placeholder="CC del paciente"
+                  />
+                  <p
+                    *ngIf="intentoEnvio && !formData.cedula"
+                    class="text-[10px] text-red-500 font-bold italic ml-1"
                   >
-                  <div class="relative">
-                    <input
-                      class="w-full px-4 py-3 bg-slate-50 border-slate-200 rounded-xl focus:ring-blue-600 focus:border-blue-600 text-sm font-medium"
-                      type="text"
-                      value="1.234.567-8"
-                      [(ngModel)]="formData.cedula"
-                      name="cedula"
-                      (blur)="buscarPaciente()"
-                    />
-                    <div
-                      class="absolute right-3 top-1/2 -translate-y-1/2 flex items-center text-blue-600"
-                    >
-                      <span
-                        class="material-symbols-outlined text-lg"
-                        data-icon="check_circle"
-                        style="font-variation-settings: 'FILL' 1"
-                        >check_circle</span
-                      >
-                    </div>
-                  </div>
+                    * Campo obligatorio
+                  </p>
                 </div>
+
                 <div class="space-y-2">
                   <label class="text-[10px] uppercase tracking-widest font-bold text-slate-500"
                     >Nombre del Paciente</label
@@ -77,35 +73,15 @@
               </div>
               <!-- Date and Time -->
               <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div class="space-y-2">
-                  <label class="text-[10px] uppercase tracking-widest font-bold text-slate-500"
-                    >Fecha de Cita</label
-                  >
-                  <div class="relative">
-                    <input
-                      class="w-full px-4 py-3 bg-slate-50 border-slate-200 rounded-xl focus:ring-blue-600 focus:border-blue-600 text-sm font-medium"
-                      type="date"
-                      [(ngModel)]="formData.fecha"
-                      name="fecha"
-                      (change)="cargarDisponibilidad()"
-                    />
-                  </div>
-                </div>
-                <div class="space-y-2">
-                  <label class="text-[10px] uppercase tracking-widest font-bold text-slate-500"
-                    >Horario Disponible</label
-                  >
-                  <select
-                    class="w-full px-4 py-3 bg-slate-50 border-slate-200 rounded-xl"
-                    [(ngModel)]="formData.hora"
-                    name="hora"
-                  >
-                    <option value="" disabled selected>Seleccione una hora</option>
-                    <option *ngFor="let h of horarios" [value]="h.iso.split('T')[1].slice(0, 5)">
-                      {{ h.hora }}
-                    </option>
-                  </select>
-                </div>
+                <app-horario-selector
+                  class="w-full col-span-2"
+                  [fecha]="formData.fecha"
+                  [horaSeleccionada]="formData.hora"
+                  [horarios]="horarios"
+                  (fechaChange)="actualizarFecha($event)"
+                  (horaChange)="formData.hora = $event"
+                >
+                </app-horario-selector>
               </div>
               <!-- Specialist Selection -->
               <div class="space-y-3">
@@ -117,19 +93,12 @@
                 </app-especialista-selector>
               </div>
             </div>
-            <div class="p-8 bg-slate-50 border-t border-slate-100 flex justify-end gap-4">
-              <button
-                class="px-6 py-3 text-slate-600 font-bold text-sm hover:bg-slate-200 rounded-xl transition-all"
-              >
-                Cancelar
-              </button>
-              <button
-                (click)="agendar()"
-                class="px-10 py-3 bg-primary text-white font-bold text-sm rounded-xl shadow-lg shadow-blue-200 hover:bg-primary-container transition-all active:scale-95"
-              >
-                Confirmar Cita
-              </button>
-            </div>
+            <app-form-actions
+              [disabled]="esFormularioInvalido"
+              (onConfirm)="agendar()"
+              (onCancel)="cancelar()"
+            >
+            </app-form-actions>
           </div>
         </div>
         <!-- Right Column: Context/Info -->
@@ -179,7 +148,7 @@
               <div>
                 <h5 class="text-sm font-bold text-slate-900">Recordatorio de Protocolo</h5>
                 <p class="text-xs text-slate-500 mt-1 leading-relaxed">
-                  Asegúrese de validar el seguro médico antes de confirmar citas de control.
+                  Asegúrese de que el usuario este registrado.
                 </p>
               </div>
             </div>
