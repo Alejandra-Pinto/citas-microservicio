@@ -1,5 +1,5 @@
 import { Inject, Injectable, BadRequestException } from '@nestjs/common';
-import { Cita, TipoCita } from '../../domain/entities/cita.entity';
+import { Cita, EstadoCita, TipoCita } from '../../domain/entities/cita.entity';
 import type { CitaRepository } from '../../domain/repositories/cita.repository';
 import { PoliticaAgendamientoService } from '../../domain/services/politica-agendamiento.service';
 import { CrearCitaDto } from '../dto/crear-cita.dto';
@@ -20,7 +20,7 @@ export class CrearCitaManualUseCase {
   ) {}
 
   async ejecutar(dto: CrearCitaDto) {
-    const fechaCita = dto.fechaHora;
+    const fechaCita = new Date(dto.fechaHora);
 
     // No permitir pasado
     if (fechaCita < new Date()) {
@@ -49,7 +49,7 @@ export class CrearCitaManualUseCase {
     // Validar horario dentro del rango permitido (8:00 - 18:00)
     if (!this.disponibilidadService.esHorarioValido(fechaCita, duracionNueva)) {
       throw new BadRequestException(
-        'Las citas solo pueden agendarse entre 8:00 y 11:59',
+        'Las citas solo pueden agendarse entre 8:00 y 18:00',
       );
     }
 
@@ -79,7 +79,7 @@ export class CrearCitaManualUseCase {
       fechaCita,
       duracionNueva,
       dto.tipo,
-      'PROGRAMADA',
+      EstadoCita.PROGRAMADA,
     );
 
     await this.citaRepository.guardar(cita);

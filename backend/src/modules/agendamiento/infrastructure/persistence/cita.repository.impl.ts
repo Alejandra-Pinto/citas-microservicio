@@ -20,7 +20,7 @@ export class CitaRepositoryImpl implements CitaRepository {
       fechaHora: cita.fechaHora,
       duracion: cita.duracion,
       tipo: cita.tipo,
-      estado: cita.estado,
+      estadoCita: cita.estado,
     });
 
     await this.repo.save(entity);
@@ -49,7 +49,7 @@ export class CitaRepositoryImpl implements CitaRepository {
             c.fechaHora,
             c.duracion,
             c.tipo,
-            c.estado,
+            c.estadoCita,
           ),
       );
   }
