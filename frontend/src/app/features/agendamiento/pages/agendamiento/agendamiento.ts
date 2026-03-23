@@ -190,8 +190,12 @@ export class Agendamiento implements OnInit {
     this.intentoEnvio = true;
     if (!this.validar()) return;
 
-    const fechaHoraStr = `${this.formData.fecha}T${this.formData.hora}:00`;
-    console.log('Hora seleccionada:', this.formData.hora);
+    // Dividimos la hora (ej: "8:0") y nos aseguramos que cada parte tenga 2 dígitos
+    const [horas, minutos] = this.formData.hora.split(':');
+    const horaFormateada = `${horas.padStart(2, '0')}:${minutos.padStart(2, '0')}`;
+    
+    const fechaHoraStr = `${this.formData.fecha}T${horaFormateada}:00`;
+    console.log('Hora seleccionada:', horaFormateada);
     console.log('Fecha final enviada:', fechaHoraStr);
 
     const dto = {

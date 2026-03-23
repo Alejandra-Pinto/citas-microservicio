@@ -35,7 +35,7 @@ export class DisponibilidadAgendamientoService {
       const finExistente = inicioExistente + c.duracion * 60000;
 
       // Lógica de solapamiento: (InicioA < FinB) && (FinA > InicioB)
-      return inicioNuevo < finExistente && finNuevo > inicioExistente;
+      return inicioNuevo <= finExistente && finNuevo >= inicioExistente;
     });
   }
 
