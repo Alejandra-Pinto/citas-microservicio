@@ -1,0 +1,33 @@
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+
+  <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-100 flex items-center gap-5 transition-transform hover:-translate-y-1 duration-300">
+    <div class="w-14 h-14 bg-blue-50 rounded-xl flex items-center justify-center text-blue-600">
+      <span class="material-symbols-outlined text-[32px]">assignment_ind</span>
+    </div>
+    <div>
+      <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Total de Citas</p>
+      <h3 class="text-3xl font-black text-slate-800">{{ citas.length }}</h3>
+    </div>
+  </div>
+
+  <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-100 flex items-center gap-5 transition-transform hover:-translate-y-1 duration-300">
+    <div class="w-14 h-14 bg-amber-50 rounded-xl flex items-center justify-center text-amber-600">
+      <span class="material-symbols-outlined text-[32px]">pending_actions</span>
+    </div>
+    <div>
+      <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Pendientes</p>
+      <h3 class="text-3xl font-black text-slate-800">{{ pendientes }}</h3>
+    </div>
+  </div>
+
+  <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-100 flex items-center gap-5 transition-transform hover:-translate-y-1 duration-300">
+    <div class="w-14 h-14 bg-emerald-50 rounded-xl flex items-center justify-center text-emerald-600">
+      <span class="material-symbols-outlined text-[32px]">task_alt</span>
+    </div>
+    <div>
+      <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Completadas</p>
+      <h3 class="text-3xl font-black text-slate-800">{{ completadas }}</h3>
+    </div>
+  </div>
+
+</div>

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { CitasService } from '../../../agendamiento/services/citas-service';
+import { CitasService } from '../../../../core/services/citas-service';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 
