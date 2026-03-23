@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Cita } from '../models/cita.model';
 
@@ -35,4 +35,20 @@ export class CitasService {
     return this.http.get(`http://localhost:3000/pacientes/${documento}`);
   }
 
+  buscarSugerencias(termino: string) {
+    return this.http.get<any[]>(`${this.api}/pacientes/buscar?q=${termino}`);
+  }
+
+  // Reporte
+  exportarReporte(especialistaId: string, fecha: string, formato: 'pdf' | 'excel') {
+    const params = new HttpParams()
+      .set('especialistaId', especialistaId)
+      .set('fecha', fecha)
+      .set('formato', formato);
+
+    return this.http.get(`${this.api}/exportar`, {
+      params,
+      responseType: 'blob' //CRÍTICO: Para recibir archivos binarios
+    });
+  }
 }

@@ -1,61 +1,49 @@
 import { Component, OnInit } from '@angular/core';
-import { AdministradorService } from '../../services/administrador';
-import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { EspecialistaService } from '../../../../core/services/especialista.service';
 
 @Component({
+  selector: 'app-configuracion-admin',
   standalone: true,
   imports: [CommonModule, FormsModule],
-  selector: 'app-configuracion-agenda',
   templateUrl: './configuracion-agenda.html',
-  styleUrls: ['./configuracion-agenda.scss']
 })
-export class ConfiguracionAgendaComponent implements OnInit {
+export class ConfiguracionAdmin implements OnInit {
+  especialistas: any[] = [];
+  espExpandedId: string | null = null;
+  
+  // Configuración de semanas
+  semanasGlobal = 4;
+  
+  // Listas maestras
+  diasSemana = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'];
+  intervalos = [5, 10, 15, 20, 25, 30, 40, 50];
 
-  config = {
-    horaInicio: '',
-    horaFin: '',
-    semanasDisponibles: 1,
-    diasAtencion: [] as string[]
-  };
+  constructor(private especialistaService: EspecialistaService) {}
 
-  constructor(private adminService: AdministradorService) {}
-
-  ngOnInit(): void {
-    this.cargarConfiguracion();
-  }
-
-  cargarConfiguracion() {
-    this.adminService.obtenerConfiguracion().subscribe((data: any) => {
-      if (data) {
-        this.config = {
-          horaInicio: data.horaInicio || '',
-          horaFin: data.horaFin || '',
-          semanasDisponibles: data.semanasDisponibles || 1,
-          diasAtencion: data.diasLaborales || [] // 👈 CLAVE
-        };
-      }
+  ngOnInit() {
+    this.especialistaService.listarEspecialistas().subscribe(data => {
+      this.especialistas = data;
     });
   }
 
-  guardar() {
-    this.adminService.guardarConfiguracion(this.config)
-      .subscribe(() => {
-        alert('Configuración guardada');
-      });
+  toggleEspecialista(id: string) {
+    this.espExpandedId = this.espExpandedId === id ? null : id;
   }
 
-  toggleDia(dia: string) {
-    const diaUpper = dia.toUpperCase();
-
-    const index = this.config.diasAtencion.indexOf(diaUpper);
-
-    if (index >= 0) {
-      this.config.diasAtencion.splice(index, 1);
-    } else {
-      this.config.diasAtencion.push(diaUpper);
+  // Métodos para el contador de semanas (más intuitivo para mayores)
+  ajustarSemanas(valor: number) {
+    if (this.semanasGlobal + valor >= 1 && this.semanasGlobal + valor <= 52) {
+      this.semanasGlobal += valor;
     }
+  }
 
-    console.log(this.config.diasAtencion); // 👈 DEBUG
+  guardarConfiguracionGlobal() {
+    // Aquí iría la lógica para enviar la configuración global al backend
+    console.log('Configuración global guardada:', {
+      semanasGlobal: this.semanasGlobal,
+      especialistas: this.especialistas
+    });
   }
 }

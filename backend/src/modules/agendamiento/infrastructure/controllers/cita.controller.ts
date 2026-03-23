@@ -1,5 +1,15 @@
 /* eslint-disable @typescript-eslint/no-unsafe-return */
-import { Body, Controller, Get, Post, Query } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Post,
+  Query,
+  Res,
+  Param,
+  Patch,
+} from '@nestjs/common';
+import { type Response } from 'express'; // Importación necesaria para el tipado de res
 import { CrearCitaManualUseCase } from '../../application/use-cases/crear-cita-manual.usecase';
 import { ListarCitasProfesionalUseCase } from '../../application/use-cases/listar-citas-profesional.usecase';
 import { CrearCitaDto } from '../../application/dto/crear-cita.dto';
@@ -10,7 +20,7 @@ import { CancelarCitaUseCase } from '../../application/use-cases/cancelar-cita.u
 import { ReagendarCitaUseCase } from '../../application/use-cases/reagendar-cita.usecase';
 import { FinalizarCitaUseCase } from '../../application/use-cases/finalizar-cita.usecase';
 import { MarcarNoAsistioUseCase } from '../../application/use-cases/noAsistida-cita.usecase';
-import { Param, Patch } from '@nestjs/common';
+import { ExportarCitasUseCase } from '../../application/use-cases/exportar-citas.usecase';
 
 @Controller('citas')
 export class CitaController {
@@ -23,6 +33,7 @@ export class CitaController {
     private readonly reagendarCita: ReagendarCitaUseCase,
     private readonly finalizarCita: FinalizarCitaUseCase,
     private readonly marcarNoAsistioUseCase: MarcarNoAsistioUseCase,
+    private readonly exportarCitasUseCase: ExportarCitasUseCase,
   ) {}
 
   @Post()
@@ -59,6 +70,36 @@ export class CitaController {
     return this.obtenerCitas.ejecutar(dto);
   }
 
+  //IMPORTANTE: Ponemos 'exportar' antes de las rutas con ':id'
+  //para que NestJS no confunda la palabra con un ID.
+  @Get('exportar')
+  async exportar(
+    @Query('especialistaId') especialistaId: string,
+    @Query('fecha') fecha: string,
+    @Query('formato') formato: 'pdf' | 'excel',
+    @Res() res: Response, // Tipado correcto con Express
+  ): Promise<void> {
+    const buffer = await this.exportarCitasUseCase.ejecutar(
+      especialistaId,
+      fecha,
+      formato,
+    );
+
+    const ext = formato === 'excel' ? 'xlsx' : 'pdf';
+    const contentType =
+      formato === 'excel'
+        ? 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+        : 'application/pdf';
+
+    res.set({
+      'Content-Type': contentType,
+      'Content-Disposition': `attachment; filename=citas_piedra_azul_${fecha}.${ext}`,
+      'Content-Length': buffer.length.toString(),
+    });
+
+    res.end(buffer);
+  }
+
   @Patch(':id/cancelar')
   async cancelar(@Param('id') id: string) {
     return this.cancelarCita.ejecutar(id);
@@ -72,7 +113,7 @@ export class CitaController {
     return this.reagendarCita.ejecutar(id, new Date(fechaHora));
   }
 
-  @Patch('/finalizar')
+  @Patch(':citaId/finalizar') // Corregido de /finalizar a :citaId/finalizar para capturar el Param
   async finalizar(@Param('citaId') citaId: string) {
     return this.finalizarCita.ejecutar(citaId);
   }

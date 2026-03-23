@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { HeaderComponent } from './header';
+import { HorarioSelector } from './horario-selector';
 
-describe('HeaderComponent', () => {
-  let component: HeaderComponent;
-  let fixture: ComponentFixture<HeaderComponent>;
+describe('HorarioSelector', () => {
+  let component: HorarioSelector;
+  let fixture: ComponentFixture<HorarioSelector>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [HeaderComponent]
+      imports: [HorarioSelector]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(HeaderComponent);
+    fixture = TestBed.createComponent(HorarioSelector);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
