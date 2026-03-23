@@ -4,6 +4,7 @@ import { Repository } from 'typeorm';
 import { CitaRepository } from '../../domain/repositories/cita.repository';
 import { Cita } from '../../domain/entities/cita.entity';
 import { CitaOrmEntity } from './cita.orm-entity';
+import { ConsultarCitasDto } from '../../application/dto/consultar-cita.dto';
 
 @Injectable()
 export class CitaRepositoryImpl implements CitaRepository {
@@ -66,5 +67,48 @@ export class CitaRepositoryImpl implements CitaRepository {
     });
 
     return count > 0;
+  }
+
+  async buscarTodas(dto: ConsultarCitasDto): Promise<Cita[]> {
+    const where: Partial<CitaOrmEntity> = {};
+
+    if (dto.pacienteId) {
+      where.pacienteId = dto.pacienteId;
+    }
+
+    if (dto.especialistaId) {
+      where.especialistaId = dto.especialistaId;
+    }
+
+    const citas = await this.repo.find({ where });
+
+    return citas.map(
+      (c) =>
+        new Cita(
+          c.id,
+          c.pacienteId,
+          c.especialistaId,
+          c.fechaHora,
+          c.duracion,
+          c.tipo,
+          c.estadoCita,
+        ),
+    );
+  }
+
+  async buscarPorId(id: string): Promise<Cita | null> {
+    const c = await this.repo.findOne({ where: { id } });
+
+    if (!c) return null;
+
+    return new Cita(
+      c.id,
+      c.pacienteId,
+      c.especialistaId,
+      c.fechaHora,
+      c.duracion,
+      c.tipo,
+      c.estadoCita,
+    );
   }
 }
