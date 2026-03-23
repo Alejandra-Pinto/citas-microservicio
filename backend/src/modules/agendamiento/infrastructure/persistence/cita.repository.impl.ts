@@ -5,6 +5,7 @@ import { CitaRepository } from '../../domain/repositories/cita.repository';
 import { Cita } from '../../domain/entities/cita.entity';
 import { CitaOrmEntity } from './cita.orm-entity';
 import { ConsultarCitasDto } from '../../application/dto/consultar-cita.dto';
+import { FindOptionsWhere } from 'typeorm';
 
 @Injectable()
 export class CitaRepositoryImpl implements CitaRepository {
@@ -31,28 +32,20 @@ export class CitaRepositoryImpl implements CitaRepository {
     especialistaId: string,
     fecha: string,
   ): Promise<Cita[]> {
-    const citas = await this.repo.find({
-      where: {
-        especialistaId,
-      },
-    });
+    const queryBuilder = this.repo
+      .createQueryBuilder('cita')
+      .leftJoinAndSelect('cita.paciente', 'paciente')
+      .leftJoinAndSelect('cita.especialista', 'especialista')
+      .where('cita.especialistaId = :especialistaId', { especialistaId });
+
+    const citas = await queryBuilder.getMany();
+
     return citas
       .filter((c) => {
         const fechaCita = c.fechaHora.toISOString().split('T')[0];
         return fechaCita === fecha;
       })
-      .map(
-        (c) =>
-          new Cita(
-            c.id,
-            c.pacienteId,
-            c.especialistaId,
-            c.fechaHora,
-            c.duracion,
-            c.tipo,
-            c.estadoCita,
-          ),
-      );
+      .map((c) => this.mapToDomain(c));
   }
 
   async existeCitaEnHorario(
@@ -69,37 +62,64 @@ export class CitaRepositoryImpl implements CitaRepository {
     return count > 0;
   }
 
-  async buscarTodas(dto: ConsultarCitasDto): Promise<Cita[]> {
-    const where: Partial<CitaOrmEntity> = {};
+  async buscarTodas(dto?: ConsultarCitasDto): Promise<Cita[]> {
+    // Definimos 'where' con el tipo oficial de la Entidad de TypeORM
+    const where: FindOptionsWhere<CitaOrmEntity> = {};
 
-    if (dto.pacienteId) {
-      where.pacienteId = dto.pacienteId;
+    if (dto) {
+      if (dto.pacienteId) where.pacienteId = dto.pacienteId;
+      if (dto.especialistaId) where.especialistaId = dto.especialistaId;
     }
 
-    if (dto.especialistaId) {
-      where.especialistaId = dto.especialistaId;
-    }
+    // Ahora pasamos 'where' directamente, sin 'as any'
+    const citas = await this.repo.find({
+      where,
+      relations: ['paciente', 'especialista'],
+    });
 
-    const citas = await this.repo.find({ where });
-
-    return citas.map(
-      (c) =>
-        new Cita(
-          c.id,
-          c.pacienteId,
-          c.especialistaId,
-          c.fechaHora,
-          c.duracion,
-          c.tipo,
-          c.estadoCita,
-        ),
-    );
+    return citas.map((c) => this.mapToDomain(c));
   }
 
   async buscarPorId(id: string): Promise<Cita | null> {
-    const c = await this.repo.findOne({ where: { id } });
+    const c = await this.repo.findOne({
+      where: { id },
+      relations: ['paciente', 'especialista'],
+    });
 
     if (!c) return null;
+
+    return this.mapToDomain(c);
+  }
+
+  /**
+   * Método privado para evitar repetir la lógica de creación de la entidad Cita
+   * e incluir los datos del paciente y especialista si existen.
+   */
+  p; /**
+   * Método privado para mapear la entidad de base de datos al objeto de negocio (Dominio).
+   * Usamos unknown y luego el tipo esperado para satisfacer la regla 'no-unsafe-assignment'.
+   */
+  private mapToDomain(c: CitaOrmEntity): Cita {
+    // 1. Definimos las interfaces con los nombres plurales de tus ORMs
+    interface PersonaData {
+      nombres?: string;
+      apellidos?: string; // El paciente tiene apellidos
+      documento?: string; // El paciente usa documento como ID
+      id?: string; // El especialista usa id como ID
+    }
+
+    // 2. Casteo seguro para el linter
+    const p = c.paciente as unknown as PersonaData | undefined;
+    const e = c.especialista as unknown as PersonaData | undefined;
+
+    // 3. Construcción de nombres (Plural -> Singular para el Dominio)
+    // Para el paciente concatenamos nombres y apellidos
+    const nombreCompletoP = p
+      ? `${p.nombres ?? ''} ${p.apellidos ?? ''}`.trim()
+      : 'Paciente no cargado';
+
+    // Para el especialista usamos su campo 'nombres'
+    const nombreE = e?.nombres ?? 'Especialista no asignado';
 
     return new Cita(
       c.id,
@@ -109,6 +129,18 @@ export class CitaRepositoryImpl implements CitaRepository {
       c.duracion,
       c.tipo,
       c.estadoCita,
+      // Mapeo al objeto literal que espera la Entidad de Dominio
+      p
+        ? {
+            nombre: nombreCompletoP || 'Sin nombre',
+            documento: p.documento ?? 'S/D',
+          }
+        : undefined,
+      e
+        ? {
+            nombre: nombreE,
+          }
+        : undefined,
     );
   }
 }

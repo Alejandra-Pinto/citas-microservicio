@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unsafe-return */
 import {
   Body,
   Controller,
@@ -21,6 +20,7 @@ import { ReagendarCitaUseCase } from '../../application/use-cases/reagendar-cita
 import { FinalizarCitaUseCase } from '../../application/use-cases/finalizar-cita.usecase';
 import { MarcarNoAsistioUseCase } from '../../application/use-cases/noAsistida-cita.usecase';
 import { ExportarCitasUseCase } from '../../application/use-cases/exportar-citas.usecase';
+import { ListarTodasLasCitasUseCase } from '../../application/use-cases/listar-citas-general-citas.usecase';
 
 @Controller('citas')
 export class CitaController {
@@ -34,6 +34,7 @@ export class CitaController {
     private readonly finalizarCita: FinalizarCitaUseCase,
     private readonly marcarNoAsistioUseCase: MarcarNoAsistioUseCase,
     private readonly exportarCitasUseCase: ExportarCitasUseCase,
+    private readonly listarTodasLasCitasUseCase: ListarTodasLasCitasUseCase, // Agregado correctamente
   ) {}
 
   @Post()
@@ -70,8 +71,6 @@ export class CitaController {
     return this.obtenerCitas.ejecutar(dto);
   }
 
-  //IMPORTANTE: Ponemos 'exportar' antes de las rutas con ':id'
-  //para que NestJS no confunda la palabra con un ID.
   @Get('exportar')
   async exportar(
     @Query('especialistaId') especialistaId: string,
@@ -121,5 +120,10 @@ export class CitaController {
   @Patch(':id/no-asistio')
   async marcarNoAsistio(@Param('id') id: string) {
     return this.marcarNoAsistioUseCase.ejecutar(id);
+  }
+
+  @Get('resumen-disponibilidad')
+  async obtenerResumen() {
+    return await this.listarTodasLasCitasUseCase.ejecutar();
   }
 }

@@ -5,6 +5,7 @@ export interface CitaRepository {
   guardar(cita: Cita): Promise<void>;
   buscarTodas(dto: ConsultarCitasDto): Promise<Cita[]>;
   buscarPorId(id: string): Promise<Cita | null>;
+  buscarTodas(): Promise<Cita[]>;
 
   buscarPorProfesionalYFecha(
     especialistaId: string,

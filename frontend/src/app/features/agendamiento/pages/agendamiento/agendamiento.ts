@@ -7,9 +7,10 @@ import { HeaderComponent } from '../../componentes/header/header';
 import { EspecialistaSelectorComponent } from '../../componentes/especialista-selector/especialista-selector';
 import { EspecialistaService } from '../../../../core/services/especialista.service';
 import { HorarioSelectorComponent } from '../../componentes/horario-selector/horario-selector';
-import { FormActionsComponent } from '../../../../components/form-actions/form-actions';
+import { FormActionsComponent } from '../../componentes/form-actions/form-actions';
 import Swal from 'sweetalert2';
 import { NgModel } from '@angular/forms';
+import { DisponibilidadDoctores } from '../../componentes/disponibilidad-doctores/disponibilidad-doctores';
 import { PacienteService } from '../../../../core/services/paciente.service';
 
 @Component({
@@ -23,6 +24,7 @@ import { PacienteService } from '../../../../core/services/paciente.service';
     EspecialistaSelectorComponent,
     HorarioSelectorComponent,
     FormActionsComponent,
+    DisponibilidadDoctores,
   ],
   templateUrl: './agendamiento.html',
   styleUrl: './agendamiento.scss',
@@ -45,7 +47,7 @@ export class Agendamiento implements OnInit {
   constructor(
     private citasService: CitasService,
     private especialistaService: EspecialistaService,
-    private pacienteService: PacienteService
+    private pacienteService: PacienteService,
   ) {}
 
   sugerencias: any[] = []; // Array para guardar los resultados temporales
@@ -189,8 +191,8 @@ export class Agendamiento implements OnInit {
     if (!this.validar()) return;
 
     const fechaHoraStr = `${this.formData.fecha}T${this.formData.hora}:00`;
-    console.log("Hora seleccionada:", this.formData.hora);
-    console.log("Fecha final enviada:", fechaHoraStr);
+    console.log('Hora seleccionada:', this.formData.hora);
+    console.log('Fecha final enviada:', fechaHoraStr);
 
     const dto = {
       pacienteId: this.formData.cedula,

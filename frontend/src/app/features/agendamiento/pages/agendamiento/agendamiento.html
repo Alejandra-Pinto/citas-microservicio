@@ -1,11 +1,9 @@
 <app-header></app-header>
 
 <div class="flex-1 w-full bg-slate-50/50">
-  
   <div class="p-8">
     <div class="max-w-7xl mx-auto">
       <div class="grid grid-cols-12 gap-8">
-        
         <div class="col-span-12 lg:col-span-8 space-y-8">
           <div class="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
             <div class="p-8 border-b border-slate-50">
@@ -30,30 +28,41 @@
                     class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-blue-600 focus:border-blue-600 text-sm font-medium transition-all outline-none"
                     placeholder="CC del paciente"
                   />
-                  <p *ngIf="intentoEnvio && !formData.cedula" class="text-[10px] text-red-500 font-bold italic ml-1">
+                  <p
+                    *ngIf="intentoEnvio && !formData.cedula"
+                    class="text-[10px] text-red-500 font-bold italic ml-1"
+                  >
                     * Campo obligatorio
                   </p>
                 </div>
 
                 <div class="space-y-2">
-                  <label class="text-[10px] uppercase tracking-widest font-bold text-slate-500">Nombre del Paciente</label>
-                  <input 
-                    type="text" 
-                    [(ngModel)]="formData.nombre" 
-                    name="nombre" 
-                    readonly 
+                  <label class="text-[10px] uppercase tracking-widest font-bold text-slate-500"
+                    >Nombre del Paciente</label
+                  >
+                  <input
+                    type="text"
+                    [(ngModel)]="formData.nombre"
+                    name="nombre"
+                    readonly
                     class="w-full px-4 py-3 bg-slate-100 border border-slate-200 rounded-xl text-sm font-medium text-slate-500 outline-none cursor-not-allowed"
                   />
                 </div>
               </div>
 
               <div class="space-y-3">
-                <label class="text-[10px] uppercase tracking-widest font-bold text-slate-500">Tipo de Consulta</label>
+                <label class="text-[10px] uppercase tracking-widest font-bold text-slate-500"
+                  >Tipo de Consulta</label
+                >
                 <div class="flex gap-4">
                   <button
                     type="button"
                     class="flex-1 flex items-center justify-center gap-2 py-4 rounded-xl border-2 transition-all font-bold"
-                    [ngClass]="formData.tipo === 'PRIMERA_VEZ' ? 'border-blue-600 bg-blue-50 text-blue-600' : 'border-slate-100 bg-white text-slate-400'"
+                    [ngClass]="
+                      formData.tipo === 'PRIMERA_VEZ'
+                        ? 'border-blue-600 bg-blue-50 text-blue-600'
+                        : 'border-slate-100 bg-white text-slate-400'
+                    "
                     (click)="formData.tipo = 'PRIMERA_VEZ'"
                   >
                     <span class="material-symbols-outlined">medical_information</span>
@@ -62,7 +71,11 @@
                   <button
                     type="button"
                     class="flex-1 flex items-center justify-center gap-2 py-4 rounded-xl border-2 transition-all font-bold"
-                    [ngClass]="formData.tipo === 'CONTROL' ? 'border-blue-600 bg-blue-50 text-blue-600' : 'border-slate-100 bg-white text-slate-400'"
+                    [ngClass]="
+                      formData.tipo === 'CONTROL'
+                        ? 'border-blue-600 bg-blue-50 text-blue-600'
+                        : 'border-slate-100 bg-white text-slate-400'
+                    "
                     (click)="formData.tipo = 'CONTROL'"
                   >
                     <span class="material-symbols-outlined">history</span>
@@ -96,21 +109,11 @@
 
         <div class="col-span-12 lg:col-span-4 space-y-6">
           <app-paciente-resumen [paciente]="pacienteEncontrado"></app-paciente-resumen>
-          
-          <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
-            <h4 class="text-xs font-bold uppercase tracking-widest text-slate-400 mb-6">Disponibilidad Hoy</h4>
-            <div class="space-y-4">
-              <div class="flex items-center justify-between">
-                <span class="text-sm font-medium text-slate-700">Dr. Gomez</span>
-                <span class="text-xs font-bold text-slate-400">4 Libres</span>
-              </div>
-              <div class="w-full bg-slate-100 h-1.5 rounded-full overflow-hidden">
-                <div class="bg-emerald-500 h-full w-[65%]"></div>
-              </div>
-            </div>
+
+          <div>
+            <app-disponibilidad-doctores></app-disponibilidad-doctores>
           </div>
         </div>
-
       </div>
     </div>
   </div>
