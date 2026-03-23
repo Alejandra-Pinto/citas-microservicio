@@ -1,4 +1,4 @@
-<main class="pt-24 pb-12 px-10 min-h-screen bg-slate-50/50"> 
+<main class="pt-24 pb-12 px-10 min-h-screen bg-[#E9EEF0]"> 
   
   <div class="flex flex-col md:flex-row md:items-end justify-between mb-10 gap-6">
     <div> 
@@ -39,6 +39,12 @@
     </div>
   </div>
 
+  <div class="flex items-center gap-2 mt-2 text-slate-500 mb-3 ml-1"> 
+        <p class="text-md font-medium ">
+          Selecciona un bloque para clasificar de acuerdo al estado de tus citas.
+        </p>
+    </div>
+
   <app-metricas-citas 
     [citas]="citas" 
     (filtrarEstado)="onFiltrarPorMetrica($event)"
@@ -48,7 +54,7 @@
   <app-filtro-citas (buscar)="onBuscar($event)" class="block mb-6"></app-filtro-citas>
 
   @if (loading) {
-    <div class="flex justify-center items-center py-20">
+    <div class="flex justify-center items-center py-20 bg-[#F8FAFB]">
       <div class="flex flex-col items-center gap-3">
         <div class="w-8 h-8 border-4 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
         <p class="text-slate-500 font-bold">Buscando en la agenda...</p>
@@ -64,7 +70,7 @@
   }
 
   @if (!loading && citas.length === 0) {
-    <div class="bg-white py-20 px-6 rounded-2xl shadow-sm border border-slate-100 text-center flex flex-col items-center">
+    <div class="bg-[#F8FAFB] py-20 px-6 rounded-2xl shadow-md border border-slate-400 text-center flex flex-col items-center">
       <div class="w-16 h-16 bg-slate-50 rounded-full flex items-center justify-center mb-4">
         <span class="material-symbols-outlined text-4xl text-slate-300">event_busy</span>
       </div>
@@ -74,7 +80,7 @@
   }
 
   @if (citas.length > 0) {
-    <div class="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
+    <div class="bg-white rounded-2xl shadow-md border border-slate-100 overflow-hidden">
       <app-tabla-citas [citas]="citasFiltradas"></app-tabla-citas>
     </div>
   }
