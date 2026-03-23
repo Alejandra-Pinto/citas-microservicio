@@ -1,24 +1,37 @@
 import { Module } from '@nestjs/common';
+import { TypeOrmModule } from '@nestjs/typeorm';
 import { AdministradorController } from './infrastructure/controllers/administrador.controller';
 import { ConfigurarAgendaUseCase } from './application/use-cases/configurar.agenda.usecase';
-import { ObtenerConfiguracionUseCase } from './application/use-cases/obtener.agenda.usecase';
-import { ValidacionConfiguracionService } from './domain/services/validacion-configuracion.service';
-import { ConfiguracionRepositoryImpl } from './infrastructure/persistence/configuracion.repository.impl';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { ConfiguracionAgendaOrm } from './infrastructure/persistence/configuracionAgenda.orm.entity';
+import { ObtenerAgendaEspecialistaUseCase } from './application/use-cases/obtener.agenda.usecase';
+import { ObtenerConfiguracionSistemaUseCase } from './application/use-cases/obtener.configuracion.sistema.usecase';
+import { ConfigurarSistemaUseCase } from './application/use-cases/configurar.sistema.usecase';
+import { AdministradorRepositoryImpl } from './infrastructure/persistence/configuracion.repository.impl';
+import { ConfiguracionSistemaOrmEntity } from './infrastructure/persistence/configuracion-sistema.orm.entity';
+import { EspecialistaAgendaPort } from './domain/ports/especialista-agenda.port';
+import { EspecialistaAgendaAdapter } from './infrastructure/adapters/especialista-agenda.adapter';
+import { EspecialistaModule } from '../especialista/especialista.module';
+import { ConfiguracionRepository } from './domain/repositories/configuracion.repository';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([ConfiguracionAgendaOrm])],
+  imports: [
+    EspecialistaModule,
+    TypeOrmModule.forFeature([ConfiguracionSistemaOrmEntity]),
+  ],
   controllers: [AdministradorController],
   providers: [
     ConfigurarAgendaUseCase,
-    ObtenerConfiguracionUseCase,
-    ValidacionConfiguracionService,
+    ObtenerAgendaEspecialistaUseCase,
+    ObtenerConfiguracionSistemaUseCase,
+    ConfigurarSistemaUseCase,
     {
-      provide: 'ConfiguracionRepository',
-      useClass: ConfiguracionRepositoryImpl,
+      provide: ConfiguracionRepository,
+      useClass: AdministradorRepositoryImpl,
+    },
+    {
+      provide: EspecialistaAgendaPort,
+      useClass: EspecialistaAgendaAdapter,
     },
   ],
-  exports: ['ConfiguracionRepository'],
+  exports: [ConfiguracionRepository],
 })
 export class AdministradorModule {}

@@ -29,6 +29,7 @@ export class CrearEspecialistaUseCase {
       dto.tipo,
       dto.especialidad,
       dto.intervaloAtencion,
+      dto.horarioAtencion,
       true,
     );
 

@@ -1,33 +1,40 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-
-import type { ConfiguracionRepository } from '../../domain/repositories/configuracion.repository';
-import { ConfiguracionAgenda } from '../../domain/entities/configuracion-agenda.entity';
-import { ConfiguracionAgendaOrm } from './configuracionAgenda.orm.entity';
+import { ConfiguracionRepository } from '../../domain/repositories/configuracion.repository';
+import { ConfiguracionSistema } from '../../domain/entities/configuracion-sistema.entity';
+import { ConfiguracionSistemaOrmEntity } from './configuracion-sistema.orm.entity';
 
 @Injectable()
-export class ConfiguracionRepositoryImpl implements ConfiguracionRepository {
+export class AdministradorRepositoryImpl implements ConfiguracionRepository {
   constructor(
-    @InjectRepository(ConfiguracionAgendaOrm)
-    private repo: Repository<ConfiguracionAgendaOrm>,
+    @InjectRepository(ConfiguracionSistemaOrmEntity)
+    private readonly repo: Repository<ConfiguracionSistemaOrmEntity>,
   ) {}
 
-  async guardar(config: ConfiguracionAgenda): Promise<void> {
-    await this.repo.save(config);
+  async obtenerConfiguracionGlobal(): Promise<ConfiguracionSistema | null> {
+    // Buscamos la primera (y normalmente única) configuración del sistema
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+    const entity = await this.repo.findOne({ where: {} });
+    if (!entity) return null;
+
+    return new ConfiguracionSistema(
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-unsafe-member-access
+      entity.id,
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-unsafe-member-access
+      entity.ventanaHabilitacionSemanas,
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-unsafe-member-access
+      entity.fechaUltimaActualizacion,
+    );
   }
 
-  async obtener(): Promise<ConfiguracionAgenda | null> {
-    const data = await this.repo.find({ take: 1 });
-
-    if (!data.length) return null;
-
-    return new ConfiguracionAgenda(
-      data[0].id,
-      data[0].semanasDisponibles,
-      data[0].diasAtencion,
-      data[0].horaInicio,
-      data[0].horaFin,
-    );
+  async save(config: ConfiguracionSistema): Promise<void> {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+    const entity = this.repo.create({
+      id: config.id,
+      ventanaHabilitacionSemanas: config.ventanaHabilitacionSemanas,
+      fechaUltimaActualizacion: config.fechaUltimaActualizacion,
+    });
+    await this.repo.save(entity);
   }
 }

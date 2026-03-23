@@ -1,7 +1,7 @@
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import { Inject, Injectable, BadRequestException } from '@nestjs/common';
 import { Cita, EstadoCita, TipoCita } from '../../domain/entities/cita.entity';
 import type { CitaRepository } from '../../domain/repositories/cita.repository';
-import { PoliticaAgendamientoService } from '../../domain/services/politica-agendamiento.service';
 import { CrearCitaDto } from '../dto/crear-cita.dto';
 import { randomUUID } from 'crypto';
 import type { EspecialistaPort } from '../../domain/ports/especialista.port';
@@ -9,10 +9,10 @@ import type { PacientePort } from '../../domain/ports/paciente.port';
 import { DisponibilidadAgendamientoService } from '../../domain/services/disponibilidad-agendamiento.service';
 
 @Injectable()
+@Injectable()
 export class CrearCitaManualUseCase {
   constructor(
     @Inject('CitaRepository') private readonly citaRepository: CitaRepository,
-    private readonly politica: PoliticaAgendamientoService,
     private readonly disponibilidadService: DisponibilidadAgendamientoService,
     @Inject('EspecialistaPort')
     private readonly especialistaPort: EspecialistaPort,
@@ -22,61 +22,79 @@ export class CrearCitaManualUseCase {
   async ejecutar(dto: CrearCitaDto) {
     const fechaCita = new Date(dto.fechaHora);
 
-    // No permitir pasado
-    if (fechaCita < new Date()) {
-      throw new BadRequestException('No puedes agendar citas en el pasado');
+    // 1. Validar ventana de tiempo (Configuración Global Administrador)
+    const enVentana =
+      await this.disponibilidadService.estaEnVentanaPermitida(fechaCita);
+    if (!enVentana) {
+      throw new BadRequestException(
+        'La fecha seleccionada está fuera del rango permitido por la clínica',
+      );
     }
 
-    // Validar paciente
+    // 2. Validar paciente
     const paciente = await this.pacientePort.obtenerPorId(dto.pacienteId);
-    if (!paciente) throw new BadRequestException('Paciente no existe');
-    if (!paciente.activo) throw new BadRequestException('Paciente inactivo');
+    if (!paciente || !paciente.activo) {
+      throw new BadRequestException('Paciente no válido o inactivo');
+    }
 
-    // Validar especialista
+    // 3. Validar especialista y obtener su agenda
     const especialista = await this.especialistaPort.obtenerPorId(
       dto.especialistaId,
     );
-    if (!especialista) throw new BadRequestException('Especialista no existe');
-    if (!especialista.activo)
-      throw new BadRequestException('Especialista inactivo');
+    if (!especialista || !especialista.activo) {
+      throw new BadRequestException('Especialista no disponible');
+    }
 
-    // Calcular duración
+    // 4. Calcular duración según tipo de cita
     const duracionNueva = this.calcularDuracion(
       dto.tipo,
       especialista.intervaloAtencion,
     );
 
-    // Validar horario dentro del rango permitido (8:00 - 18:00)
-    const esHorarioValido = await this.disponibilidadService.esHorarioValido(
-      fechaCita,
-      duracionNueva,
-    );
+    // 5. Validar que la hora esté dentro del HORARIO ESPECÍFICO del médico
+    // Reutilizamos la lógica del servicio comparando contra el horario configurado
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
+    const [hInicio, mInicio] = especialista.horarioAtencion.horaInicio
+      .split(':')
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+      .map(Number);
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
+    const [hFin, mFin] = especialista.horarioAtencion.horaFin
+      .split(':')
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+      .map(Number);
+    const minutosCitaInicio =
+      fechaCita.getHours() * 60 + fechaCita.getMinutes();
+    const minutosCitaFin = minutosCitaInicio + duracionNueva;
+    const minutosLimiteInicio = hInicio * 60 + mInicio;
+    const minutosLimiteFin = hFin * 60 + mFin;
 
-    if (!esHorarioValido) {
+    if (
+      minutosCitaInicio < minutosLimiteInicio ||
+      minutosCitaFin > minutosLimiteFin
+    ) {
       throw new BadRequestException(
-        'Las citas solo pueden agendarse entre 8:00 y 18:00',
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+        `El especialista solo atiende de ${especialista.horarioAtencion.horaInicio} a ${especialista.horarioAtencion.horaFin}`,
       );
     }
 
-    // Traer citas del día
-    const fecha = fechaCita.toISOString().split('T')[0];
-    const citas = await this.citaRepository.buscarPorProfesionalYFecha(
+    // 6. Validar conflictos con otras citas
+    const fechaStr = fechaCita.toISOString().split('T')[0];
+    const citasDelDia = await this.citaRepository.buscarPorProfesionalYFecha(
       dto.especialistaId,
-      fecha,
+      fechaStr,
     );
-
-    // Validar conflicto
-    const conflicto = this.disponibilidadService.existeConflicto(
+    const tieneConflicto = this.disponibilidadService.existeConflicto(
       fechaCita,
       duracionNueva,
-      citas,
+      citasDelDia,
     );
-
-    if (conflicto) {
-      throw new BadRequestException('Horario no disponible');
+    if (tieneConflicto) {
+      throw new BadRequestException('El horario ya está ocupado por otra cita');
     }
 
-    // Crear cita
+    // 7. Crear y guardar
     const cita = new Cita(
       randomUUID(),
       dto.pacienteId,
@@ -92,9 +110,6 @@ export class CrearCitaManualUseCase {
   }
 
   private calcularDuracion(tipo: TipoCita, intervaloBase: number): number {
-    if (tipo === TipoCita.PRIMERA_VEZ) {
-      return intervaloBase + 10;
-    }
-    return intervaloBase;
+    return tipo === TipoCita.PRIMERA_VEZ ? intervaloBase + 10 : intervaloBase;
   }
 }
