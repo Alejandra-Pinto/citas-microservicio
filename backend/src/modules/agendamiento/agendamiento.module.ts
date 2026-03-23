@@ -13,7 +13,11 @@ import { EspecialistaModule } from '../especialista/especialista.module';
 import { ObtenerDisponibilidadUseCase } from './application/use-cases/obtener-disponibilidad.usecase';
 import { DisponibilidadAgendamientoService } from './domain/services/disponibilidad-agendamiento.service';
 import { ConfiguracionAdapter } from './infrastructure/adapters/configuracionAgenda.adapter';
-
+import { ObtenerCitasUseCase } from './application/use-cases/obtener-citas.usecase';
+import { CancelarCitaUseCase } from './application/use-cases/cancelar-cita.usecase';
+import { ReagendarCitaUseCase } from './application/use-cases/reagendar-cita.usecase';
+import { FinalizarCitaUseCase } from './application/use-cases/finalizar-cita.usecase';
+import { MarcarNoAsistioUseCase } from './application/use-cases/noAsistida-cita.usecase';
 import { AdministradorModule } from '../administrador/administrador.module';
 
 @Module({
@@ -30,6 +34,11 @@ import { AdministradorModule } from '../administrador/administrador.module';
     PoliticaAgendamientoService,
     ObtenerDisponibilidadUseCase,
     DisponibilidadAgendamientoService,
+    ObtenerCitasUseCase,
+    CancelarCitaUseCase,
+    ReagendarCitaUseCase,
+    FinalizarCitaUseCase,
+    MarcarNoAsistioUseCase,
 
     { provide: 'CitaRepository', useClass: CitaRepositoryImpl },
 
