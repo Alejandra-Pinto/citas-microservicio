@@ -33,7 +33,7 @@ export const routes: Routes = [
     path: 'administrador',
     loadComponent: () =>
       import('./features/administrador/pages/configuracion-agenda/configuracion-agenda')
-        .then(m => m.ConfiguracionAgendaComponent),
+        .then(m => m.ConfiguracionAdmin),
   },
   {
     path: '**',
