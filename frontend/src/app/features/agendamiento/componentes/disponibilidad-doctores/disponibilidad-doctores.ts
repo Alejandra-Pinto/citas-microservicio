@@ -21,14 +21,14 @@ export class DisponibilidadDoctores implements OnInit {
 
   obtenerYProcesarCitas() {
     this.citasService.getCitasParaDashboard().subscribe({
-      next: (citas: Cita[]) => {
+      next: (citas: any[]) => {
         const conteoMap = new Map<string, number>();
 
         citas.forEach((cita) => {
-          // Si el back no manda el nombre, usamos el ID temporalmente
-          const nombreMostrar = cita.especialistaNombre || `ID: ${cita.especialistaId}`;
-          const actual = conteoMap.get(nombreMostrar) || 0;
-          conteoMap.set(nombreMostrar, actual + 1);
+          // Extraemos el nombre desde la relación 'especialista' que activamos en el back
+          const nombreDoc = cita.especialista?.nombre || cita.especialista?.apellido || 'Médico';
+          const actual = conteoMap.get(nombreDoc) || 0;
+          conteoMap.set(nombreDoc, actual + 1);
         });
 
         this.doctoresDisponibilidad = Array.from(conteoMap, ([nombre, total]) => ({
@@ -37,6 +37,14 @@ export class DisponibilidadDoctores implements OnInit {
         })).sort((a, b) => b.citasAgendadas - a.citasAgendadas);
       },
     });
+  }
+
+  getBarColor(citas: number): string {
+    const porcentaje = (citas / this.MAX_CITAS) * 100;
+
+    if (porcentaje >= 80) return 'bg-red-500'; // Crítico (Más de 40 citas)
+    if (porcentaje >= 50) return 'bg-amber-500'; // Medio (25-40 citas)
+    return 'bg-emerald-500'; // Bajo (Menos de 25 citas)
   }
 
   calcularPorcentaje(citas: number): number {
