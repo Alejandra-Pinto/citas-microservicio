@@ -23,7 +23,7 @@
       (ngModelChange)="onHoraChange($event)"
     >
       <option value="" disabled selected>Seleccione una hora</option>
-      <option *ngFor="let h of horarios" [value]="h.iso.split('T')[1].slice(0, 5)">
+      <option *ngFor="let h of horarios" [value]="convertirHora(h.hora)">
         {{ h.hora }}
       </option>
     </select>
