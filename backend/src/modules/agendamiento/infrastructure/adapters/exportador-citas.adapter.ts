@@ -1,3 +1,6 @@
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/* eslint-disable @typescript-eslint/no-unsafe-call */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 // src/modules/agendamiento/infrastructure/adapters/exportador-citas.adapter.ts
 import { Injectable } from '@nestjs/common';
 import * as PDFDocumentProxy from 'pdfkit';
