@@ -1,160 +1,99 @@
-<body class="bg-background text-on-background h-full overflow-hidden flex">
-  <!-- Main Content Area -->
-  <main class="flex-1 min-h-screen overflow-y-auto flex flex-col">
-    <!-- TopAppBar (Predicted Component) -->
-    <app-header></app-header>
-    <!-- Canvas Area -->
-    <section class="p-8 max-w-6xl mx-auto w-full">
-      <div class="grid grid-cols-12 gap-8">
-        <!-- Left Column: Form -->
-        <div class="col-span-12 lg:col-span-8 space-y-8">
-          <!-- Appointment Form Card -->
-          <div class="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
-            <div class="p-8 border-b border-slate-50">
-              <h3 class="text-xl font-bold text-on-surface">Detalles de la Cita</h3>
-              <p class="text-sm text-on-surface-variant mt-1">
-                Complete la información para registrar una nueva consulta médica.
-              </p>
-            </div>
-            <div class="p-8 space-y-6">
-              <!-- Patient Lookup -->
-              <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div class="space-y-2">
-                  <label class="text-[10px] uppercase tracking-widest font-bold text-slate-500">
-                    Cédula del Paciente
-                  </label>
-                  <input
-                    type="text"
-                    [(ngModel)]="formData.cedula"
-                    (blur)="buscarPaciente()"
-                    (keyup.enter)="buscarPaciente()"
-                    [ngClass]="{ 'border-red-500 bg-red-50': intentoEnvio && !formData.cedula }"
-                    class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-blue-600 focus:border-blue-600 text-sm font-medium transition-all outline-none"
-                    placeholder="CC del paciente"
-                  />
-                  <p
-                    *ngIf="intentoEnvio && !formData.cedula"
-                    class="text-[10px] text-red-500 font-bold italic ml-1"
-                  >
-                    * Campo obligatorio
-                  </p>
-                </div>
+<section class="p-8 max-w-6xl mx-auto w-full">
+  <div class="grid grid-cols-12 gap-8">
+    
+    <div class="col-span-12 lg:col-span-8 space-y-8">
+      
+      <div class="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
+        <div class="p-8 border-b border-slate-50">
+          <h3 class="text-xl font-bold text-slate-800">Detalles de la Cita</h3>
+          <p class="text-sm text-slate-500 mt-1">
+            Complete la información para registrar una nueva consulta médica.
+          </p>
+        </div>
 
-                <div class="space-y-2">
-                  <label class="text-[10px] uppercase tracking-widest font-bold text-slate-500"
-                    >Nombre del Paciente</label
-                  >
-                  <input type="text" [(ngModel)]="formData.nombre" name="nombre" readonly />
-                </div>
-              </div>
-              <!-- Appointment Type Toggle -->
-              <div class="space-y-3">
-                <label class="text-[10px] uppercase tracking-widest font-bold text-slate-500"
-                  >Tipo de Consulta</label
-                >
-                <div class="flex gap-4">
-                  <button
-                    class="flex-1 flex items-center justify-center gap-2 py-4 rounded-xl border-2 border-primary bg-blue-50 text-primary font-bold transition-all"
-                    (click)="formData.tipo = 'PRIMERA_VEZ'"
-                  >
-                    <span class="material-symbols-outlined" data-icon="medical_information"
-                      >medical_information</span
-                    >
-                    Primera Cita
-                  </button>
-                  <button
-                    class="flex-1 flex items-center justify-center gap-2 py-4 rounded-xl border-2 border-slate-100 bg-white text-slate-400 hover:border-slate-200 hover:text-slate-600 font-bold transition-all"
-                    (click)="formData.tipo = 'CONTROL'"
-                  >
-                    <span class="material-symbols-outlined" data-icon="history">history</span>
-                    Control
-                  </button>
-                </div>
-              </div>
-              <!-- Date and Time -->
-              <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <app-horario-selector
-                  class="w-full col-span-2"
-                  [fecha]="formData.fecha"
-                  [horaSeleccionada]="formData.hora"
-                  [horarios]="horarios"
-                  (fechaChange)="actualizarFecha($event)"
-                  (horaChange)="formData.hora = $event"
-                >
-                </app-horario-selector>
-              </div>
-              <!-- Specialist Selection -->
-              <div class="space-y-3">
-                <app-especialista-selector
-                  [especialistas]="especialistas"
-                  [seleccionadoId]="formData.especialistaid"
-                  (cambioEspecialista)="manejarCambioEspecialista($event)"
-                >
-                </app-especialista-selector>
-              </div>
+        <div class="p-8 space-y-6">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div class="space-y-2">
+              <label class="text-[10px] uppercase tracking-widest font-bold text-slate-500">
+                Cédula del Paciente
+              </label>
+              <input
+                type="text"
+                [(ngModel)]="formData.cedula"
+                (blur)="buscarPaciente()"
+                (keyup.enter)="buscarPaciente()"
+                [ngClass]="{ 'border-red-500 bg-red-50': intentoEnvio && !formData.cedula }"
+                class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-blue-600 focus:border-blue-600 text-sm font-medium transition-all outline-none"
+                placeholder="CC del paciente"
+              />
             </div>
-            <app-form-actions
-              [disabled]="esFormularioInvalido"
-              (onConfirm)="agendar()"
-              (onCancel)="cancelar()"
-            >
-            </app-form-actions>
-          </div>
-        </div>
-        <!-- Right Column: Context/Info -->
-        <div class="col-span-12 lg:col-span-4 space-y-6">
-          <!-- Patient Summary Card (Editorial Style) -->
-          <div>
-            <div class="relative z-10">
-              <app-paciente-resumen [paciente]="pacienteEncontrado"></app-paciente-resumen>
+
+            <div class="space-y-2">
+              <label class="text-[10px] uppercase tracking-widest font-bold text-slate-500">Nombre del Paciente</label>
+              <input 
+                type="text" 
+                [(ngModel)]="formData.nombre" 
+                class="w-full px-4 py-3 bg-slate-100 border-transparent rounded-xl text-sm font-medium text-slate-500" 
+                readonly 
+              />
             </div>
           </div>
-          <!-- Daily Stats Card -->
-          <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
-            <h4 class="text-xs font-bold uppercase tracking-widest text-slate-400 mb-6">
-              Disponibilidad Hoy
-            </h4>
-            <div class="space-y-4">
-              <div class="flex items-center justify-between">
-                <div class="flex items-center gap-3">
-                  <div class="w-2 h-2 rounded-full bg-emerald-500"></div>
-                  <span class="text-sm font-medium text-slate-700">Dr. Gomez</span>
-                </div>
-                <span class="text-xs font-bold text-slate-400">4 Libres</span>
-              </div>
-              <div class="w-full bg-slate-100 h-1.5 rounded-full overflow-hidden">
-                <div class="bg-emerald-500 h-full w-[65%]"></div>
-              </div>
-              <div class="flex items-center justify-between mt-6">
-                <div class="flex items-center gap-3">
-                  <div class="w-2 h-2 rounded-full bg-amber-500"></div>
-                  <span class="text-sm font-medium text-slate-700">Dr. Martinez</span>
-                </div>
-                <span class="text-xs font-bold text-slate-400">2 Libres</span>
-              </div>
-              <div class="w-full bg-slate-100 h-1.5 rounded-full overflow-hidden">
-                <div class="bg-amber-500 h-full w-[85%]"></div>
-              </div>
-            </div>
-          </div>
-          <!-- Notification Card -->
-          <div class="bg-surface-container-high p-6 rounded-2xl border border-blue-100">
-            <div class="flex items-start gap-4">
-              <div
-                class="w-10 h-10 rounded-xl bg-blue-100 flex items-center justify-center text-blue-600"
+
+          <div class="space-y-3">
+            <label class="text-[10px] uppercase tracking-widest font-bold text-slate-500">Tipo de Consulta</label>
+            <div class="flex gap-4">
+              <button
+                class="flex-1 flex items-center justify-center gap-2 py-4 rounded-xl border-2 border-blue-600 bg-blue-50 text-blue-600 font-bold transition-all"
+                (click)="formData.tipo = 'PRIMERA_VEZ'"
               >
-                <span class="material-symbols-outlined" data-icon="info">info</span>
-              </div>
-              <div>
-                <h5 class="text-sm font-bold text-slate-900">Recordatorio de Protocolo</h5>
-                <p class="text-xs text-slate-500 mt-1 leading-relaxed">
-                  Asegúrese de que el usuario este registrado.
-                </p>
-              </div>
+                <span class="material-symbols-outlined">medical_information</span>
+                Primera Cita
+              </button>
+              <button
+                class="flex-1 flex items-center justify-center gap-2 py-4 rounded-xl border-2 border-slate-100 bg-white text-slate-400 hover:border-slate-200 hover:text-slate-600 font-bold transition-all"
+                (click)="formData.tipo = 'CONTROL'"
+              >
+                <span class="material-symbols-outlined">history</span>
+                Control
+              </button>
             </div>
           </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <app-horario-selector
+              class="w-full col-span-2"
+              [fecha]="formData.fecha"
+              [horaSeleccionada]="formData.hora"
+              [horarios]="horarios"
+              (fechaChange)="actualizarFecha($event)"
+              (horaChange)="formData.hora = $event"
+            ></app-horario-selector>
+          </div>
+
+          <div class="space-y-3">
+            <app-especialista-selector
+              [especialistas]="especialistas"
+              [seleccionadoId]="formData.especialistaid"
+              (cambioEspecialista)="manejarCambioEspecialista($event)"
+            ></app-especialista-selector>
+          </div>
         </div>
+
+        <app-form-actions
+          [disabled]="esFormularioInvalido"
+          (onConfirm)="agendar()"
+          (onCancel)="cancelar()"
+        ></app-form-actions>
       </div>
-    </section>
-  </main>
-</body>
+    </div>
+
+    <div class="col-span-12 lg:col-span-4 space-y-6">
+      <app-paciente-resumen [paciente]="pacienteEncontrado"></app-paciente-resumen>
+
+      <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
+        <h4 class="text-xs font-bold uppercase tracking-widest text-slate-400 mb-6">Disponibilidad Hoy</h4>
+        </div>
+    </div>
+
+  </div>
+</section>

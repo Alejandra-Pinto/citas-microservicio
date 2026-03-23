@@ -1,0 +1,21 @@
+//Layout principal
+.flex {
+  display: flex;
+}
+
+.h-screen {
+  height: 100vh;
+}
+
+//Contenedor de la derecha (donde está el agendamiento)
+.flex-1 {
+  flex: 1 1 0%;
+  min-width: 0; //CRÍTICO: Evita que el contenido desborde al flex
+}
+
+// Si tu Sidebar tiene un ancho de 280px, asegúrate de que sea rígido
+// Puedes añadir esto si el sidebar se encoge o se monta:
+app-sidebar {
+  width: 280px; 
+  flex-shrink: 0; //Evita que el sidebar se haga chiquito
+}

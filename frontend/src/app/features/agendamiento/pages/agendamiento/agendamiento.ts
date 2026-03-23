@@ -3,7 +3,6 @@ import { CitasService } from '../../../../core/services/citas-service';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { PacienteResumenComponent } from './paciente-resumen-component/paciente-resumen-component';
-import { HeaderComponent } from './header/header';
 import { EspecialistaSelectorComponent } from './especialista-selector/especialista-selector';
 import { EspecialistaService } from '../../../../core/services/especialista.service';
 import { HorarioSelectorComponent } from './horario-selector/horario-selector';
@@ -18,7 +17,6 @@ import { NgModel } from '@angular/forms';
     FormsModule,
     CommonModule,
     PacienteResumenComponent,
-    HeaderComponent,
     EspecialistaSelectorComponent,
     HorarioSelectorComponent,
     FormActionsComponent,
