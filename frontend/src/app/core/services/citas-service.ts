@@ -48,7 +48,10 @@ export class CitasService {
 
     return this.http.get(`${this.api}/exportar`, {
       params,
-      responseType: 'blob' //CRÍTICO: Para recibir archivos binarios
+      responseType: 'blob', //CRÍTICO: Para recibir archivos binarios
     });
+  }
+  getCitasParaDashboard(): Observable<Cita[]> {
+    return this.http.get<Cita[]>(`${this.api}/resumen-disponibilidad`);
   }
 }

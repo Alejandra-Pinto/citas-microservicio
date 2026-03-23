@@ -1,0 +1,37 @@
+<div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 h-full">
+  <div class="flex items-center justify-between mb-6">
+    <h4 class="text-xs font-bold uppercase tracking-widest text-slate-400">Disponibilidad Hoy</h4>
+    <span class="text-[10px] bg-blue-50 text-blue-600 px-2 py-1 rounded-lg font-bold">
+      Máx: {{ MAX_CITAS }}
+    </span>
+  </div>
+
+  <div class="space-y-6">
+    <div *ngIf="doctoresDisponibilidad.length === 0" class="py-10 text-center">
+      <p class="text-xs text-slate-400 italic">No hay citas registradas hoy.</p>
+    </div>
+
+    <div *ngFor="let doc of doctoresDisponibilidad" class="space-y-2">
+      <div class="flex items-center justify-between">
+        <span class="text-sm font-semibold text-slate-700"> Dr. {{ doc.nombre }} </span>
+        <span class="text-xs font-bold text-slate-400">
+          {{ MAX_CITAS - doc.citasAgendadas }} Libres
+        </span>
+      </div>
+
+      <div class="w-full bg-slate-100 h-2 rounded-full overflow-hidden">
+        <div
+          class="h-full bg-emerald-500 transition-all duration-1000 ease-out shadow-sm"
+          [style.width.%]="(doc.citasAgendadas / MAX_CITAS) * 100"
+        ></div>
+      </div>
+
+      <div class="flex justify-between items-center text-[10px]">
+        <span class="text-slate-400 font-medium">
+          Ocupación: {{ (doc.citasAgendadas / MAX_CITAS) * 100 | number: '1.0-0' }}%
+        </span>
+        <span class="text-slate-500 font-bold"> {{ doc.citasAgendadas }} / {{ MAX_CITAS }} </span>
+      </div>
+    </div>
+  </div>
+</div>
