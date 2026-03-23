@@ -35,44 +35,71 @@ export class DisponibilidadAgendamientoService {
       const finExistente = inicioExistente + c.duracion * 60000;
 
       // Lógica de solapamiento: (InicioA < FinB) && (FinA > InicioB)
-      return inicioNuevo <= finExistente && finNuevo >= inicioExistente;
+      return inicioNuevo < finExistente && finNuevo > inicioExistente;
     });
   }
 
   calcularHorariosDisponibles(
     intervalo: number,
     citas: Cita[],
-    fecha: string, // Formato "YYYY-MM-DD"
+    fecha: string,
     horarioAtencion: { horaInicio: string; horaFin: string },
   ): Date[] {
     const disponibles: Date[] = [];
-
-    // 1. Convertir horas "HH:mm" a minutos totales para el bucle
     const [hInicio, mInicio] = horarioAtencion.horaInicio
       .split(':')
       .map(Number);
     const [hFin, mFin] = horarioAtencion.horaFin.split(':').map(Number);
 
-    const minutosInicio = hInicio * 60 + mInicio;
     const minutosFin = hFin * 60 + mFin;
-
-    // 2. Preparar la fecha base
     const [year, month, day] = fecha.split('-').map(Number);
-    const fechaBase = new Date(year, month - 1, day);
 
-    // 3. Iterar por slots de tiempo
-    for (
-      let minutos = minutosInicio;
-      minutos + intervalo <= minutosFin; // El slot debe caber antes de la hora fin
-      minutos += intervalo
-    ) {
-      const slotInicio = new Date(fechaBase);
-      slotInicio.setHours(Math.floor(minutos / 60), minutos % 60, 0, 0);
+    // 1. Mapeamos las citas a minutos para facilitar comparaciones numéricas
+    const citasEnMinutos = citas
+      .map((c) => {
+        const d = new Date(c.fechaHora);
+        const inicio = d.getHours() * 60 + d.getMinutes();
+        return { inicio, fin: inicio + c.duracion };
+      })
+      .sort((a, b) => a.inicio - b.inicio);
 
-      const ocupado = this.existeConflicto(slotInicio, intervalo, citas);
+    let minutosActuales = hInicio * 60 + mInicio;
 
-      if (!ocupado) {
-        disponibles.push(slotInicio);
+    // 2. Bucle de búsqueda
+    while (minutosActuales + intervalo <= minutosFin) {
+      // ¿Hay alguna cita que esté ocurriendo JUSTO AHORA?
+      const citaActual = citasEnMinutos.find(
+        (c) => minutosActuales >= c.inicio && minutosActuales < c.fin,
+      );
+
+      if (citaActual) {
+        // Si el médico está ocupado, saltamos al final de esta cita
+        minutosActuales = citaActual.fin;
+        continue;
+      }
+
+      // ¿Si empiezo una cita ahora, chocaría con la PRÓXIMA cita programada?
+      // (Validamos el bloque de 20 minutos hacia adelante)
+      const choqueConProxima = citasEnMinutos.find(
+        (c) =>
+          minutosActuales < c.inicio && minutosActuales + intervalo > c.inicio,
+      );
+
+      if (choqueConProxima) {
+        // Si choca, no podemos usar este hueco.
+        // Saltamos al final de esa cita próxima para seguir buscando
+        minutosActuales = choqueConProxima.fin;
+      } else {
+        // ¡LIBRE! El bloque de 20 min cabe perfectamente
+        const slot = new Date(
+          year,
+          month - 1,
+          day,
+          Math.floor(minutosActuales / 60),
+          minutosActuales % 60,
+        );
+        disponibles.push(slot);
+        minutosActuales += intervalo;
       }
     }
 

@@ -164,6 +164,7 @@ export class Agendamiento implements OnInit {
       .getDisponibilidad(this.formData.especialistaid, this.formData.fecha)
       .subscribe((data) => {
         this.horarios = data;
+        console.log('Disponibilidad recibida:', data);
       });
   }
   manejarCambioEspecialista(id: number) {
