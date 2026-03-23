@@ -20,6 +20,8 @@ export class Cita {
     public duracion: number,
     public tipo: TipoCita,
     public estado: EstadoCita = EstadoCita.PROGRAMADA,
+    public paciente?: { nombre: string; documento: string },
+    public especialista?: { nombre: string; especialidad?: string },
   ) {}
 
   cancelar() {
