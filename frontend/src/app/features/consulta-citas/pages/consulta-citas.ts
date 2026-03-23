@@ -14,29 +14,49 @@ import { RouterLink } from "@angular/router";
   templateUrl: './consulta-citas.html',
 })
 export class ConsultaCitas {
-
+  citas: Cita[] = [];
+  estadoSeleccionado = 'TODAS'; // Nuevo: rastrea qué filtro de métrica está activo
+  loading = false;
+  error = '';
+  fechaActual = new Date();
 
   constructor(private citasService: CitasService) {}
 
-  citas: Cita[] = [];
-  loading = false;
-  error = '';
+  get fechaFormateada(): string {
+    return this.fechaActual.toLocaleDateString('es-ES', {
+      weekday: 'long',
+      day: 'numeric',
+      month: 'long',
+      year: 'numeric'
+    });
+  }
+
+  // Esta función calcula qué enviar a la tabla basado en el clic de la métrica
+  get citasFiltradas(): Cita[] {
+    if (this.estadoSeleccionado === 'TODAS') {
+      return this.citas;
+    }
+    return this.citas.filter(c => c.estado === this.estadoSeleccionado);
+  }
+
+  onFiltrarPorMetrica(estado: string) {
+    this.estadoSeleccionado = estado;
+  }
 
   onBuscar(filtro: { especialistaId: string; fecha: string }) {
     this.loading = true;
     this.error = '';
+    this.estadoSeleccionado = 'TODAS'; // Resetear filtro al buscar de nuevo
 
-    this.citasService
-      .listarCitas(filtro.especialistaId, filtro.fecha)
-      .subscribe({
-        next: (data) => {
-          this.citas = data;
-          this.loading = false;
-        },
-        error: () => {
-          this.error = 'Error al cargar citas';
-          this.loading = false;
-        },
-      });
+    this.citasService.listarCitas(filtro.especialistaId, filtro.fecha).subscribe({
+      next: (data) => {
+        this.citas = data;
+        this.loading = false;
+      },
+      error: () => {
+        this.error = 'Error al cargar citas';
+        this.loading = false;
+      },
+    });
   }
 }

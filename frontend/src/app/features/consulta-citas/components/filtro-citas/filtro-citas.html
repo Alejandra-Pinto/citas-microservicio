@@ -1,11 +1,22 @@
 <div class="flex flex-wrap gap-4 items-end bg-white p-4 rounded-xl shadow-sm border border-slate-100">
   
-  <div class="flex-1 min-w-[200px]">
+  <div class="flex-1 min-w-[240px]">
     <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1 block">Especialista</label>
-    <div class="relative">
-      <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-[18px]">medical_services</span>
-      <input type="text" [(ngModel)]="especialistaId" placeholder="ID o Nombre..." 
-        class="w-full bg-slate-50 border border-slate-200 rounded-lg py-2.5 pl-10 pr-4 text-sm focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all outline-none text-slate-700 font-medium" />
+    <div class="relative group"> <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-[18px] z-10 group-focus-within:text-blue-500 transition-colors">
+    medical_services
+  </span>
+  
+  <select [(ngModel)]="especialistaId" 
+    class="w-full bg-slate-50 border border-slate-200 rounded-lg py-2.5 pl-10 pr-10 text-sm focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 transition-all outline-none text-slate-700 font-bold appearance-none cursor-pointer">
+    <option value="" disabled selected>Seleccione un médico...</option>
+    @for (esp of especialistas; track esp.id) {
+      <option [value]="esp.id" class="py-2">
+        Dr. {{ esp.nombres }} {{ esp.apellidos }} - {{ esp.especialidad }}
+      </option>
+    }
+  </select>
+
+      <span class="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 text-[18px] pointer-events-none">expand_more</span>
     </div>
   </div>
 

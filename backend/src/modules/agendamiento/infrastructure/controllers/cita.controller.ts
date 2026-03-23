@@ -3,6 +3,13 @@ import { CrearCitaManualUseCase } from '../../application/use-cases/crear-cita-m
 import { ListarCitasProfesionalUseCase } from '../../application/use-cases/listar-citas-profesional.usecase';
 import { CrearCitaDto } from '../../application/dto/crear-cita.dto';
 import { ObtenerDisponibilidadUseCase } from '../../application/use-cases/obtener-disponibilidad.usecase';
+import { ObtenerCitasUseCase } from '../../application/use-cases/obtener-citas.usecase';
+import { ConsultarCitasDto } from '../../application/dto/consultar-cita.dto';
+import { CancelarCitaUseCase } from '../../application/use-cases/cancelar-cita.usecase';
+import { ReagendarCitaUseCase } from '../../application/use-cases/reagendar-cita.usecase';
+import { FinalizarCitaUseCase } from '../../application/use-cases/finalizar-cita.usecase';
+import { MarcarNoAsistioUseCase } from '../../application/use-cases/noAsistida-cita.usecase';
+import { Param, Patch } from '@nestjs/common';
 
 @Controller('citas')
 export class CitaController {
@@ -10,6 +17,11 @@ export class CitaController {
     private readonly crearCita: CrearCitaManualUseCase,
     private readonly listarCitas: ListarCitasProfesionalUseCase,
     private readonly obtenerDisponibilidad: ObtenerDisponibilidadUseCase,
+    private readonly obtenerCitas: ObtenerCitasUseCase,
+    private readonly cancelarCita: CancelarCitaUseCase,
+    private readonly reagendarCita: ReagendarCitaUseCase,
+    private readonly finalizarCita: FinalizarCitaUseCase,
+    private readonly marcarNoAsistioUseCase: MarcarNoAsistioUseCase,
   ) {}
 
   @Post()
@@ -17,7 +29,7 @@ export class CitaController {
     return this.crearCita.ejecutar(dto);
   }
 
-  @Get()
+  @Get('/profesional')
   async listar(
     @Query('especialistaId') especialistaId: string,
     @Query('fecha') fecha: string,
@@ -39,5 +51,33 @@ export class CitaController {
       hora: h.toLocaleTimeString(),
       iso: h.toISOString(),
     }));
+  }
+
+  @Get('/filtrar')
+  async obtener(@Query() dto: ConsultarCitasDto) {
+    return this.obtenerCitas.ejecutar(dto);
+  }
+
+  @Patch(':id/cancelar')
+  async cancelar(@Param('id') id: string) {
+    return this.cancelarCita.ejecutar(id);
+  }
+
+  @Patch(':id/reagendar')
+  async reagendar(
+    @Param('id') id: string,
+    @Body('fechaHora') fechaHora: string,
+  ) {
+    return this.reagendarCita.ejecutar(id, new Date(fechaHora));
+  }
+
+  @Patch('/finalizar')
+  async finalizar(@Param('citaId') citaId: string) {
+    return this.finalizarCita.ejecutar(citaId);
+  }
+
+  @Patch(':id/no-asistio')
+  async marcarNoAsistio(@Param('id') id: string) {
+    return this.marcarNoAsistioUseCase.ejecutar(id);
   }
 }

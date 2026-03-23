@@ -23,11 +23,20 @@ export class Cita {
   ) {}
 
   cancelar() {
+    if (this.estado === EstadoCita.CANCELADA) {
+      throw new Error('La cita ya está cancelada');
+    }
+
+    if (this.estado === EstadoCita.FINALIZADA) {
+      throw new Error('No puedes cancelar una cita finalizada');
+    }
+
     this.estado = EstadoCita.CANCELADA;
   }
 
   reagendar(nuevaFecha: Date) {
     this.fechaHora = nuevaFecha;
+    this.estado = EstadoCita.REAGENDADA;
   }
 
   finalizar() {
