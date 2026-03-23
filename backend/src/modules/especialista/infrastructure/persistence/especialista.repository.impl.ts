@@ -26,6 +26,7 @@ export class EspecialistaRepositoryImpl implements EspecialistaRepository {
       tipo: especialista.tipo,
       especialidad: especialista.especialidad,
       intervaloAtencion: especialista.intervaloAtencion,
+      horarioAtencion: especialista.horarioAtencion,
       activo: especialista.activo,
     });
 
@@ -43,6 +44,7 @@ export class EspecialistaRepositoryImpl implements EspecialistaRepository {
           e.tipo as TipoProfesional,
           e.especialidad as Especialidad,
           e.intervaloAtencion,
+          e.horarioAtencion,
           e.activo,
         ),
     );
@@ -59,6 +61,7 @@ export class EspecialistaRepositoryImpl implements EspecialistaRepository {
       e.tipo as TipoProfesional,
       e.especialidad as Especialidad,
       e.intervaloAtencion,
+      e.horarioAtencion,
       e.activo,
     );
   }
@@ -69,6 +72,7 @@ export class EspecialistaRepositoryImpl implements EspecialistaRepository {
       tipo: especialista.tipo,
       especialidad: especialista.especialidad,
       intervaloAtencion: especialista.intervaloAtencion,
+      horarioAtencion: especialista.horarioAtencion,
       activo: especialista.activo,
     });
   }

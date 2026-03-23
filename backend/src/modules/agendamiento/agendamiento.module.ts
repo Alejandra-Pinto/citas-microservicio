@@ -22,7 +22,7 @@ import { DisponibilidadAgendamientoService } from './domain/services/disponibili
 import { CitaRepositoryImpl } from './infrastructure/persistence/cita.repository.impl';
 import { PacienteAdapter } from './infrastructure/adapters/paciente.adapter';
 import { EspecialistaAdapter } from './infrastructure/adapters/especialista.adapter';
-import { ConfiguracionAdapter } from './infrastructure/adapters/configuracionAgenda.adapter';
+import { ConfiguracionSistemaAdapter } from './infrastructure/adapters/configuracionSistema.adapter';
 import { ExportadorCitasAdapter } from './infrastructure/adapters/exportador-citas.adapter'; // Nuevo
 import { ExportadorCitasPort } from './domain/ports/exportador-citas.port'; // Nuevo
 
@@ -30,6 +30,7 @@ import { ExportadorCitasPort } from './domain/ports/exportador-citas.port'; // N
 import { PacienteModule } from '../paciente/paciente.module';
 import { EspecialistaModule } from '../especialista/especialista.module';
 import { AdministradorModule } from '../administrador/administrador.module';
+import { ConfiguracionSistemaPort } from './domain/ports/configuracionSistema.port';
 
 @Module({
   imports: [
@@ -65,8 +66,11 @@ import { AdministradorModule } from '../administrador/administrador.module';
     EspecialistaAdapter,
     { provide: 'EspecialistaPort', useExisting: EspecialistaAdapter },
 
-    ConfiguracionAdapter,
-    { provide: 'ConfiguracionPort', useExisting: ConfiguracionAdapter },
+    ConfiguracionSistemaAdapter,
+    {
+      provide: ConfiguracionSistemaPort,
+      useExisting: ConfiguracionSistemaAdapter,
+    },
   ],
   exports: ['PacientePort', 'EspecialistaPort', ExportarCitasUseCase],
 })
