@@ -15,7 +15,7 @@ export class CrearConfiguracionDto {
   especialistaId?: string; // El admin debe decir a quién configura
 
   @IsInt()
-  @Min(15)
+  @Min(1)
   intervaloAtencion: number;
 
   @ValidateNested()
