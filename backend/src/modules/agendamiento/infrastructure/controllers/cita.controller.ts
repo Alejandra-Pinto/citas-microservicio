@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unsafe-return */
 import {
   Body,
   Controller,
@@ -21,7 +20,7 @@ import { ReagendarCitaUseCase } from '../../application/use-cases/reagendar-cita
 import { FinalizarCitaUseCase } from '../../application/use-cases/finalizar-cita.usecase';
 import { MarcarNoAsistioUseCase } from '../../application/use-cases/noAsistida-cita.usecase';
 import { ExportarCitasUseCase } from '../../application/use-cases/exportar-citas.usecase';
-import { ListarTodasLasCitasUseCase } from '../../application/use-cases/listar-todas-las-citas.usecase';
+import { ListarTodasLasCitasUseCase } from '../../application/use-cases/listar-citas-general-citas.usecase';
 
 @Controller('citas')
 export class CitaController {

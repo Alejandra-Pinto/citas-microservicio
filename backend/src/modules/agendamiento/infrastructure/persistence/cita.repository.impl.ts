@@ -5,6 +5,7 @@ import { CitaRepository } from '../../domain/repositories/cita.repository';
 import { Cita } from '../../domain/entities/cita.entity';
 import { CitaOrmEntity } from './cita.orm-entity';
 import { ConsultarCitasDto } from '../../application/dto/consultar-cita.dto';
+import { FindOptionsWhere } from 'typeorm';
 
 @Injectable()
 export class CitaRepositoryImpl implements CitaRepository {
@@ -61,15 +62,19 @@ export class CitaRepositoryImpl implements CitaRepository {
     return count > 0;
   }
 
-  async buscarTodas(dto: ConsultarCitasDto): Promise<Cita[]> {
-    const where: Partial<CitaOrmEntity> = {};
+  async buscarTodas(dto?: ConsultarCitasDto): Promise<Cita[]> {
+    // Definimos 'where' con el tipo oficial de la Entidad de TypeORM
+    const where: FindOptionsWhere<CitaOrmEntity> = {};
 
-    if (dto.pacienteId) where.pacienteId = dto.pacienteId;
-    if (dto.especialistaId) where.especialistaId = dto.especialistaId;
+    if (dto) {
+      if (dto.pacienteId) where.pacienteId = dto.pacienteId;
+      if (dto.especialistaId) where.especialistaId = dto.especialistaId;
+    }
 
+    // Ahora pasamos 'where' directamente, sin 'as any'
     const citas = await this.repo.find({
       where,
-      relations: ['paciente', 'especialista'], // Mantenemos consistencia
+      relations: ['paciente', 'especialista'],
     });
 
     return citas.map((c) => this.mapToDomain(c));
