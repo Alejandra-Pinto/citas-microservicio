@@ -1,0 +1,40 @@
+<section class="py-10 bg-slate-50/50 relative overflow-hidden">
+  <div class="absolute top-0 left-0 w-full h-full opacity-[0.03] pointer-events-none">
+    <svg width="100%" height="100%"><pattern id="grid-schedule" width="40" height="40" patternUnits="userSpaceOnUse"><path d="M 40 0 L 0 0 0 40" fill="none" stroke="currentColor" stroke-width="1"/></pattern><rect width="100%" height="100%" fill="url(#grid-schedule)" /></svg>
+  </div>
+
+  <div class="container mx-auto px-6 relative z-10">
+    <div class="bg-white border border-slate-100 rounded-[2.5rem] p-8 shadow-[0_15px_40px_-15px_rgba(0,0,0,0.05)] flex flex-col lg:flex-row items-center justify-between gap-8 transition-all hover:shadow-[0_25px_50px_-12px_rgba(29,78,216,0.08)]">
+      <div class="flex items-center gap-6">
+        <div class="w-14 h-14 bg-blue-50/50 rounded-2xl flex items-center justify-center text-[#1D4ED8] shadow-sm border border-blue-100/50">
+          <span class="material-symbols-outlined text-3xl">schedule</span>
+        </div>
+        <div class="flex flex-col">
+          <h4 class="text-xs font-black text-slate-400 uppercase tracking-[0.2em] mb-1">Horario de Atención</h4>
+          <p class="text-slate-800 text-lg font-medium m-0">
+            Lunes a Sábado: <span class="text-[#1D4ED8] font-bold tracking-tight">8:00 AM — 6:00 PM</span>
+          </p>
+        </div>
+      </div>
+      <div class="flex flex-wrap items-center justify-center gap-8">
+        <div class="flex items-center gap-3 bg-emerald-50/60 px-5 py-2.5 rounded-full border border-emerald-100/50">
+          <span class="relative flex h-2.5 w-2.5">
+            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+            <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
+          </span>
+          <span class="text-[11px] font-black text-emerald-700 uppercase tracking-widest">Abierto Ahora</span>
+        </div>
+        <div class="hidden lg:block h-10 w-px bg-slate-100"></div>
+        <div class="flex items-center gap-4 group cursor-pointer">
+          <div class="w-10 h-10 bg-slate-50 rounded-xl flex items-center justify-center text-slate-400 group-hover:bg-[#1D4ED8] group-hover:text-white transition-all duration-300 border border-slate-100">
+            <span class="material-symbols-outlined text-xl">location_on</span>
+          </div>
+          <div class="flex flex-col">
+            <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Ubicación</span>
+            <span class="text-sm font-bold text-slate-700 tracking-tight group-hover:text-[#1D4ED8]">Sede Principal, Popayán</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

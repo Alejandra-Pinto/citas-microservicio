@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { HeaderComponent } from './header';
+import { PorQueElegir } from './por-que-elegir';
 
-describe('HeaderComponent', () => {
-  let component: HeaderComponent;
-  let fixture: ComponentFixture<HeaderComponent>;
+describe('PorQueElegir', () => {
+  let component: PorQueElegir;
+  let fixture: ComponentFixture<PorQueElegir>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [HeaderComponent]
+      imports: [PorQueElegir]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(HeaderComponent);
+    fixture = TestBed.createComponent(PorQueElegir);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
