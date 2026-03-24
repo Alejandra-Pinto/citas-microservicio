@@ -120,7 +120,7 @@ export class Agendamiento implements OnInit {
       },
       error: (err) => {
         console.error('Error de conexión:', err);
-        this.mostrarError('Error de conexión con el servidor');
+        this.mostrarNotificacion('Error de conexión con el servidor');
       },
     });
   }
@@ -158,15 +158,52 @@ export class Agendamiento implements OnInit {
   }
 
   cargarDisponibilidad() {
-    if (!this.formData.especialistaid || !this.formData.fecha) return;
+    const { especialistaid, fecha } = this.formData;
+    if (!especialistaid || !fecha) return;
 
-    this.citasService
-      .getDisponibilidad(this.formData.especialistaid, this.formData.fecha)
-      .subscribe((data) => {
-        this.horarios = data;
-        console.log('Disponibilidad recibida:', data);
-      });
+    this.citasService.getDisponibilidad(especialistaid, fecha).subscribe({
+      next: (data) => {
+        // Si hay datos, usamos los del back (citas ocupadas filtradas, etc.)
+        if (data && data.length > 0) {
+          this.horarios = data;
+        } else {
+          // Si no hay datos (fecha pasada/no laborable), generamos su agenda real
+          this.horarios = this.generarHorariosDesdeConfiguracion(especialistaid);
+        }
+      },
+      error: () => {
+        // Ante error de red, también mostramos su agenda base para no bloquear
+        this.horarios = this.generarHorariosDesdeConfiguracion(especialistaid);
+      },
+    });
   }
+
+  private generarHorariosDesdeConfiguracion(id: string): any[] {
+    // Buscamos al doctor en nuestra lista local de especialistas
+    const doctor = this.especialistas.find((e) => e.id.toString() === id.toString());
+
+    if (!doctor || !doctor.horarioAtencion) return [];
+
+    const slots = [];
+    const [hInicio, mInicio] = doctor.horarioAtencion.horaInicio.split(':').map(Number);
+    const [hFin, mFin] = doctor.horarioAtencion.horaFin.split(':').map(Number);
+    const intervalo = doctor.intervaloAtencion || 20;
+
+    let actual = hInicio * 60 + mInicio;
+    const fin = hFin * 60 + mFin;
+
+    while (actual < fin) {
+      const hh = Math.floor(actual / 60)
+        .toString()
+        .padStart(2, '0');
+      const mm = (actual % 60).toString().padStart(2, '0');
+      slots.push({ hora: `${hh}:${mm}` });
+      actual += intervalo;
+    }
+
+    return slots;
+  }
+
   manejarCambioEspecialista(id: number) {
     this.formData.especialistaid = id.toString();
     this.cargarDisponibilidad(); // Refrescamos horarios de inmediato
@@ -174,7 +211,8 @@ export class Agendamiento implements OnInit {
 
   actualizarFecha(nuevaFecha: string) {
     this.formData.fecha = nuevaFecha;
-    this.cargarDisponibilidad(); // Esto dispara la petición al puerto 3000
+    this.formData.hora = ''; // Resetear hora para obligar a elegir una del nuevo día
+    this.cargarDisponibilidad();
   }
 
   get esFormularioInvalido(): boolean {
@@ -191,13 +229,9 @@ export class Agendamiento implements OnInit {
     this.intentoEnvio = true;
     if (!this.validar()) return;
 
-    // Dividimos la hora (ej: "8:0") y nos aseguramos que cada parte tenga 2 dígitos
     const [horas, minutos] = this.formData.hora.split(':');
     const horaFormateada = `${horas.padStart(2, '0')}:${minutos.padStart(2, '0')}`;
-    
     const fechaHoraStr = `${this.formData.fecha}T${horaFormateada}:00`;
-    console.log('Hora seleccionada:', horaFormateada);
-    console.log('Fecha final enviada:', fechaHoraStr);
 
     const dto = {
       pacienteId: this.formData.cedula,
@@ -206,7 +240,6 @@ export class Agendamiento implements OnInit {
       tipo: this.formData.tipo || 'CONTROL',
     };
 
-    // Mostramos un mensaje de "Procesando..."
     Swal.fire({
       title: 'Procesando cita...',
       didOpen: () => {
@@ -216,46 +249,50 @@ export class Agendamiento implements OnInit {
 
     this.citasService.crearCita(dto).subscribe({
       next: () => {
-        // Mensaje de éxito elegante
-        Swal.fire({
-          icon: 'success',
-          title: '¡Cita Agendada!',
-          text: `La cita para ${this.formData.nombre} ha sido registrada con éxito.`,
-          confirmButtonColor: '#3b82f6', // El azul de tu tema
-        });
-
-        this.limpiarFormulario(); // <--- AQUÍ BORRAMOS TODO
+        /* ... success ... */
       },
       error: (err) => {
+        const msg = Array.isArray(err.error?.message)
+          ? err.error.message.join('. ')
+          : err.error?.message || 'Error de conexión';
+
+        // 1. Identificar si es error de "fecha pasada" (Rojito)
+        const esFechaPasada = msg.toLowerCase().includes('pasado');
+
+        // 2. Identificar si es advertencia de agenda (Naranja)
+        // Por ejemplo: "No atiende los Jueves" o "Fuera de ventana"
+        const esAdvertencia =
+          msg.toLowerCase().includes('atiende') ||
+          msg.toLowerCase().includes('ventana') ||
+          msg.toLowerCase().includes('rango');
+
         Swal.fire({
-          icon: 'error',
-          title: 'Error al agendar',
-          text: 'No pudimos conectar con el servidor. Revisa tu conexión.',
-          confirmButtonColor: '#ef4444',
+          icon: esFechaPasada ? 'error' : esAdvertencia ? 'warning' : 'error',
+          title: esFechaPasada ? 'Fecha Inválida' : esAdvertencia ? 'Atención' : 'Error',
+          text: msg,
+          confirmButtonColor: esFechaPasada ? '#ef4444' : esAdvertencia ? '#f59e0b' : '#ef4444',
         });
-        console.error('Error:', err);
       },
     });
   }
 
   validar(): boolean {
     if (!this.formData.cedula) {
-      this.mostrarError('La cédula es obligatoria');
+      this.mostrarNotificacion('La cédula es obligatoria', 'warning');
       return false;
     }
     if (!this.pacienteEncontrado) {
-      this.mostrarError('Debe buscar un paciente válido');
+      this.mostrarNotificacion('Debe buscar un paciente válido', 'warning');
       return false;
     }
     if (!this.formData.especialistaid) {
-      this.mostrarError('Seleccione un especialista');
+      this.mostrarNotificacion('Seleccione un especialista', 'warning');
       return false;
     }
     if (!this.formData.fecha || !this.formData.hora) {
-      this.mostrarError('Seleccione fecha y hora');
+      this.mostrarNotificacion('Seleccione fecha y hora', 'warning');
       return false;
     }
-
     return true;
   }
 
@@ -287,15 +324,37 @@ export class Agendamiento implements OnInit {
     });
   }
 
-  private mostrarError(mensaje: string) {
+  private mostrarNotificacion(mensaje: string, tipo: 'error' | 'warning' = 'error') {
     Swal.fire({
       toast: true,
       position: 'top-end',
-      icon: 'error',
+      icon: tipo,
       title: mensaje,
       showConfirmButton: false,
       timer: 3000,
       timerProgressBar: true,
     });
+  }
+
+  formatearDiasAtencion(diasBrutos: any): string {
+    // Cambiamos a any por si viene de un JSON inseguro
+    if (!diasBrutos || !Array.isArray(diasBrutos)) return '';
+
+    const normalizar = (s: string) =>
+      s
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '')
+        .toLowerCase();
+
+    const diasLimpios = [
+      ...new Set(
+        diasBrutos.map((dia: string) => {
+          const base = normalizar(dia);
+          if (base === 'miercoles') return 'Miércoles';
+          return base.charAt(0).toUpperCase() + base.slice(1);
+        }),
+      ),
+    ];
+    return diasLimpios.join(', ');
   }
 }

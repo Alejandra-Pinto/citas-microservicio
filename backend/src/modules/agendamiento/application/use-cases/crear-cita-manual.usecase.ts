@@ -8,7 +8,12 @@ import type { EspecialistaPort } from '../../domain/ports/especialista.port';
 import type { PacientePort } from '../../domain/ports/paciente.port';
 import { DisponibilidadAgendamientoService } from '../../domain/services/disponibilidad-agendamiento.service';
 
-@Injectable()
+interface HorarioAtencion {
+  horaInicio: string;
+  horaFin: string;
+  diaSemana: string[];
+}
+
 @Injectable()
 export class CrearCitaManualUseCase {
   constructor(
@@ -21,7 +26,23 @@ export class CrearCitaManualUseCase {
 
   async ejecutar(dto: CrearCitaDto) {
     const fechaCita = new Date(dto.fechaHora);
+    const ahora = new Date();
 
+    // 1. Validación de Fecha Pasada
+    if (fechaCita.getTime() < ahora.getTime()) {
+      throw new BadRequestException(
+        'No es posible agendar una cita en el pasado. Por favor, selecciona una fecha futura.',
+      );
+    }
+
+    // 2. Validación de Antelación (30 minutos)
+    const minutosAntelacion = 30;
+    const tiempoMinimo = ahora.getTime() + minutosAntelacion * 60000;
+    if (fechaCita.getTime() < tiempoMinimo) {
+      throw new BadRequestException(
+        `Por políticas de la clínica, las citas deben programarse con al menos ${minutosAntelacion} minutos de antelación.`,
+      );
+    }
     // 1. Validar ventana de tiempo (Configuración Global Administrador)
     const enVentana =
       await this.disponibilidadService.estaEnVentanaPermitida(fechaCita);
@@ -43,6 +64,48 @@ export class CrearCitaManualUseCase {
     );
     if (!especialista || !especialista.activo) {
       throw new BadRequestException('Especialista no disponible');
+    }
+
+    // 3. Validación de Días Laborales (Limpiando duplicados)
+    const horario = especialista.horarioAtencion as unknown as HorarioAtencion;
+    const diasSemanaMap: Record<number, string> = {
+      0: 'Domingo',
+      1: 'Lunes',
+      2: 'Martes',
+      3: 'Miércoles',
+      4: 'Jueves',
+      5: 'Viernes',
+      6: 'Sábado',
+    };
+
+    const nombreDiaCita = diasSemanaMap[fechaCita.getDay()];
+    const normalizar = (s: string) =>
+      s
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '')
+        .toLowerCase();
+
+    // Obtenemos los días. Si no hay, usamos array vacío.
+    const diasLaborales = horario?.diaSemana || [];
+
+    const trabajaHoy = diasLaborales.some(
+      (d: string) => normalizar(d) === normalizar(nombreDiaCita),
+    );
+
+    if (!trabajaHoy) {
+      // 1. Primero normalizamos todos los días a su versión "bonita" con tilde
+      const diasNormalizados = diasLaborales.map((d: string) => {
+        const base = normalizar(d);
+        if (base === 'miercoles') return 'Miércoles';
+        return base.charAt(0).toUpperCase() + base.slice(1);
+      });
+
+      // 2. AHORA usamos el Set sobre los días ya corregidos para eliminar duplicados
+      const listaUnica = Array.from(new Set(diasNormalizados)).join(', ');
+
+      throw new BadRequestException(
+        `La doctora no atiende los ${nombreDiaCita}. Sus días de atención son: ${listaUnica}.`,
+      );
     }
 
     // 4. Calcular duración según tipo de cita
