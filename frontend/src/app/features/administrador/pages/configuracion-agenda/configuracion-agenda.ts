@@ -72,6 +72,7 @@ export class ConfiguracionAdmin implements OnInit {
 
           // 🔥 Si backend devuelve datos, los usamos
           if (data) {
+            console.log('CONFIG ESPECIALISTA:', data);
             esp.config = {
               intervaloAtencion: data.intervaloAtencion ?? 30,
               horarioAtencion: {
@@ -108,8 +109,8 @@ export class ConfiguracionAdmin implements OnInit {
     const config = esp.config;
 
     // 🔴 VALIDACIONES FRONT (evitan 400)
-    if (!config.intervaloAtencion || config.intervaloAtencion < 15) {
-      alert('Intervalo inválido (mínimo 15)');
+    if (!config.intervaloAtencion || config.intervaloAtencion < 5) {
+      alert('Intervalo inválido (mínimo 5)');
       return;
     }
 

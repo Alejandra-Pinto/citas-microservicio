@@ -60,19 +60,38 @@
                     </td>
 
                     <td class="px-8 py-5">
-                        <div class="flex items-center gap-2">
-                            <span class="w-2 h-2 rounded-full"
+                        <div class="flex items-center gap-3">
+                            <span class="relative flex h-2.5 w-2.5">
+                            @if (cita.estado !== 'CANCELADA') {
+                                <span 
+                                class="animate-ping absolute inline-flex h-full w-full rounded-full opacity-75"
                                 [ngClass]="{
-                                    'bg-emerald-500': cita.estado === 'FINALIZADA',
-                                    'bg-amber-500': cita.estado === 'PROGRAMADA',
-                                    'bg-red-500': cita.estado === 'CANCELADA'
+                                    'bg-emerald-400': cita.estado === 'FINALIZADA',
+                                    'bg-amber-300': cita.estado === 'PROGRAMADA'
+                                }">
+                                </span>
+                            }
+                            
+                            <span 
+                                class="relative inline-flex rounded-full h-2.5 w-2.5"
+                                [ngClass]="{
+                                'bg-emerald-500': cita.estado === 'FINALIZADA',
+                                'bg-amber-500': cita.estado === 'PROGRAMADA',
+                                'bg-red-500': cita.estado === 'CANCELADA'
                                 }">
                             </span>
-                            <span class="text-sm font-semibold text-slate-600">
-                                {{ cita.estado | titlecase }}
+                            </span>
+
+                            <span class="text-sm font-bold tracking-tight"
+                                [ngClass]="{
+                                    'text-emerald-700': cita.estado === 'FINALIZADA',
+                                    'text-amber-600': cita.estado === 'PROGRAMADA',
+                                    'text-red-600': cita.estado === 'CANCELADA'
+                                }">
+                            {{ cita.estado | titlecase }}
                             </span>
                         </div>
-                    </td>
+                        </td>
 
                     <td class="px-8 py-5 text-right">
                         <button class="text-blue-600 font-bold text-xs hover:underline uppercase tracking-wider">

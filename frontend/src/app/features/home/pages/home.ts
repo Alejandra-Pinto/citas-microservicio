@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { Header } from "../../../shared/components/header/header";
+import { Header } from "../components/headerHome/header";
 import { PorQueElegir } from '../components/por-que-elegir/por-que-elegir';
 import { Horario } from '../components/horario/horario';
 import { Mapa } from '../components/mapa/mapa';
