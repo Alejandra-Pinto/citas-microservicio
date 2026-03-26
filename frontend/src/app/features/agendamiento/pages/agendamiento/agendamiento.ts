@@ -45,7 +45,7 @@ export class Agendamiento implements OnInit {
   constructor(
     private citasService: CitasService,
     private especialistaService: EspecialistaService,
-    private pacienteService: PacienteService,
+    private pacienteService: PacienteService
   ) {}
 
   sugerencias: any[] = []; // Array para guardar los resultados temporales
@@ -248,6 +248,14 @@ export class Agendamiento implements OnInit {
     this.citasService.crearCita(dto).subscribe({
       next: () => {
         /* ... success ... */
+        Swal.fire({
+          icon: 'success',
+          title: '¡Cita Agendada!',
+          text: `La cita para ${this.formData.nombre} ha sido registrada con éxito.`,
+          confirmButtonColor: '#3b82f6',
+        });
+
+        this.limpiarFormulario();
       },
       error: (err) => {
         const msg = Array.isArray(err.error?.message)
