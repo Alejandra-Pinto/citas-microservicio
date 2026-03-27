@@ -22,7 +22,10 @@ export class Especialista {
     public intervaloAtencion: number,
     public horarioAtencion: HorarioAtencion,
     public activo: boolean = true,
-  ) {}
+  ) {
+    if (intervaloAtencion <= 0)
+      throw new Error('El intervalo debe ser mayor a 0');
+  }
 
   desactivar() {
     this.activo = false;

@@ -9,7 +9,6 @@ export class ListarTodasLasCitasUseCase {
   ) {}
 
   async ejecutar() {
-    // Ahora esto funciona sin errores porque el DTO es opcional
     return await this.citaRepository.buscarTodas();
   }
 }

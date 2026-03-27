@@ -22,7 +22,11 @@ export class Cita {
     public estado: EstadoCita = EstadoCita.PROGRAMADA,
     public paciente?: { nombre: string; documento: string },
     public especialista?: { nombre: string; especialidad?: string },
-  ) {}
+  ) {
+    if (duracion <= 0) throw new Error('La duración debe ser mayor a 0');
+    if (!especialistaId || !pacienteId)
+      throw new Error('Especialista y Paciente son obligatorios');
+  }
 
   cancelar() {
     if (this.estado === EstadoCita.CANCELADA) {
@@ -37,11 +41,25 @@ export class Cita {
   }
 
   reagendar(nuevaFecha: Date) {
+    if (nuevaFecha <= new Date()) {
+      throw new Error('No se puede reagendar a una fecha pasada');
+    }
+    if (this.estado === EstadoCita.FINALIZADA) {
+      throw new Error('No se puede reagendar una cita ya finalizada');
+    }
     this.fechaHora = nuevaFecha;
     this.estado = EstadoCita.REAGENDADA;
   }
 
   finalizar() {
+    if (
+      this.estado !== EstadoCita.PROGRAMADA &&
+      this.estado !== EstadoCita.REAGENDADA
+    ) {
+      throw new Error(
+        'Solo se pueden finalizar citas programadas o reagendadas',
+      );
+    }
     this.estado = EstadoCita.FINALIZADA;
   }
 

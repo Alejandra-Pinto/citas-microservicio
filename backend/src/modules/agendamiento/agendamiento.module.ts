@@ -16,7 +16,6 @@ import { ExportarCitasUseCase } from './application/use-cases/exportar-citas.use
 import { ListarTodasLasCitasUseCase } from './application/use-cases/listar-citas-general-citas.usecase';
 
 //Services
-import { PoliticaAgendamientoService } from './domain/services/politica-agendamiento.service';
 import { DisponibilidadAgendamientoService } from './domain/services/disponibilidad-agendamiento.service';
 
 //Infrastructure & Adapters
@@ -51,7 +50,6 @@ import { ConfiguracionSistemaPort } from './domain/ports/configuracionSistema.po
     FinalizarCitaUseCase,
     MarcarNoAsistioUseCase,
     ExportarCitasUseCase,
-    PoliticaAgendamientoService,
     DisponibilidadAgendamientoService,
     ListarTodasLasCitasUseCase,
 
