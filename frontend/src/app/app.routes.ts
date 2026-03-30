@@ -9,10 +9,9 @@ export const routes: Routes = [
   },
   {
     path: 'home',
-    loadComponent: () =>
-      import('./features/home/pages/home').then(m => m.Home),
+    loadComponent: () => import('./features/home/pages/home').then((m) => m.Home),
   },
-  //RUTAS PROTEGIDAS / CON SIDEBAR (Hijas del Layout)
+
   {
     path: '',
     component: DashboardLayoutComponent,
@@ -20,31 +19,33 @@ export const routes: Routes = [
       {
         path: 'agendarUser',
         loadComponent: () =>
-          import('./features/agendamiento/pages/asistente/asistente')
-            .then(m => m.AsistenteComponent),
+          import('./features/agendamiento/pages/asistente/asistente').then(
+            (m) => m.AsistenteComponent,
+          ),
       },
       {
         path: 'agendar',
         loadComponent: () =>
-          import('./features/agendamiento/pages/agendamiento/agendamiento')
-            .then(m => m.Agendamiento),
+          import('./features/agendamiento/pages/agendamiento/agendamiento').then(
+            (m) => m.Agendamiento,
+          ),
       },
       {
         path: 'mis-citas',
         loadComponent: () =>
-          import('./features/consulta-citas/pages/consulta-citas')
-            .then(m => m.ConsultaCitas),
+          import('./features/consulta-citas/pages/consulta-citas').then((m) => m.ConsultaCitas),
       },
       {
         path: 'administrador',
         loadComponent: () =>
-          import('./features/administrador/pages/configuracion-agenda/configuracion-agenda')
-            .then(m => m.ConfiguracionAdmin),
+          import('./features/administrador/pages/configuracion-agenda/configuracion-agenda').then(
+            (m) => m.ConfiguracionAdmin,
+          ),
       },
-    ]
+    ],
   },
   {
     path: '**',
     redirectTo: 'home',
-  }
+  },
 ];

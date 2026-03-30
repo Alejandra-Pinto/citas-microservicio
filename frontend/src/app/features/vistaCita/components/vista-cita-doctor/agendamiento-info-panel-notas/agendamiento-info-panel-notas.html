@@ -1,0 +1,59 @@
+<div
+  class="bg-white rounded-xl shadow-sm overflow-hidden flex flex-col h-full border border-slate-100"
+>
+  <div class="px-8 py-4 bg-slate-50/50 border-b border-slate-100 flex justify-between items-center">
+    <h3 class="font-bold text-on-surface flex items-center gap-2">
+      <span class="material-symbols-outlined text-primary">description</span>
+      Notas de la Consulta
+    </h3>
+    <div class="flex gap-2">
+      <button
+        class="p-2 hover:bg-slate-100 rounded-lg transition-colors text-slate-400"
+        title="Ver Historial"
+      >
+        <span class="material-symbols-outlined text-sm">history</span>
+      </button>
+      <button
+        (click)="guardarNotas()"
+        class="p-2 hover:bg-slate-100 rounded-lg transition-colors text-primary"
+        title="Guardar Progreso"
+      >
+        <span class="material-symbols-outlined text-sm">save</span>
+      </button>
+    </div>
+  </div>
+
+  <div class="p-8">
+    <textarea
+      [(ngModel)]="notas"
+      class="w-full min-h-[300px] border-none focus:ring-0 p-0 text-sm leading-relaxed text-slate-600 placeholder:text-slate-300 resize-none bg-transparent"
+      placeholder="Inicie el registro de la consulta aquí..."
+    >
+    </textarea>
+
+    <div class="mt-8 flex flex-wrap gap-3">
+      <div
+        *ngFor="let tag of tags; let i = index"
+        class="group px-4 py-2 bg-slate-100 rounded-lg text-xs font-bold text-slate-500 border border-slate-200 flex items-center gap-2"
+      >
+        {{ tag }}
+        <button (click)="eliminarTag(i)" class="hidden group-hover:block text-error">
+          <span class="material-symbols-outlined text-xs">close</span>
+        </button>
+      </div>
+
+      <div class="flex items-center gap-2">
+        <input
+          [(ngModel)]="nuevoTag"
+          (keyup.enter)="agregarTag()"
+          type="text"
+          placeholder="Nuevo tag..."
+          class="px-3 py-1 text-xs border border-dashed border-slate-300 rounded-lg focus:border-primary focus:ring-0 w-24"
+        />
+        <button (click)="agregarTag()" class="text-primary">
+          <span class="material-symbols-outlined text-sm">add_circle</span>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
