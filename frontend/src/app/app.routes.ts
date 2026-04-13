@@ -42,6 +42,14 @@ export const routes: Routes = [
             (m) => m.ConfiguracionAdmin,
           ),
       },
+      {
+        path: 'cita/:id', // <--- Añadimos esta
+        title: 'Detalle de Cita - Piedra Azul',
+        loadComponent: () =>
+          import('./features/vistaCita/pages/vista-cita-doctor/vista-cita-doctor').then(
+            (m) => m.VistaCitaDoctor,
+          ),
+      },
     ],
   },
   {

@@ -1,9 +1,14 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-paciente-perfil-card',
-  imports: [],
+  standalone: true,
+  imports: [CommonModule],
   templateUrl: './paciente-perfil-card.html',
-  styleUrl: './paciente-perfil-card.scss',
+  styleUrls: ['./paciente-perfil-card.scss'],
 })
-export class PacientePerfilCard {}
+export class PacientePerfilCard {
+  // Usamos el tipo parcial para permitir que falten campos si aún no cargan (en caso de la foto del paciente)
+  @Input() pacienteInfo?: any;
+}
