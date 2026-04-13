@@ -1,34 +1,40 @@
 @if (citaInfo) {
   <div
-    class="bg-white rounded-xl shadow-sm overflow-hidden flex flex-col h-full border border-slate-100"
+    class="bg-white rounded-xl shadow-sm overflow-hidden flex flex-col h-full border border-outline-variant"
   >
-    <div class="px-8 py-4 bg-slate-50 border-b border-slate-100 flex justify-between items-center">
-      <h3 class="font-bold text-slate-700 flex items-center gap-2 text-sm uppercase tracking-wider">
-        <span class="material-symbols-outlined text-blue-600">edit_note</span>
-        Registro Clínico
+    <div
+      class="px-8 py-4 bg-surface-container/50 border-b border-outline-variant flex justify-between items-center"
+    >
+      <h3
+        class="font-bold text-on-surface flex items-center gap-2 text-sm uppercase tracking-wider"
+      >
+        <span class="material-symbols-outlined text-primary">description</span>
+        Notas de la Consulta
       </h3>
-      <div class="text-[10px] font-black text-slate-300 uppercase">Piedra Azul - Historia</div>
+      <div class="text-[10px] font-black text-slate-400 uppercase tracking-widest">
+        Piedra Azul - Historia
+      </div>
     </div>
 
     <div class="p-8">
       <textarea
         [(ngModel)]="citaInfo.notas"
-        class="w-full min-h-[250px] border-none focus:ring-0 p-0 text-sm leading-relaxed text-slate-600 placeholder:text-slate-300 resize-none bg-transparent"
-        placeholder="Escriba aquí la evolución del paciente, síntomas y diagnóstico..."
+        class="w-full min-h-[300px] border-none focus:ring-0 p-0 text-sm leading-relaxed text-on-surface-variant placeholder:text-slate-300 resize-none bg-transparent"
+        placeholder="Inicie el registro de la consulta aquí (síntomas, diagnóstico, evolución)..."
       >
       </textarea>
 
-      <div class="mt-8 pt-6 border-t border-slate-50 flex flex-wrap gap-3 items-center">
+      <div class="mt-8 pt-6 border-t border-surface-variant flex flex-wrap gap-3 items-center">
         @for (tag of tags; track $index) {
           <div
-            class="group px-3 py-1.5 bg-blue-50 rounded-lg text-[11px] font-bold text-blue-600 border border-blue-100 flex items-center gap-2 transition-all"
+            class="group px-4 py-2 bg-surface-container-high rounded-lg text-xs font-bold text-slate-500 border border-outline-variant flex items-center gap-2 transition-all hover:border-primary/30"
           >
             {{ tag }}
             <button
               (click)="eliminarTag($index)"
-              class="hover:text-red-500 opacity-0 group-hover:opacity-100 transition-opacity"
+              class="hover:text-error opacity-0 group-hover:opacity-100 transition-opacity flex items-center"
             >
-              <span class="material-symbols-outlined text-[14px]">close</span>
+              <span class="material-symbols-outlined text-[16px]">close</span>
             </button>
           </div>
         }
@@ -38,16 +44,18 @@
             [(ngModel)]="nuevoTag"
             (keyup.enter)="agregarTag()"
             type="text"
-            placeholder="Añadir #"
-            class="px-2 py-1 text-[11px] border border-dashed border-slate-200 rounded-lg focus:border-blue-400 focus:ring-0 w-20 bg-slate-50/50"
+            placeholder="+ Agregar #"
+            class="px-4 py-2 text-xs font-bold border border-dashed border-outline rounded-lg focus:border-primary focus:ring-0 w-32 bg-surface-container-lowest text-slate-500"
           />
-          <button (click)="agregarTag()" class="text-blue-400 hover:text-blue-600">
-            <span class="material-symbols-outlined text-sm">add_circle</span>
+          <button (click)="agregarTag()" class="text-primary hover:scale-110 transition-transform">
+            <span class="material-symbols-outlined text-xl">add_circle</span>
           </button>
         </div>
       </div>
     </div>
   </div>
 } @else {
-  <div class="animate-pulse bg-white h-80 rounded-xl shadow-sm border border-slate-100"></div>
+  <div
+    class="animate-pulse bg-white h-[450px] rounded-xl shadow-sm border border-outline-variant"
+  ></div>
 }
