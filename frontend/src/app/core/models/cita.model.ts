@@ -6,5 +6,20 @@ export interface Cita {
   fechaHora: string;
   duracion: number;
   tipo: string;
-  estado: string;
+  estado: 'PROGRAMADA' | 'CANCELADA' | 'REAGENDADA' | 'FINALIZADA';
+  notas?: string;
+
+  paciente?: {
+    nombres: string;
+    apellidos: string;
+    documento: string;
+    fotoUrl?: string;
+    genero?: string;
+    celular?: string;
+  };
+  especialista?: {
+    nombre: string;
+    apellidos: string;
+    fotoUrl?: string;
+  };
 }

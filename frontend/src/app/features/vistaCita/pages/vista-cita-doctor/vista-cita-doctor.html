@@ -1,0 +1,43 @@
+<div class="max-w-7xl mx-auto space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
+  <app-agendamiento-estados-citas
+    [estadoActual]="cita?.estado"
+    (alCambiarEstado)="onEstadoChanged($event)"
+  >
+  </app-agendamiento-estados-citas>
+
+  <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+    <div class="lg:col-span-4 space-y-6">
+      <app-paciente-perfil-card [pacienteInfo]="cita?.paciente"></app-paciente-perfil-card>
+
+      <div class="bg-blue-600 p-6 rounded-2xl shadow-lg text-white relative overflow-hidden">
+        <span class="material-symbols-outlined absolute -right-4 -bottom-4 text-8xl opacity-10"
+          >info</span
+        >
+        <p class="text-[10px] font-black uppercase tracking-widest opacity-60 mb-2">
+          Nota del Sistema
+        </p>
+        <p class="font-medium text-sm leading-relaxed relative z-10">
+          Verificar historial de alergias antes de prescribir medicamentos.
+        </p>
+      </div>
+    </div>
+
+    <div class="lg:col-span-8 space-y-8">
+      <app-agendamiento-info-medico [citaInfo]="cita"></app-agendamiento-info-medico>
+      <app-agendamiento-info-panel-notas [citaInfo]="cita"></app-agendamiento-info-panel-notas>
+
+      <div class="flex justify-end gap-4 mt-8">
+        <button
+          class="px-8 py-4 text-slate-400 font-bold text-xs hover:text-slate-600 transition-colors"
+        >
+          DESCARTAR
+        </button>
+        <button
+          class="px-10 py-4 bg-blue-600 text-white rounded-2xl font-black text-xs shadow-xl hover:bg-blue-700 hover:-translate-y-1 transition-all"
+        >
+          GUARDAR CAMBIOS
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

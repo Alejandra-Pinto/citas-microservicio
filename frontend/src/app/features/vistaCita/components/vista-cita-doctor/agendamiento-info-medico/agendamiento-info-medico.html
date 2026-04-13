@@ -1,0 +1,59 @@
+@if (citaInfo) {
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+    <div class="bg-white p-6 rounded-xl shadow-sm border-l-4 border-blue-600">
+      <div class="flex items-start justify-between mb-4">
+        <span class="bg-blue-50 text-blue-600 p-3 rounded-xl">
+          <span class="material-symbols-outlined">medical_services</span>
+        </span>
+        <span class="text-[9px] font-black uppercase tracking-tighter text-slate-300"
+          >Servicio</span
+        >
+      </div>
+
+      <h4 class="text-xs font-bold text-slate-400 uppercase mb-1">Especialidad</h4>
+      <p class="text-lg font-extrabold text-slate-800 mb-4">{{ citaInfo.tipo }}</p>
+
+      <h4 class="text-xs font-bold text-slate-400 uppercase mb-1">Médico Asignado</h4>
+      <div class="flex items-center gap-3">
+        <div
+          class="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center overflow-hidden"
+        >
+          <img
+            [src]="citaInfo.especialista?.fotoUrl || 'assets/images/default-doctor.png'"
+            class="w-full h-full object-cover"
+            alt="Doctor"
+          />
+        </div>
+        <p class="font-bold text-sm text-slate-700">
+          Dr. {{ citaInfo.especialista?.nombre }} {{ citaInfo.especialista?.apellidos }}
+        </p>
+      </div>
+    </div>
+
+    <div class="bg-white p-6 rounded-xl shadow-sm border-l-4 border-amber-400">
+      <div class="flex items-start justify-between mb-4">
+        <span class="bg-amber-50 text-amber-600 p-3 rounded-xl">
+          <span class="material-symbols-outlined">schedule</span>
+        </span>
+        <span class="text-[9px] font-black uppercase tracking-tighter text-slate-300">Agenda</span>
+      </div>
+
+      <h4 class="text-xs font-bold text-slate-400 uppercase mb-1">Fecha de Cita</h4>
+      <p class="text-lg font-extrabold text-slate-800 mb-4">
+        {{ citaInfo.fechaHora | date: 'fullDate' | titlecase }}
+      </p>
+
+      <h4 class="text-xs font-bold text-slate-400 uppercase mb-1">Horario Programado</h4>
+      <div class="flex items-center gap-2 text-slate-700 font-bold text-sm">
+        <span class="material-symbols-outlined text-slate-400 text-sm">alarm</span>
+        {{ rangoHorario }}
+      </div>
+    </div>
+  </div>
+} @else {
+  <div
+    class="p-6 bg-slate-50 rounded-xl border border-dashed border-slate-200 text-center text-slate-400"
+  >
+    Cargando información médica...
+  </div>
+}
