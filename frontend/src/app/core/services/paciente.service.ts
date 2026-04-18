@@ -10,6 +10,11 @@ export class PacienteService {
 
   constructor(private http: HttpClient) {}
 
+  // Método para conectar con el backend y Keycloak
+  crearPaciente(datos: any): Observable<any> {
+    return this.http.post<any>(this.api, datos);
+  }
+
   // Obtener un paciente por su ID/Documento
   getPaciente(id: string): Observable<any> {
     return this.http.get<any>(`${this.api}/${id}`);

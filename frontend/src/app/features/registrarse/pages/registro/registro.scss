@@ -1,0 +1,19 @@
+.input-moderno {
+  // Cambiamos 'border-outline' por 'border-slate-200'
+  @apply w-full h-12 px-4 bg-slate-50 border border-slate-200 rounded-xl transition-all text-slate-700 font-medium outline-none;
+  
+  // Efecto de foco más suave para adultos mayores
+  &:focus {
+    @apply ring-4 ring-blue-500/10 border-blue-500 bg-white;
+  }
+
+  &.error {
+    @apply border-red-500 bg-red-50;
+  }
+}
+
+.btn-principal {
+  // 'bg-primary' debe estar definido en tu tailwind.config.js, 
+  // si no, usa 'bg-blue-600'
+  @apply w-full h-14 bg-[#1D4ED8] text-white font-bold rounded-2xl shadow-lg shadow-blue-900/20 hover:shadow-blue-900/30 active:scale-[0.97] transition-all flex items-center justify-center gap-2 disabled:opacity-40 disabled:grayscale disabled:cursor-not-allowed uppercase tracking-widest text-[12px];
+}

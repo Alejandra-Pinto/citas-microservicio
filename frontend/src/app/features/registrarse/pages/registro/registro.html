@@ -1,0 +1,104 @@
+<div class="flex flex-col md:flex-row min-h-screen bg-surface">
+  <app-branding-side class="hidden md:flex md:w-[35%] lg:w-[30%]"></app-branding-side>
+
+  <div class="flex-grow p-6 md:p-12 lg:p-16 flex items-center justify-center overflow-y-auto">
+    <div class="w-full max-w-xl bg-white p-8 md:p-10 rounded-3xl shadow-xl border border-outline/30">
+      
+      <div class="mb-8 text-center md:text-left">
+        <h1 class="text-3xl font-extrabold text-slate-800 tracking-tight mb-2">Crear mi cuenta</h1>
+        <p class="text-slate-500 text-sm">Regístrese para acceder a sus citas médicas en Piedra Azul.</p>
+      </div>
+
+      <form [formGroup]="registroForm" (ngSubmit)="onSubmit()" class="space-y-4">
+        
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div class="space-y-1">
+            <label class="text-xs font-bold text-slate-600 uppercase">Nombres</label>
+            <input formControlName="nombres" class="input-moderno" [class.error]="getFieldError('nombres')" placeholder="Ej. Pedro" type="text"/>
+            <span class="text-[12px] text-red-500 font-bold italic" *ngIf="getFieldError('nombres')">{{ getFieldError('nombres') }}</span>
+          </div>
+          <div class="space-y-1">
+            <label class="text-xs font-bold text-slate-600 uppercase">Apellidos</label>
+            <input formControlName="apellidos" class="input-moderno" [class.error]="getFieldError('apellidos')" placeholder="Ej. Casallas" type="text"/>
+            <span class="text-[12px] text-red-500 font-bold italic" *ngIf="getFieldError('apellidos')">{{ getFieldError('apellidos') }}</span>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div class="space-y-1">
+            <label class="text-xs font-bold text-slate-600 uppercase">Documento de Identidad</label>
+            <input formControlName="documento" class="input-moderno" [class.error]="getFieldError('documento')" placeholder="Ej: 123456789" type="text"/>
+            <span class="text-[12px] text-red-500 font-bold italic" *ngIf="getFieldError('documento')">{{ getFieldError('documento') }}</span>
+          </div>
+          <div class="space-y-1">
+            <label class="text-xs font-bold text-slate-600 uppercase">Teléfono Celular</label>
+            <input formControlName="celular" class="input-moderno" [class.error]="getFieldError('celular')" placeholder="Ej:3001234567" type="tel"/>
+            <span class="text-[12px] text-red-500 font-bold italic" *ngIf="getFieldError('celular')">{{ getFieldError('celular') }}</span>
+          </div>
+        </div>
+
+        <div class="space-y-1">
+          <label class="text-xs font-bold text-slate-600 uppercase">Correo Electrónico</label>
+          <input formControlName="email" class="input-moderno" [class.error]="getFieldError('email')" placeholder="Ej: usuario@correo.com" type="email"/>
+          <span class="text-[12px] text-red-500 font-bold italic" *ngIf="getFieldError('email')">{{ getFieldError('email') }}</span>
+        </div>
+
+        <div class="space-y-2">
+          <label class="text-xs font-bold text-slate-600 uppercase">Género</label>
+          <div class="grid grid-cols-3 gap-2">
+            @for (opcion of ['MASCULINO', 'FEMENINO', 'OTRO']; track opcion) {
+              <label class="flex flex-col items-center justify-center p-3 border rounded-xl cursor-pointer transition-all border-outline hover:bg-slate-50 has-[:checked]:border-primary has-[:checked]:bg-primary/5 has-[:checked]:text-primary">
+                <input type="radio" formControlName="generoP" [value]="opcion" class="hidden">
+                <span class="text-[15px] font-bold">{{ opcion | titlecase }}</span>
+              </label>
+            }
+          </div>
+        </div>
+
+        @if (!modoAdministrativo) {
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div class="space-y-1">
+              <label class="text-xs font-bold text-slate-600 uppercase">Contraseña</label>
+              <div class="relative">
+                <input formControlName="password" [type]="showPassword() ? 'text' : 'password'" class="input-moderno pr-10"/>
+                <button type="button" (click)="showPassword.set(!showPassword())" class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400">
+                  <span class="material-symbols-outlined text-lg">{{ showPassword() ? 'visibility' : 'visibility_off' }}</span>
+                </button>
+              </div>
+              <span class="text-[12px] text-red-500 font-bold italic" *ngIf="getFieldError('password')">{{ getFieldError('password') }}</span>
+            </div>
+            <div class="space-y-1">
+              <label class="text-xs font-bold text-slate-600 uppercase">Confirmar</label>
+              <div class="relative">
+                <input formControlName="confirmarPassword" [type]="showConfirmPassword() ? 'text' : 'password'" class="input-moderno pr-10"/>
+                <button type="button" (click)="showConfirmPassword.set(!showConfirmPassword())" class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400">
+                  <span class="material-symbols-outlined text-lg">{{ showConfirmPassword() ? 'visibility' : 'visibility_off' }}</span>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div *ngIf="registroForm.errors?.['mismatch'] && registroForm.get('confirmarPassword')?.touched" 
+               class="bg-red-50 border-l-4 border-red-500 p-3 rounded-md flex items-center gap-3 animate-bounce">
+            <span class="material-symbols-outlined text-red-500">warning</span>
+            <span class="text-red-700 text-xs font-bold uppercase">Las contraseñas no coinciden</span>
+          </div>
+        }
+
+        <div class="pt-4 text-center space-y-4">
+          <button [disabled]="registroForm.invalid || cargando" class="btn-principal">
+            {{ cargando ? 'REGISTRANDO...' : (modoAdministrativo ? 'REGISTRAR PACIENTE' : 'CREAR MI EXPEDIENTE') }}
+            <span class="material-symbols-outlined">how_to_reg</span>
+          </button>
+
+          @if (!modoAdministrativo) {
+            <p class="text-sm text-slate-500 font-medium">
+              ¿Ya tienes una cuenta? 
+              <a (click)="authService.login()" class="text-primary font-bold hover:underline cursor-pointer">Inicia sesión aquí</a>
+            </p>
+          }
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

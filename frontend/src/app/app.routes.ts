@@ -13,6 +13,10 @@ export const routes: Routes = [
     loadComponent: () => import('./features/home/pages/home').then((m) => m.Home),
   },
   {
+    path: 'registro',
+    loadComponent: () => import('./features/registrarse/pages/registro/registro').then((m) => m.RegistroPage),
+  },
+  {
     path: '',
     component: DashboardLayoutComponent,
     canActivate: [AuthGuard], // <-- Protege TODO el dashboard
