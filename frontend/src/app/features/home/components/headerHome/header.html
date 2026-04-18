@@ -25,12 +25,16 @@
 
       <div class="hidden lg:flex items-center gap-8">
         <a href="#" class="text-[13px] font-bold text-[#1D4ED8] no-underline">Inicio</a>
-        <a href="#servicios" class="text-[13px] font-semibold text-slate-500 hover:text-[#1D4ED8] transition-colors no-underline">Servicios</a>
-        <a href="#equipo" class="text-[13px] font-semibold text-slate-600 hover:text-[#1D4ED8] transition-colors no-underline">Equipo</a>
-        <button class="bg-[#1D4ED8] text-white px-5 py-2 rounded-lg text-[11px] font-bold hover:bg-blue-700 transition-all shadow-sm uppercase tracking-wider">
-          Registrarse
-        </button>
-      </div>
+        @if (!authService.isLoggedIn()) {
+          <button (click)="login()" class="bg-[#1D4ED8] text-white px-5 py-2 rounded-lg text-[11px] font-bold hover:bg-blue-700 transition-all shadow-sm uppercase tracking-wider">
+            Iniciar Sesión / Registrarse
+          </button>
+        } @else {
+          <button routerLink="/agendar" class="bg-green-600 text-white px-5 py-2 rounded-lg text-[11px] font-bold hover:bg-green-700 transition-all shadow-sm uppercase tracking-wider">
+            Ir al Panel
+          </button>
+        }
+      </div>>
     </div>
   </nav>
 

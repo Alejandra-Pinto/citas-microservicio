@@ -7,8 +7,10 @@ import { ObtenerConfiguracionSistemaUseCase } from '../../application/use-cases/
 // Importación de DTOs
 import { CrearConfiguracionDto } from '../../application/dto/crear-configuracion.dto';
 import { ActualizarReglasGlobalesDto } from '../../application/dto/actualizar-reglas-globales.dto';
+import { Roles } from 'nest-keycloak-connect';
 
 @Controller('administrador')
+@Roles({ roles: ['ADMIN'] })
 export class AdministradorController {
   constructor(
     private readonly configurarAgendaUC: ConfigurarAgendaUseCase,

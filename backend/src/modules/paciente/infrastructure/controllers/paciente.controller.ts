@@ -3,6 +3,7 @@ import { CrearPacienteUseCase } from '../../application/use-cases/crear-paciente
 import { ListarPacientesUseCase } from '../../application/use-cases/listar-pacientes.usecase';
 import { BuscarPacienteUseCase } from './../../application/use-cases/buscar-paciente.usecase';
 import { CrearPacienteDto } from '../../application/dto/crear-paciente.dto';
+import { Unprotected } from 'nest-keycloak-connect';
 
 @Controller('pacientes')
 export class PacienteController {
@@ -13,6 +14,7 @@ export class PacienteController {
   ) {}
 
   @Post()
+  @Unprotected() // Permite acceso sin token, ya que es para registro
   async crear(@Body() dto: CrearPacienteDto) {
     return this.crearPaciente.ejecutar(dto);
   }

@@ -7,9 +7,11 @@ import { BuscarPacienteUseCase } from './application/use-cases/buscar-paciente.u
 import { PacienteRepositoryImpl } from './infrastructure/persistence/paciente.repository.impl';
 import { ValidacionPacienteService } from './domain/services/validacion-paciente.service';
 import { PacienteOrmEntity } from './infrastructure/persistence/paciente.orm.entity';
+import { KeycloakAdapter } from './infrastructure/adapters/keycloak.adapter';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([PacienteOrmEntity])],
+  imports: [TypeOrmModule.forFeature([PacienteOrmEntity]), ConfigModule],
   controllers: [PacienteController],
   providers: [
     CrearPacienteUseCase,
@@ -19,6 +21,10 @@ import { PacienteOrmEntity } from './infrastructure/persistence/paciente.orm.ent
     {
       provide: 'PacienteRepository',
       useClass: PacienteRepositoryImpl,
+    },
+    {
+      provide: 'IdentidadRepository', // <--- Nuevo puerto
+      useClass: KeycloakAdapter,
     },
   ],
   exports: ['PacienteRepository'],

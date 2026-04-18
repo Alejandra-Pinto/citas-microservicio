@@ -21,6 +21,7 @@ import { FinalizarCitaUseCase } from '../../application/use-cases/finalizar-cita
 import { MarcarNoAsistioUseCase } from '../../application/use-cases/noAsistida-cita.usecase';
 import { ExportarCitasUseCase } from '../../application/use-cases/exportar-citas.usecase';
 import { ListarTodasLasCitasUseCase } from '../../application/use-cases/listar-citas-general-citas.usecase';
+import { Roles } from 'nest-keycloak-connect';
 
 @Controller('citas')
 export class CitaController {
@@ -38,11 +39,13 @@ export class CitaController {
   ) {}
 
   @Post()
+  @Roles({ roles: ['ADMIN', 'ESPECIALISTA', 'PACIENTE'] })
   async crear(@Body() dto: CrearCitaDto) {
     return this.crearCita.ejecutar(dto);
   }
 
   @Get()
+  @Roles({ roles: ['ADMIN', 'ESPECIALISTA'] })
   async listar(
     @Query('especialistaId') especialistaId: string,
     @Query('fecha') fecha: string,
@@ -72,6 +75,7 @@ export class CitaController {
   }
 
   @Get('exportar')
+  @Roles({ roles: ['ADMIN', 'ESPECIALISTA'] })
   async exportar(
     @Query('especialistaId') especialistaId: string,
     @Query('fecha') fecha: string,
@@ -100,11 +104,13 @@ export class CitaController {
   }
 
   @Patch(':id/cancelar')
+  @Roles({ roles: ['ADMIN', 'ESPECIALISTA'] })
   async cancelar(@Param('id') id: string) {
     return this.cancelarCita.ejecutar(id);
   }
 
   @Patch(':id/reagendar')
+  @Roles({ roles: ['ADMIN', 'ESPECIALISTA'] })
   async reagendar(
     @Param('id') id: string,
     @Body('fechaHora') fechaHora: string,
@@ -112,17 +118,20 @@ export class CitaController {
     return this.reagendarCita.ejecutar(id, new Date(fechaHora));
   }
 
-  @Patch(':citaId/finalizar') // Corregido de /finalizar a :citaId/finalizar para capturar el Param
+  @Patch(':citaId/finalizar')
+  @Roles({ roles: ['ADMIN', 'ESPECIALISTA'] })
   async finalizar(@Param('citaId') citaId: string) {
     return this.finalizarCita.ejecutar(citaId);
   }
 
   @Patch(':id/no-asistio')
+  @Roles({ roles: ['ADMIN', 'ESPECIALISTA'] })
   async marcarNoAsistio(@Param('id') id: string) {
     return this.marcarNoAsistioUseCase.ejecutar(id);
   }
 
   @Get('resumen-disponibilidad')
+  @Roles({ roles: ['ADMIN', 'ESPECIALISTA'] })
   async obtenerResumen() {
     return await this.listarTodasLasCitasUseCase.ejecutar();
   }

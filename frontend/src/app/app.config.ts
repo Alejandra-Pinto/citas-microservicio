@@ -1,22 +1,66 @@
-import { ApplicationConfig, LOCALE_ID, provideZoneChangeDetection, provideBrowserGlobalErrorListeners } from '@angular/core';
+import { 
+  ApplicationConfig, 
+  LOCALE_ID, 
+  provideZoneChangeDetection, 
+  APP_INITIALIZER, 
+  importProvidersFrom
+} from '@angular/core';
 import { provideRouter } from '@angular/router';
-import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClient, withInterceptorsFromDi, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { routes } from './app.routes';
 
-// Importaciones para el idioma
+// Keycloak
+import { KeycloakAngularModule, KeycloakService, KeycloakBearerInterceptor } from 'keycloak-angular';
+
+// Idioma
 import { registerLocaleData } from '@angular/common';
 import localeEs from '@angular/common/locales/es';
 
-// IMPORTANTE: Registra el locale con un ID explícito
-registerLocaleData(localeEs, 'es-ES'); 
+registerLocaleData(localeEs, 'es-ES');
+
+// 1. Definimos la función de inicialización ANTES del objeto de configuración
+export function initializeKeycloak(keycloak: KeycloakService) {
+  return () =>
+    keycloak.init({
+      config: {
+        url: 'http://localhost:9090',
+        realm: 'clinica-piedra-azul',
+        clientId: 'frontend-clinica',
+      },
+      initOptions: {
+        onLoad: 'check-sso',
+        silentCheckSsoRedirectUri: window.location.origin + '/assets/silent-check-sso.html',
+        checkLoginIframe: false
+      },
+      enableBearerInterceptor: true,
+      bearerPrefix: 'Bearer',
+    });
+}
 
 export const appConfig: ApplicationConfig = {
   providers: [
-    provideBrowserGlobalErrorListeners(),
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(routes),
-    provideHttpClient(),
-    // Cambiamos 'es' por 'es-ES' para que coincida exactamente con el registro de arriba
-    { provide: LOCALE_ID, useValue: 'es-ES' } 
-  ]
+    provideHttpClient(withInterceptorsFromDi()), 
+    
+    // ESTO SUELE ARREGLAR EL ERROR NG0201
+    importProvidersFrom(KeycloakAngularModule),
+
+    // Luego el inicializador
+    {
+      provide: APP_INITIALIZER,
+      useFactory: initializeKeycloak,
+      multi: true,
+      deps: [KeycloakService],
+    },
+
+    // Finalmente los interceptores
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: KeycloakBearerInterceptor,
+      multi: true,
+    },
+
+    { provide: LOCALE_ID, useValue: 'es-ES' },
+  ],
 };

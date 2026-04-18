@@ -1,4 +1,5 @@
 import { Module } from '@nestjs/common';
+import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
@@ -12,6 +13,9 @@ import { AuditoriaModule } from './modules/auditoria/auditoria.module';
 
 @Module({
   imports: [
+    ConfigModule.forRoot({
+      isGlobal: true, // Esto hace que el .env esté disponible en toda la app
+    }),
     TypeOrmModule.forRoot({
       type: 'postgres',
       host: 'localhost',
