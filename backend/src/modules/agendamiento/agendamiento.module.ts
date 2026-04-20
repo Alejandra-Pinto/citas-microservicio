@@ -72,6 +72,11 @@ import { ConfiguracionSistemaPort } from './domain/ports/configuracionSistema.po
       useExisting: ConfiguracionSistemaAdapter,
     },
   ],
-  exports: ['PacientePort', 'EspecialistaPort', ExportarCitasUseCase],
+  exports: [
+    'PacientePort',
+    'EspecialistaPort',
+    ExportarCitasUseCase,
+    'CitaRepository',
+  ],
 })
 export class AgendamientoModule {}
