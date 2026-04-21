@@ -213,58 +213,77 @@
                 class="material-symbols-outlined text-blue-600">clinical_notes</span>
               Tu Historial de Citas
             </h3>
+
             <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+
               <div class="space-y-4">
                 <h4
                   class="text-xs font-bold text-slate-400 uppercase tracking-widest">Próximas
                   Citas</h4>
+
                 <div *ngIf="citasFuturas().length === 0"
-                  class="text-sm italic text-slate-400 py-4">No hay citas
-                  programadas.</div>
+                  class="text-sm italic text-slate-400 py-4">
+                  No hay citas programadas.
+                </div>
+
                 <div *ngFor="let cita of citasFuturas()"
                   class="p-4 bg-slate-50 rounded-xl flex justify-between items-center">
                   <div>
                     <p class="text-sm font-bold text-slate-700">
-                      {{ cita.especialista?.nombre || 'Médico no asignado' }}
+                      {{ cita.especialistaNombre || 'Médico no asignado' }}
                     </p>
-
                     <p class="text-xs text-blue-600 font-medium mb-1">
-                      {{ cita.tipo | titlecase }} - {{ cita.especialidad |
-                      titlecase }}
+                      {{ cita.notas }}
                     </p>
-
-                    <p class="text-xs text-slate-500">
+                    <p class="text-xs text-slate-500 flex items-center gap-1">
                       <span
-                        class="material-symbols-outlined text-[12px] align-middle">calendar_month</span>
+                        class="material-symbols-outlined text-[14px]">calendar_month</span>
                       {{ cita.fechaHora | date:'mediumDate' }}
                       <span class="mx-1">•</span>
                       <span
-                        class="material-symbols-outlined text-[12px] align-middle">schedule</span>
+                        class="material-symbols-outlined text-[14px]">schedule</span>
                       {{ cita.fechaHora | date:'shortTime' }}
                     </p>
                   </div>
-
                   <span
-                    class="px-3 py-1 bg-blue-100 text-blue-700 text-[10px] font-bold rounded-full">
+                    class="px-2 py-1 bg-green-100 text-green-700 text-[10px] rounded-full font-bold">
                     Próxima
                   </span>
                 </div>
               </div>
+
               <div class="space-y-4">
                 <h4
                   class="text-xs font-bold text-slate-400 uppercase tracking-widest">Citas
                   Realizadas</h4>
+
                 <div *ngIf="citasPasadas().length === 0"
-                  class="text-sm italic text-slate-400 py-4">No hay registros
-                  previos.</div>
+                  class="text-sm italic text-slate-400 py-4">
+                  No hay registros previos.
+                </div>
+
                 <div *ngFor="let cita of citasPasadas()"
-                  class="p-4 bg-white border border-slate-50 rounded-xl opacity-60">
-                  <p class="text-sm font-bold text-slate-700">{{
-                    cita.especialidad | titlecase }}</p>
-                  <p class="text-xs text-slate-500">{{ cita.fechaHora |
-                    date:'mediumDate' }}</p>
+                  class="p-4 bg-slate-50 rounded-xl flex justify-between items-center opacity-60">
+                  <div>
+                    <p class="text-sm font-bold text-slate-500">
+                      {{ cita.especialistaNombre || 'Médico no asignado' }}
+                    </p>
+                    <p class="text-xs text-slate-400 font-medium mb-1">
+                      {{ cita.notas }}
+                    </p>
+                    <p class="text-xs text-slate-400 flex items-center gap-1">
+                      <span
+                        class="material-symbols-outlined text-[14px]">history</span>
+                      {{ cita.fechaHora | date:'mediumDate' }}
+                    </p>
+                  </div>
+                  <span
+                    class="px-2 py-1 bg-cyan-200 text-cyan-500 text-[10px] rounded-full font-bold">
+                    Finalizada
+                  </span>
                 </div>
               </div>
+
             </div>
           </div>
         </div>

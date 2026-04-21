@@ -54,35 +54,33 @@ export class AsistenteComponent implements OnInit {
     });
   }
 
-  // asistente.ts
-
   cargarHistorialPaciente() {
     const usuario = this.authService.usuario();
     if (usuario?.username) {
       this.citasService.obtenerCitasPorPaciente(usuario.username).subscribe({
-        next: (citasBack: any[]) => {
+        next: (res: any[]) => {
           const ahora = new Date();
 
-          const procesadas: Cita[] = citasBack.map((c) => {
-            const nombreMedico =
-              c.especialista?.nombre || c.especialista?.nombres || 'Médico no asignado';
+          const procesadas = res.map((c) => {
+            const especialidadBack = c.especialidad || c.especialista?.especialidad || 'General';
+            const especialidadFormateada = especialidadBack
+              .replace(/_/g, ' ')
+              .toLowerCase()
+              .replace(/\b\w/g, (l: string) => l.toUpperCase());
 
             return {
               ...c,
-              especialistaNombre: nombreMedico,
-              notas: c.especialidad ? `Especialidad: ${c.especialidad}` : c.notas,
-
-              estado: this.validarEstado(c.estado || c.estadoCita),
-            } as Cita; 
+              especialistaNombre:
+                c.especialista?.nombre || `${c.especialista?.nombres} ${c.especialista?.apellidos}`,
+              notas: c.notas ? `${especialidadFormateada} — ${c.notas}` : especialidadFormateada,
+            } as Cita;
           });
 
-          // Ordenar (Más cercana primero)
-          procesadas.sort(
+          const ordenadas = procesadas.sort(
             (a, b) => new Date(a.fechaHora).getTime() - new Date(b.fechaHora).getTime(),
           );
-
-          this.citasFuturas.set(procesadas.filter((c) => new Date(c.fechaHora) >= ahora));
-          this.citasPasadas.set(procesadas.filter((c) => new Date(c.fechaHora) < ahora).reverse());
+          this.citasFuturas.set(ordenadas.filter((c) => new Date(c.fechaHora) >= ahora));
+          this.citasPasadas.set(ordenadas.filter((c) => new Date(c.fechaHora) < ahora).reverse());
         },
       });
     }
