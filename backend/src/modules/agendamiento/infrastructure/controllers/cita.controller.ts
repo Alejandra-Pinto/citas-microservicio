@@ -14,7 +14,10 @@ import { ListarCitasProfesionalUseCase } from '../../application/use-cases/lista
 import { CrearCitaDto } from '../../application/dto/crear-cita.dto';
 import { ObtenerDisponibilidadUseCase } from '../../application/use-cases/obtener-disponibilidad.usecase';
 import { ObtenerCitasUseCase } from '../../application/use-cases/obtener-citas.usecase';
-import { ConsultarCitasDto } from '../../application/dto/consultar-cita.dto';
+import {
+  ConsultarCitasDto,
+  TipoConsultaCita,
+} from '../../application/dto/consultar-cita.dto';
 import { CancelarCitaUseCase } from '../../application/use-cases/cancelar-cita.usecase';
 import { ReagendarCitaUseCase } from '../../application/use-cases/reagendar-cita.usecase';
 import { FinalizarCitaUseCase } from '../../application/use-cases/finalizar-cita.usecase';
@@ -67,6 +70,17 @@ export class CitaController {
       hora: h.toLocaleTimeString(),
       iso: h.toISOString(),
     }));
+  }
+
+  @Get('paciente/:pacienteId')
+  async listarPorPaciente(@Param('pacienteId') pacienteId: string) {
+    const dto: ConsultarCitasDto = {
+      pacienteId: pacienteId,
+      tipo: TipoConsultaCita.TODAS,
+    };
+
+    // Esto es lo que garantiza que mapToDomain se ejecute y limpie los nombres
+    return this.obtenerCitas.ejecutar(dto);
   }
 
   @Get('/filtrar')

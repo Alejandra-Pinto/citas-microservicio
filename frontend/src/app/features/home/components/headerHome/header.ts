@@ -23,4 +23,14 @@ export class Header {
   login() {
     this.authService.login();
   }
+
+  handleCtaClick() {
+    if (!this.authService.isLoggedIn()) {
+      // Si no está logueado, lo mandamos a autenticarse
+      this.authService.login();
+    } else {
+      // Si ya está logueado, lo mandamos a su ruta específica
+      this.authService.login(); // Recuerda que tu nuevo login() ya hace el navigate interno
+    }
+  }
 }

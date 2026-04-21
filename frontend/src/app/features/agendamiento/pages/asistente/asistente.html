@@ -1,99 +1,275 @@
-<div class="relative flex h-auto min-h-screen w-full lg:max-w-6xl mx-auto flex-col bg-white dark:bg-background-dark shadow-xl overflow-x-hidden">
+<div class="flex-1 w-full bg-[#E6EBED] min-h-screen">
+  <div class="p-8">
+    <div class="max-w-7xl mx-auto">
+      <div class="grid grid-cols-12 gap-8">
 
-  <div class="flex items-center bg-white dark:bg-background-dark p-4 border-b border-gray-100 dark:border-gray-800 sticky top-0 z-10 justify-between">
-    <div routerLink="/" class="text-primary flex size-10 shrink-0 items-center justify-center cursor-pointer rounded-full hover:bg-primary/10">
-      <span class="material-symbols-outlined"><i class="fas fa-arrow-left"></i></span>
-    </div>
-    <h2 class="text-[#0c121d] dark:text-white text-lg font-bold leading-tight tracking-[-0.015em] flex-1 text-center pr-10">Agendar Cita</h2>
-  </div>
+        <div class="col-span-12 lg:col-span-8 space-y-6">
 
-  <div class="px-4 py-3 flex gap-2 overflow-x-auto no-scrollbar">
-    <div class="flex items-center gap-2 whitespace-nowrap bg-primary/10 text-primary px-3 py-1 rounded-full text-xs font-semibold">
-      <span class="size-2 bg-primary rounded-full"></span>
-      Seleccionar Especialista
-    </div>
-    <div class="flex items-center gap-2 whitespace-nowrap bg-gray-100 dark:bg-gray-800 text-gray-500 px-3 py-1 rounded-full text-xs font-semibold">
-      <span class="size-2 bg-gray-300 rounded-full"></span>
-      Horario
-    </div>
-  </div>
+          <div
+            class="bg-[#F8FAFB] rounded-2xl shadow-sm border border-slate-100 p-8 flex items-center justify-between">
+            <div class="flex items-center gap-4">
+              <div
+                class="size-14 bg-blue-600 rounded-2xl flex items-center justify-center text-white shadow-lg shadow-blue-200">
+                <span class="material-symbols-outlined text-3xl">person</span>
+              </div>
+              <div>
+                <h2
+                  class="text-2xl font-extrabold text-slate-800 tracking-tight">
+                  ¡Hola, {{ authService.usuario()?.firstName || 'Usuario' }}!
+                </h2>
+                <p class="text-sm text-slate-500 font-medium">Gestiona tu cita
+                  médica de forma rápida.</p>
+              </div>
+            </div>
+            <div class="text-right border-l border-slate-200 pl-6">
+              <p
+                class="text-[10px] uppercase tracking-widest font-bold text-slate-400">Identificación</p>
+              <p class="text-sm font-bold text-slate-700">{{
+                authService.usuario()?.username }}</p>
+            </div>
+          </div>
 
-  <div class="lg:grid lg:grid-cols-12 lg:gap-8 px-4 py-6">
+          <div
+            class="bg-[#F8FAFB] rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
+            <div class="p-6 border-b border-slate-50">
+              <h2
+                class="text-xl font-bold tracking-tight text-slate-800">Detalles
+                de tu consulta</h2>
+              <p class="text-sm text-slate-500 mt-1">
+                Complete la información para registrar una nueva consulta
+                médica.
+              </p>
+            </div>
 
-    <div class="lg:col-span-4 space-y-4">
-      <div class="flex items-center justify-between mb-4">
-        <h3 class="text-[#0c121d] dark:text-white text-lg font-bold">Especialistas</h3>
-        <span class="text-primary text-sm font-medium cursor-pointer">Ver todos</span>
+            <div class="p-8 pt-4 space-y-8">
+              <div class="space-y-3">
+                <label
+                  class="text-[10px] uppercase tracking-widest font-bold text-slate-500">Selecciona
+                  la Especialidad</label>
+                <select (change)="onEspecialidadChange($event)"
+                  class="w-full px-4 py-3 bg-white border-2 border-slate-100 rounded-xl text-sm font-medium text-slate-600 outline-none focus:border-blue-600 shadow-sm cursor-pointer">
+                  <option value>Seleccione una especialidad...</option>
+                  <option value="TERAPIA_NEURAL">Terapia Neural</option>
+                  <option value="QUIROPRAXIA">Quiropraxia</option>
+                  <option value="FISIOTERAPIA">Fisioterapia</option>
+                </select>
+              </div>
+
+              <div class="space-y-3 animate-in fade-in slide-in-from-top-2"
+                *ngIf="especialidadElegida()">
+                <label
+                  class="text-[10px] uppercase tracking-widest font-bold text-slate-500">Tipo
+                  de Consulta</label>
+                <div class="flex gap-4">
+                  <button type="button"
+                    class="flex-1 flex items-center justify-center gap-2 py-4 rounded-xl border-2 transition-all font-bold text-sm"
+                    [ngClass]="tipoCita() === 'PRIMERA_VEZ' ? 'border-blue-600 bg-blue-50 text-blue-600 shadow-sm' : 'border-slate-100 bg-white text-slate-400'"
+                    (click)="tipoCita.set('PRIMERA_VEZ')">
+                    <span
+                      class="material-symbols-outlined text-xl">medical_information</span>
+                    Primera Cita
+                  </button>
+                  <button type="button"
+                    class="flex-1 flex items-center justify-center gap-2 py-4 rounded-xl border-2 transition-all font-bold text-sm"
+                    [ngClass]="tipoCita() === 'CONTROL' ? 'border-blue-600 bg-blue-50 text-blue-600 shadow-sm' : 'border-slate-100 bg-white text-slate-400'"
+                    (click)="tipoCita.set('CONTROL')">
+                    <span
+                      class="material-symbols-outlined text-xl">history</span>
+                    Control
+                  </button>
+                </div>
+              </div>
+
+              <div class="space-y-3" *ngIf="especialidadElegida()">
+                <app-especialista-selector
+                  [especialistas]="doctoresFiltrados()"
+                  [seleccionadoId]="doctorSeleccionado()?.id"
+                  (cambioEspecialista)="seleccionarDoctor($event)">
+                </app-especialista-selector>
+              </div>
+
+              <div class="pt-6 border-t border-slate-100"
+                *ngIf="doctorSeleccionado()">
+                <app-horario-selector
+                  [fecha]="fechaSeleccionada()"
+                  [horaSeleccionada]="horaSeleccionada()"
+                  [horarios]="horarios()"
+                  (fechaChange)="onFechaChange($event)"
+                  (horaChange)="horaSeleccionada.set($event)">
+                </app-horario-selector>
+              </div>
+            </div>
+
+            <div class="p-8 bg-slate-50/50 border-t border-slate-100">
+              <app-form-actions
+                [disabled]="!horaSeleccionada() || !fechaSeleccionada()"
+                (onConfirm)="confirmarCita()"
+                (onCancel)="cancelar()"></app-form-actions>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-span-12 lg:col-span-4">
+          <div
+            class="bg-[#F1F5F9] rounded-2xl shadow-md border border-blue-200 p-8 space-y-6 sticky top-8">
+            <div
+              class="flex items-center justify-between border-b border-blue-100 pb-4">
+              <h3
+                class="text-xs font-extrabold text-slate-500 uppercase tracking-widest">Resumen
+                de Cita</h3>
+              <span
+                class="material-symbols-outlined text-blue-500">description</span>
+            </div>
+
+            <div class="space-y-5">
+              <div class="flex flex-col gap-2">
+                <span
+                  class="text-[10px] text-blue-600 uppercase font-bold tracking-widest">Modalidad</span>
+                <div class="flex items-center gap-3">
+                  <span class="material-symbols-outlined text-xl"
+                    [ngClass]="!tipoCita() ? 'text-slate-400' : 'text-blue-500'">
+                    {{
+                    tipoCita() === 'PRIMERA_VEZ' ? 'medical_information' :
+                    (tipoCita() === 'CONTROL' ? 'history' : 'help_clinic')
+                    }}
+                  </span>
+
+                  <span class="text-sm font-medium"
+                    [ngClass]="!tipoCita() ? 'text-slate-400' : 'text-slate-700'">
+                    {{
+                    tipoCita() === 'PRIMERA_VEZ' ? 'Primera Cita' :
+                    (tipoCita() === 'CONTROL' ? 'Cita de Control' :
+                    'Modalidad pendiente')
+                    }}
+                  </span>
+                </div>
+              </div>
+
+              <div class="flex flex-col gap-2">
+                <span
+                  class="text-[10px] text-blue-600 uppercase font-bold tracking-widest">Servicio</span>
+                <div class="flex items-center gap-3">
+                  <span
+                    class="material-symbols-outlined text-blue-500 text-xl">stethoscope</span>
+                  <span class="text-slate-700 text-sm font-medium">
+                    {{ (especialidadElegida()?.replace('_', ' ') | titlecase) ||
+                    'Especialidad pendiente' }}
+                  </span>
+                </div>
+              </div>
+
+              <div class="flex flex-col gap-2">
+                <span
+                  class="text-[10px] text-blue-600 uppercase font-bold tracking-widest">Especialista</span>
+                <div class="flex items-center gap-3">
+                  <span
+                    class="material-symbols-outlined text-blue-500 text-xl">person_2</span>
+                  <span class="text-slate-700 text-sm font-medium">
+                    {{ doctorSeleccionado()?.nombreMostrar ||
+                    'Médico no asignado' }}
+                  </span>
+                </div>
+              </div>
+
+              <div class="border-t border-blue-100/50 my-2"></div>
+
+              <div class="grid grid-cols-2 gap-4">
+                <div class="flex flex-col gap-2">
+                  <span
+                    class="text-[10px] text-blue-600 uppercase font-bold tracking-widest">Fecha</span>
+                  <div class="flex items-center gap-2">
+                    <span
+                      class="material-symbols-outlined text-slate-400 text-lg">calendar_today</span>
+                    <span class="text-slate-700 text-[13px] font-medium">
+                      {{ fechaSeleccionada() ? (fechaSeleccionada() |
+                      date:'dd/MM/yyyy') : '---' }}
+                    </span>
+                  </div>
+                </div>
+
+                <div class="flex flex-col gap-2">
+                  <span
+                    class="text-[10px] text-blue-600 uppercase font-bold tracking-widest">Hora</span>
+                  <div class="flex items-center gap-2">
+                    <span
+                      class="material-symbols-outlined text-slate-400 text-lg">schedule</span>
+                    <span class="text-slate-700 text-[13px] font-bold">
+                      {{ horaSeleccionada() ? (horaSeleccionada().length === 4 ?
+                      '0' + horaSeleccionada() : horaSeleccionada()) : '---' }}
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-span-12 mt-8">
+          <div
+            class="bg-white rounded-2xl shadow-sm p-8 border border-slate-100">
+            <h3
+              class="text-xl font-bold text-slate-800 mb-6 flex items-center gap-2">
+              <span
+                class="material-symbols-outlined text-blue-600">clinical_notes</span>
+              Tu Historial de Citas
+            </h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+              <div class="space-y-4">
+                <h4
+                  class="text-xs font-bold text-slate-400 uppercase tracking-widest">Próximas
+                  Citas</h4>
+                <div *ngIf="citasFuturas().length === 0"
+                  class="text-sm italic text-slate-400 py-4">No hay citas
+                  programadas.</div>
+                <div *ngFor="let cita of citasFuturas()"
+                  class="p-4 bg-slate-50 rounded-xl flex justify-between items-center">
+                  <div>
+                    <p class="text-sm font-bold text-slate-700">
+                      {{ cita.especialista?.nombre || 'Médico no asignado' }}
+                    </p>
+
+                    <p class="text-xs text-blue-600 font-medium mb-1">
+                      {{ cita.tipo | titlecase }} - {{ cita.especialidad |
+                      titlecase }}
+                    </p>
+
+                    <p class="text-xs text-slate-500">
+                      <span
+                        class="material-symbols-outlined text-[12px] align-middle">calendar_month</span>
+                      {{ cita.fechaHora | date:'mediumDate' }}
+                      <span class="mx-1">•</span>
+                      <span
+                        class="material-symbols-outlined text-[12px] align-middle">schedule</span>
+                      {{ cita.fechaHora | date:'shortTime' }}
+                    </p>
+                  </div>
+
+                  <span
+                    class="px-3 py-1 bg-blue-100 text-blue-700 text-[10px] font-bold rounded-full">
+                    Próxima
+                  </span>
+                </div>
+              </div>
+              <div class="space-y-4">
+                <h4
+                  class="text-xs font-bold text-slate-400 uppercase tracking-widest">Citas
+                  Realizadas</h4>
+                <div *ngIf="citasPasadas().length === 0"
+                  class="text-sm italic text-slate-400 py-4">No hay registros
+                  previos.</div>
+                <div *ngFor="let cita of citasPasadas()"
+                  class="p-4 bg-white border border-slate-50 rounded-xl opacity-60">
+                  <p class="text-sm font-bold text-slate-700">{{
+                    cita.especialidad | titlecase }}</p>
+                  <p class="text-xs text-slate-500">{{ cita.fechaHora |
+                    date:'mediumDate' }}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
       </div>
-
-      <div class="grid grid-cols-1 gap-4">
-        <div class="flex items-center gap-4 rounded-xl bg-white dark:bg-gray-900 p-4 border-2 border-primary shadow-sm">
-          <div class="size-16 rounded-lg bg-cover bg-center" style='background-image:url("/image/doctoraClara.png")'></div>
-          <div class="flex-1">
-            <p class="text-[#0c121d] dark:text-white text-sm font-bold leading-tight">Dr. Ibis Gonzales</p>
-            <p class="text-gray-500 dark:text-gray-400 text-xs font-normal mt-0.5">Cardiología • 12 años exp.</p>
-          </div>
-          <div class="text-primary">
-            <span class="material-symbols-outlined">check_circle</span>
-          </div>
-        </div>
-
-        <div class="flex items-center gap-4 rounded-xl bg-white dark:bg-gray-900 p-4 border border-gray-100 dark:border-gray-800 shadow-sm opacity-70 cursor-pointer hover:opacity-100 transition-opacity">
-          <div class="size-16 rounded-lg bg-cover bg-center" style='background-image: url("https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?q=80&w=200&auto=format&fit=crop");'></div>
-          <div class="flex-1">
-            <p class="text-[#0c121d] dark:text-white text-sm font-bold leading-tight">Dr. Jose</p>
-            <p class="text-gray-500 dark:text-gray-400 text-xs font-normal mt-0.5">Columna • 12 años exp.</p>
-          </div>
-          <button class="px-3 py-1 text-xs font-semibold text-primary border border-primary rounded-lg">Seleccionar</button>
-        </div>
-      </div>
-    </div>
-
-    <div class="lg:col-span-8 flex flex-col gap-12 border-l border-gray-100 dark:border-gray-800 lg:pl-12 mt-8 lg:mt-0 pb-32">
-
-      <div>
-        <h3 class="text-[#0c121d] dark:text-white text-lg font-bold mb-4">Seleccionar Fecha</h3>
-        <div class="flex gap-4 overflow-x-auto no-scrollbar pb-2">
-          <div class="flex flex-col items-center justify-center min-w-[80px] h-24 rounded-xl bg-primary text-white shadow-lg cursor-pointer">
-            <span class="text-xs uppercase font-bold opacity-80">Mar</span>
-            <span class="text-xl font-bold">17</span>
-          </div>
-          <div class="flex flex-col items-center justify-center min-w-[80px] h-24 rounded-xl bg-gray-50 dark:bg-gray-800 border border-gray-100 dark:border-gray-700 cursor-pointer">
-            <span class="text-xs uppercase font-bold text-gray-400">Mie</span>
-            <span class="text-xl font-bold text-gray-700 dark:text-gray-200">18</span>
-          </div>
-        </div>
-      </div>
-
-      <div>
-        <h3 class="text-[#0c121d] dark:text-white text-lg font-bold mb-4">Horarios Disponibles</h3>
-        <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
-          <div class="py-4 px-2 text-center text-sm font-semibold rounded-lg bg-primary text-white shadow-md cursor-pointer">
-            09:00 AM
-          </div>
-          <div class="py-4 px-2 text-center text-sm font-semibold rounded-lg bg-white dark:bg-gray-900 text-gray-700 border border-gray-200 cursor-pointer hover:border-primary">
-            09:30 AM
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="fixed bottom-0 left-0 w-full bg-white dark:bg-background-dark border-t border-gray-100 dark:border-gray-800 p-6 z-20">
-    <div class="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
-      <div class="flex gap-8">
-        <div>
-          <p class="text-xs text-gray-400 uppercase font-bold mb-1">Costo: </p>
-        </div>
-        <div class="border-l border-gray-100 pl-8">
-          <p class="text-xs text-gray-400 uppercase font-bold mb-1">Horario Seleccionado</p>
-          <p class="text-base font-semibold">Mar, 17 Mar • 09:00 AM</p>
-        </div>
-      </div>
-      <button (click)="confirmarCita()"
-        class="bg-blue-600 text-white px-8 py-4 rounded-2xl font-bold flex items-center gap-2">
-        Confirmar Cita
-      </button>
     </div>
   </div>
 </div>

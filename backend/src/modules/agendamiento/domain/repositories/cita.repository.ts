@@ -16,4 +16,6 @@ export interface CitaRepository {
     especialistaId: string,
     fechaHora: Date,
   ): Promise<boolean>;
+
+  buscarPorPaciente(pacienteId: string): Promise<Cita[]>;
 }

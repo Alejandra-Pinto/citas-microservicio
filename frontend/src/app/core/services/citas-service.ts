@@ -30,7 +30,6 @@ export class CitasService {
     });
   }
 
-  
   buscarSugerencias(termino: string) {
     return this.http.get<any[]>(`${this.api}/pacientes/buscar?q=${termino}`);
   }
@@ -49,5 +48,9 @@ export class CitasService {
   }
   getCitasParaDashboard(): Observable<Cita[]> {
     return this.http.get<Cita[]>(`${this.api}/resumen-disponibilidad`);
+  }
+
+  obtenerCitasPorPaciente(pacienteId: string): Observable<Cita[]> {
+    return this.http.get<Cita[]>(`${this.api}/paciente/${pacienteId}`);
   }
 }

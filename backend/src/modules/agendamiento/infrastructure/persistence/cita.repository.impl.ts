@@ -27,6 +27,14 @@ export class CitaRepositoryImpl implements CitaRepository {
 
     await this.repo.save(entity);
   }
+  async buscarPorPaciente(pacienteId: string): Promise<Cita[]> {
+    const entidades = await this.repo.find({
+      where: { pacienteId: pacienteId } as FindOptionsWhere<CitaOrmEntity>,
+      relations: ['especialista', 'paciente'],
+      order: { fechaHora: 'DESC' },
+    });
+    return entidades.map((c) => this.mapToDomain(c));
+  }
 
   async buscarPorProfesionalYFecha(
     especialistaId: string,

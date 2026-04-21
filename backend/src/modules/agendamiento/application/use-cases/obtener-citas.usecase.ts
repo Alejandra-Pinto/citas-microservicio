@@ -11,9 +11,12 @@ export class ObtenerCitasUseCase {
   ) {}
 
   async ejecutar(dto: ConsultarCitasDto): Promise<Cita[]> {
+    // 1. Traemos las citas filtradas desde la DB (ya sea por doctor o por paciente)
     const citas = await this.citaRepository.buscarTodas(dto);
     const ahora = new Date();
 
+    // 2. Aplicamos el filtro de estado que ya tenías
+    // Esto funcionará igual de bien para el doctor o para el paciente
     switch (dto.tipo) {
       case TipoConsultaCita.PROXIMAS:
         return citas.filter(

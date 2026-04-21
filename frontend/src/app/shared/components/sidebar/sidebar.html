@@ -1,57 +1,64 @@
-<aside class="fixed left-0 top-0 h-screen w-[280px] bg-slate-50 flex flex-col py-8 px-4 border-r border-slate-200 z-50">
+<aside
+  class="fixed left-0 top-0 h-screen w-[280px] bg-slate-50 flex flex-col py-8 px-4 border-r border-slate-200 z-50">
   <div class="container-fluid">
-    <a class="navbar-brand d-flex align-items-center" href="#" style="color: #1d4ed8">
+    <a class="navbar-brand d-flex align-items-center" href="#"
+      style="color: #1d4ed8">
       <i class="fas fa-hospital me-2"></i>
       <div>
         <div class="fw-bold text-dark">Piedra Azul</div>
-        <div class="text-muted text-extra-small mt-0" style="font-size: small">Red de Servicios</div>
+        <div class="text-muted text-extra-small mt-0"
+          style="font-size: small">Red de Servicios</div>
       </div>
     </a>
   </div>
 
   <nav class="flex-1 space-y-2">
-    <a routerLink="/inicio" routerLinkActive="text-blue-600 bg-white shadow-sm" [routerLinkActiveOptions]="{exact: true}"
+    <a routerLink="/home" routerLinkActive="text-blue-600 bg-white shadow-sm"
+      [routerLinkActiveOptions]="{exact: true}"
       class="flex items-center gap-3 px-4 py-3 text-slate-500 hover:text-blue-500 hover:bg-blue-50/50 transition-all duration-200 rounded-lg font-bold">
       <span class="material-symbols-outlined">grid_view</span>
       <span class="font-sans text-[14px]">Inicio</span>
     </a>
 
-    @if (!authService.isEspecialista()) {
-      <a routerLink="/agendar" routerLinkActive="!text-blue-600 bg-white shadow-sm"
-        class="flex items-center gap-3 px-4 py-3 text-slate-500 hover:text-blue-500 hover:bg-blue-50/50 transition-all duration-200 rounded-lg font-bold">
-        <span class="material-symbols-outlined">calendar_today</span>
-        <span class="font-sans text-[14px]">Agendar Citas</span>
-      </a>
-    }
+    @if (authService.isEspecialista()) {
+    <a routerLink="/agendar" routerLinkActive="text-blue-600 bg-white shadow-sm"
+      class="flex items-center gap-3 px-4 py-3 text-slate-500 hover:text-blue-500 hover:bg-blue-50/50 transition-all duration-200 rounded-lg font-bold">
+      <span class="material-symbols-outlined">calendar_today</span>
+      <span class="font-sans text-[14px]">Agendar Cita</span>
+    </a>
 
-    @if (authService.isEspecialista() || authService.isAdmin()) {
-      <a routerLink="/mis-citas" routerLinkActive="!text-blue-600 bg-white shadow-sm"
-        class="flex items-center gap-3 px-4 py-3 text-slate-500 hover:text-blue-500 hover:bg-blue-50/50 transition-all duration-200 rounded-lg font-bold">
-        <span class="material-symbols-outlined">medical_services</span>
-        <span class="font-sans text-[14px]">Mis citas</span>
-      </a>
+    <a routerLink="/mis-citas"
+      routerLinkActive="text-blue-600 bg-white shadow-sm"
+      class="flex items-center gap-3 px-4 py-3 text-slate-500 hover:text-blue-500 hover:bg-blue-50/50 transition-all duration-200 rounded-lg font-bold">
+      <span class="material-symbols-outlined">medical_services</span>
+      <span class="font-sans text-[14px]">Mis citas</span>
+    </a>
     }
 
     @if (authService.isAdmin()) {
-      <a routerLink="/administrador" routerLinkActive="!text-blue-600 bg-white shadow-sm"
-        class="flex items-center gap-3 px-4 py-3 text-slate-500 hover:text-blue-500 hover:bg-blue-50/50 transition-all duration-200 rounded-lg font-bold">
-        <span class="material-symbols-outlined">settings</span>
-        <span class="font-sans text-[14px]">Configurar agendas</span>
-      </a>
+    <a routerLink="/administrador"
+      routerLinkActive="text-blue-600 bg-white shadow-sm"
+      class="flex items-center gap-3 px-4 py-3 text-slate-500 hover:text-blue-500 hover:bg-blue-50/50 transition-all duration-200 rounded-lg font-bold">
+      <span class="material-symbols-outlined">settings</span>
+      <span class="font-sans text-[14px]">Configuración</span>
+    </a>
     }
+
   </nav>
 
   <div class="mt-auto pt-8 border-t border-slate-200 space-y-2">
-    <button class="w-full bg-blue-600 text-white rounded-lg py-3 px-4 font-bold text-[14px] flex items-center justify-center gap-2 shadow-lg shadow-blue-600/20 active:scale-95 transition-all">
-      <span class="material-symbols-outlined text-[20px]">add</span> Nueva Cita
+    @if (authService.isEspecialista()) {
+    <button
+      routerLink="/agendar"
+      class="w-full bg-blue-600 text-white rounded-lg py-3 px-4 font-bold text-[14px] flex items-center justify-center gap-2 shadow-lg shadow-blue-600/20 active:scale-95 transition-all">
+      <span class="material-symbols-outlined text-[20px]">add</span>
+      Nueva Cita
     </button>
-    
+    }
+
     <div class="pt-4 space-y-1">
-      <a class="flex items-center gap-3 px-4 py-2 text-slate-500 hover:text-blue-500 transition-colors" href="#">
-        <span class="material-symbols-outlined">contact_support</span>
-        <span class="font-sans font-bold text-[14px]">Soporte</span>
-      </a>
-      <a (click)="authService.logout()" class="flex items-center gap-3 px-4 py-2 text-slate-500 hover:text-red-500 transition-colors cursor-pointer">
+      <a (click)="authService.logout()"
+        class="flex items-center gap-3 px-4 py-2 text-slate-500 hover:text-red-500 transition-colors cursor-pointer">
         <span class="material-symbols-outlined">logout</span>
         <span class="font-sans font-bold text-[14px]">Cerrar Sesión</span>
       </a>
