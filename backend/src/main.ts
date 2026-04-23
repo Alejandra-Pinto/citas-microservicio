@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-call */
 import 'reflect-metadata';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
@@ -17,7 +18,20 @@ async function bootstrap() {
     }),
   );
 
-  app.enableCors();
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
+  app.getHttpAdapter().getInstance().disable('x-powered-by');
+
+  app.use((req, res, next) => {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
+    res.setHeader('X-Content-Type-Options', 'nosniff');
+    next();
+  });
+
+  app.enableCors({
+    origin: 'http://localhost:4200',
+    methods: 'GET,POST,PUT,DELETE',
+    credentials: true,
+  });
 
   const config = new DocumentBuilder()
     .setTitle('API Piedra Azul')
