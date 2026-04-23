@@ -1,22 +1,35 @@
-<div class="w-full h-full bg-primary relative flex items-center justify-center p-12 overflow-hidden">
-    <div class="absolute inset-0 opacity-20">
-        <img class="w-full h-full object-cover" src="assets/images/medical-lab.jpg" alt="Clínica Piedra Azul">
+<div class="w-full h-full relative flex items-center justify-center p-12 overflow-hidden"
+     style="background: linear-gradient(rgb(0, 67, 252), rgba(2, 46, 167, 0.986));">
+    
+    <div class="absolute inset-0">
+        <img class="w-full h-full object-cover opacity-30" src="assets/images/medical-lab.jpg" alt="Clínica Piedra Azul">
     </div>
 
-    <div class="relative z-10 text-on-primary max-w-sm">
-        <h2 class="text-4xl font-extrabold tracking-tight mb-6">Excelencia en Salud Digital</h2>
-        <p class="text-lg opacity-90 leading-relaxed mb-8">Únete a nuestra red de cuidado integral. Gestione sus citas,
-            acceda a sus resultados y conecte con especialistas en un solo lugar.</p>
-        <div class="flex flex-col gap-4">
-            <div class="flex items-center gap-3 bg-white/10 backdrop-blur-md p-4 rounded-xl">
-                <span class="material-symbols-outlined">verified_user</span>
-                <span class="font-medium">Datos 100% Protegidos</span>
-            </div>
-            <div class="flex items-center gap-3 bg-white/10 backdrop-blur-md p-4 rounded-xl">
-                <span class="material-symbols-outlined">speed</span>
-                <span class="font-medium">Acceso Instantáneo</span>
+    <div class="relative z-10 text-white max-w-sm h-full flex flex-col">
+        
+        <a href="http://localhost:4200" 
+           class="inline-flex items-center gap-3 px-6 py-3 bg-white/20 hover:bg-white/30 border border-white/40 rounded-2xl backdrop-blur-md transition-all mb-12 self-start group shadow-lg">
+            <span class="material-symbols-outlined text-white font-bold">arrow_back</span>
+            <span class="text-xs font-black tracking-widest uppercase text-white">Volver al inicio</span>
+        </a>
+
+        <div class="mt-auto mb-auto"> 
+            <h2 class="text-4xl font-extrabold tracking-tight mb-6">Excelencia en Salud Digital</h2>
+            <p class="text-lg opacity-90 leading-relaxed mb-8 text-blue-50">
+                Únete a nuestra red de cuidado integral. Gestione sus citas,
+                acceda a sus resultados y conecte con especialistas en un solo lugar.
+            </p>
+            
+            <div class="flex flex-col gap-4">
+                <div class="flex items-center gap-3 bg-white/10 backdrop-blur-md p-4 rounded-xl border border-white/10 shadow-sm">
+                    <span class="material-symbols-outlined text-blue-200">verified_user</span>
+                    <span class="font-bold text-sm tracking-wide uppercase">Datos 100% Protegidos</span>
+                </div>
+                <div class="flex items-center gap-3 bg-white/10 backdrop-blur-md p-4 rounded-xl border border-white/10 shadow-sm">
+                    <span class="material-symbols-outlined text-blue-200">speed</span>
+                    <span class="font-bold text-sm tracking-wide uppercase">Acceso Instantáneo</span>
+                </div>
             </div>
         </div>
     </div>
-
 </div>

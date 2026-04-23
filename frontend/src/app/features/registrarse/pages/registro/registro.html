@@ -1,7 +1,13 @@
 <div class="flex flex-col md:flex-row min-h-screen bg-surface">
   <app-branding-side class="hidden md:flex md:w-[35%] lg:w-[30%]"></app-branding-side>
 
-  <div class="flex-grow p-6 md:p-12 lg:p-16 flex items-center justify-center overflow-y-auto">
+  <div class="flex-grow p-6 md:p-12 lg:p-16 flex items-center justify-center overflow-y-auto relative">
+    
+    <a href="http://localhost:4200" 
+       class="md:hidden absolute top-6 left-6 p-3 bg-white rounded-xl shadow-sm border border-slate-100 text-slate-400 active:scale-95 transition-all">
+      <span class="material-symbols-outlined">home</span>
+    </a>
+
     <div class="w-full max-w-xl bg-white p-8 md:p-10 rounded-3xl shadow-xl border border-outline/30">
       
       <div class="mb-8 text-center md:text-left">
@@ -32,14 +38,14 @@
           </div>
           <div class="space-y-1">
             <label class="text-xs font-bold text-slate-600 uppercase">Teléfono Celular</label>
-            <input formControlName="celular" class="input-moderno" [class.error]="getFieldError('celular')" placeholder="Ej:3001234567" type="tel"/>
+            <input formControlName="celular" class="input-moderno" [class.error]="getFieldError('celular')" placeholder="Ej: 3001234567" type="tel"/>
             <span class="text-[12px] text-red-500 font-bold italic" *ngIf="getFieldError('celular')">{{ getFieldError('celular') }}</span>
           </div>
         </div>
 
         <div class="space-y-1">
           <label class="text-xs font-bold text-slate-600 uppercase">Correo Electrónico</label>
-          <input formControlName="email" class="input-moderno" [class.error]="getFieldError('email')" placeholder="Ej: usuario@correo.com" type="email"/>
+          <input formControlName="email" class="input-moderno" [class.error]="getFieldError('email')" placeholder="Ej: usuario@gmail.com" type="email"/>
           <span class="text-[12px] text-red-500 font-bold italic" *ngIf="getFieldError('email')">{{ getFieldError('email') }}</span>
         </div>
 

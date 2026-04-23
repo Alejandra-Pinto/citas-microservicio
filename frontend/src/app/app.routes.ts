@@ -13,6 +13,10 @@ export const routes: Routes = [
     loadComponent: () => import('./features/home/pages/home').then((m) => m.Home),
   },
   {
+    path: 'login',
+    loadComponent: () => import('./features/login/pages/login/login').then((m) => m.LoginPage),
+  },
+  {
     path: 'registro',
     loadComponent: () => import('./features/registrarse/pages/registro/registro').then((m) => m.RegistroPage),
   },

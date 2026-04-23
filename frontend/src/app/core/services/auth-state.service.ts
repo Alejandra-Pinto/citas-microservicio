@@ -69,6 +69,6 @@ export class AuthStateService {
   }
 
   public logout() {
-    this.keycloak.logout(window.location.origin);
+    this.keycloak.logout(window.location.origin + '/home');
   }
 }

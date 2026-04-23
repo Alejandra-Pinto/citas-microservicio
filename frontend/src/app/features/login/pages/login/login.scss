@@ -1,0 +1,12 @@
+:host {
+  display: block;
+}
+
+// Reutilizamos la lógica de focus que tienes en el resto del proyecto
+input:focus {
+  background-color: white !important;
+}
+
+.material-symbols-outlined {
+  font-variation-settings: 'FILL' 0, 'wght' 500, 'GRAD' 0, 'opsz' 24;
+}

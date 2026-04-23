@@ -13,26 +13,25 @@ export class AuthGuard extends KeycloakAuthGuard {
     super(router, keycloak);
   }
 
+  // En auth.guard.ts
   public async isAccessAllowed(
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot
   ): Promise<boolean> {
-    // Si no está logueado, forzar login
+    // Si no está logueado, redirigir a login
     if (!this.authenticated) {
       await this.keycloak.login({
         redirectUri: window.location.origin + state.url,
       });
+      return false;
     }
 
-    // Obtener roles requeridos de la ruta
     const requiredRoles = route.data['roles'];
-
-    // Si la ruta no pide roles específicos, permitir acceso
     if (!(requiredRoles instanceof Array) || requiredRoles.length === 0) {
       return true;
     }
 
-    // Verificar si el usuario tiene alguno de los roles requeridos
-    return requiredRoles.every((role) => this.roles.includes(role));
+    // Cambiamos every por some para que si tiene AL MENOS uno de los roles permitidos, entre
+    return requiredRoles.some((role) => this.roles.includes(role));
   }
 }

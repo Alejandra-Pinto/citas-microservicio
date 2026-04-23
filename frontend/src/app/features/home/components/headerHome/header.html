@@ -19,26 +19,22 @@
           <i class="fas fa-hospital text-lg"></i>
         </div>
         <div class="flex flex-col text-left">
-          <span
-            class="text-lg font-bold text-slate-800 leading-none tracking-tight">Piedra
+          <span class="text-lg font-bold text-slate-800 leading-none tracking-tight">Piedra
             Azul</span>
-          <span
-            class="text-[8px] font-bold uppercase tracking-[0.2em] text-blue-500 mt-1">Red
+          <span class="text-[8px] font-bold uppercase tracking-[0.2em] text-blue-500 mt-1">Red
             de Servicios</span>
         </div>
       </a>
 
-      <button (click)="toggleMenu()"
-        class="lg:hidden text-slate-600 p-2 focus:outline-none">
+      <button (click)="toggleMenu()" class="lg:hidden text-slate-600 p-2 focus:outline-none">
         <i class="fas" [ngClass]="isMenuOpen() ? 'fa-times' : 'fa-bars'"></i>
       </button>
 
       <div class="hidden lg:flex items-center gap-6">
-        <a routerLink="/home"
-          class="text-[13px] font-bold text-[#1D4ED8] no-underline">Inicio</a>
+        <!-- <a routerLink="/home" class="text-[13px] font-bold text-[#1D4ED8] no-underline">Inicio</a> -->
 
         @if (!authService.isLoggedIn()) {
-        <button (click)="login()"
+        <button routerLink="/login"
           class="text-[#1D4ED8] font-bold text-[12px] uppercase tracking-wide hover:opacity-80">
           Iniciar Sesión
         </button>
@@ -47,17 +43,23 @@
           Crear Cuenta
         </button>
         } @else {
-        <div
-          class="flex items-center gap-3 px-4 py-2 bg-slate-100 rounded-full border border-slate-200">
-          <div class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></div>
-          <span
-            class="text-[11px] font-bold text-slate-600 uppercase tracking-wider">
-            {{
-            authService.isAdmin() ? '¡Hola Administrador!' :
-            authService.isEspecialista() ? '¡Hola Especialista!' :
-            '¡Hola Paciente!'
-            }}
-          </span>
+        <div class="flex items-center gap-4">
+          <div class="flex items-center gap-3 px-4 py-2 bg-slate-100 rounded-full border border-slate-200">
+            <div class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></div>
+            <span class="text-[11px] font-bold text-slate-600 uppercase tracking-wider">
+              {{
+              authService.isAdmin() ? '¡Hola Administrador!' :
+              authService.isEspecialista() ? '¡Hola Especialista!' :
+              '¡Hola Paciente!'
+              }}
+            </span>
+          </div>
+
+          <button (click)="logout()" 
+                  class="flex items-center gap-2 px-4 py-2 bg-red-50 text-red-600 hover:bg-red-600 hover:text-white rounded-xl transition-all shadow-sm border border-red-100 group">
+            <span class="text-[11px] font-extrabold uppercase tracking-wider">Cerrar sesión</span>
+            <span class="material-symbols-outlined text-[18px] group-hover:translate-x-1 transition-transform">logout</span>
+          </button>
         </div>
         }
       </div>
@@ -65,11 +67,10 @@
 
     <div *ngIf="isMenuOpen()"
       class="lg:hidden bg-white border-t border-slate-100 px-6 py-4 flex flex-col gap-4 shadow-lg animate-in fade-in slide-in-from-top-2">
-      <a routerLink="/home" (click)="toggleMenu()"
-        class="text-slate-700 font-bold no-underline py-2">Inicio</a>
+      <a routerLink="/home" (click)="toggleMenu()" class="text-slate-700 font-bold no-underline py-2">Inicio</a>
 
       @if (!authService.isLoggedIn()) {
-      <button (click)="login(); toggleMenu()"
+      <button routerLink="/login" (click)="toggleMenu()"
         class="text-left text-[#1D4ED8] font-bold py-2 border-b border-slate-50">
         Iniciar Sesión
       </button>
@@ -78,10 +79,24 @@
         Crear Cuenta
       </button>
       } @else {
-      <button routerLink="/agendar" (click)="toggleMenu()"
-        class="bg-green-600 text-white px-4 py-3 rounded-xl font-bold text-center">
-        Ir al Panel
-      </button>
+      <div class="flex items-center gap-4">
+        <div class="flex items-center gap-3 px-4 py-2 bg-slate-100 rounded-full border border-slate-200">
+          <div class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></div>
+          <span class="text-[11px] font-bold text-slate-600 uppercase tracking-wider">
+            {{
+            authService.isAdmin() ? '¡Hola Administrador!' :
+            authService.isEspecialista() ? '¡Hola Especialista!' :
+            '¡Hola Paciente!'
+            }}
+          </span>
+        </div>
+
+        <button (click)="logout()" 
+                class="flex items-center gap-2 px-4 py-2 bg-red-50 text-red-600 hover:bg-red-600 hover:text-white rounded-xl transition-all shadow-sm border border-red-100 group">
+          <span class="text-[11px] font-extrabold uppercase tracking-wider">Cerrar sesión</span>
+          <span class="material-symbols-outlined text-[18px] group-hover:translate-x-1 transition-transform">logout</span>
+        </button>
+      </div>
       }
     </div>
   </nav>
@@ -90,13 +105,11 @@
     <div class="container mx-auto px-6 relative z-10">
       <div class="row align-items-center gy-10">
         <div class="col-12 col-md-5 text-white">
-          <h1
-            class="text-3xl md:text-4xl font-bold leading-tight mb-5 tracking-tight">
+          <h1 class="text-3xl md:text-4xl font-bold leading-tight mb-5 tracking-tight">
             Cuidamos tu salud con <br>
             excelencia y dedicación
           </h1>
-          <p
-            class="text-blue-50/70 text-base leading-relaxed mb-8 font-normal max-w-sm">
+          <p class="text-blue-50/70 text-base leading-relaxed mb-8 font-normal max-w-sm">
             Red de servicios Piedra Azul ofrece atención integral con
             profesionales calificados y medicina alternativa.
           </p>
@@ -114,8 +127,7 @@
                 }}
               </span>
 
-              <i
-                class="fas fa-arrow-right text-[10px] group-hover:translate-x-1 transition-transform"></i>
+              <i class="fas fa-arrow-right text-[10px] group-hover:translate-x-1 transition-transform"></i>
             </button>
 
             <button
@@ -126,34 +138,25 @@
         </div>
 
         <div class="col-12 col-md-7">
-          <div id="carouselLugar"
-            class="carousel slide rounded-3xl overflow-hidden shadow-2xl"
-            data-bs-ride="carousel">
+          <div id="carouselLugar" class="carousel slide rounded-3xl overflow-hidden shadow-2xl" data-bs-ride="carousel">
             <div class="carousel-inner">
               <div class="carousel-item active" data-bs-interval="4000">
-                <img src="images/casa_piedra_azul - copia.png"
-                  class="d-block w-100 object-cover h-[380px]"
+                <img src="images/casa_piedra_azul - copia.png" class="d-block w-100 object-cover h-[380px]"
                   alt="Promo 1">
               </div>
               <div class="carousel-item" data-bs-interval="4000">
-                <img src="images/TERAPIA NEURAL.png"
-                  class="d-block w-100 object-cover h-[380px]" alt="Promo 2">
+                <img src="images/TERAPIA NEURAL.png" class="d-block w-100 object-cover h-[380px]" alt="Promo 2">
               </div>
               <div class="carousel-item" data-bs-interval="4000">
-                <img src="images/ACUPUNTURA 2.png"
-                  class="d-block w-100 object-cover h-[380px]" alt="Promo 3">
+                <img src="images/ACUPUNTURA 2.png" class="d-block w-100 object-cover h-[380px]" alt="Promo 3">
               </div>
             </div>
 
-            <button class="carousel-control-prev" type="button"
-              data-bs-target="#carouselLugar" data-bs-slide="prev">
-              <span class="carousel-control-prev-icon scale-75"
-                aria-hidden="true"></span>
+            <button class="carousel-control-prev" type="button" data-bs-target="#carouselLugar" data-bs-slide="prev">
+              <span class="carousel-control-prev-icon scale-75" aria-hidden="true"></span>
             </button>
-            <button class="carousel-control-next" type="button"
-              data-bs-target="#carouselLugar" data-bs-slide="next">
-              <span class="carousel-control-next-icon scale-75"
-                aria-hidden="true"></span>
+            <button class="carousel-control-next" type="button" data-bs-target="#carouselLugar" data-bs-slide="next">
+              <span class="carousel-control-next-icon scale-75" aria-hidden="true"></span>
             </button>
           </div>
         </div>
