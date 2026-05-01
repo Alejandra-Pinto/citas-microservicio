@@ -4,6 +4,7 @@ import { HistoriaClinica } from '../../domain/entities/historia-clinica.entity';
 import type { HistoriaClinicaRepository } from '../../domain/repositories/historia-clinica.repository';
 import { CrearHistoriaDto } from '../dto/crear-historia.dto';
 import { randomUUID } from 'crypto';
+import { ClientProxy } from '@nestjs/microservices';
 import type { CitaPort } from '../../domain/ports/cita.port';
 import type { EspecialistaPort } from '../../domain/ports/especialista.port';
 import type { PacientePort } from '../../domain/ports/paciente.port';
@@ -19,6 +20,8 @@ export class CrearHistoriaUseCase {
     private readonly especialistaPort: EspecialistaPort,
     @Inject('PacientePort')
     private readonly pacientePort: PacientePort,
+    @Inject('AUDITORIA_SERVICE')
+    private readonly client: ClientProxy,
   ) {}
 
   async ejecutar(dto: CrearHistoriaDto): Promise<HistoriaClinica> {
@@ -49,6 +52,15 @@ export class CrearHistoriaUseCase {
     );
 
     await this.repository.guardar(historia);
+
+    this.client.emit('historia_creada', {
+      historiaId: historia.id,
+      citaId: historia.citaId,
+      pacienteId: historia.pacienteId,
+      especialistaId: historia.profesionalId,
+      descripcion: historia.descripcion,
+      fecha: historia.fechaHora,
+    });
 
     return historia;
   }

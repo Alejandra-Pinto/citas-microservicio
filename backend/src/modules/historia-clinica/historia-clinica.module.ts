@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { ClientsModule, Transport } from '@nestjs/microservices';
 
 // 🔹 Controller
 import { HistoriaClinicaController } from './infrastructure/controllers/historia.controller';
@@ -33,6 +34,19 @@ import { AgendamientoModule } from '../agendamiento/agendamiento.module';
 
 @Module({
   imports: [
+    ClientsModule.register([
+      {
+        name: 'AUDITORIA_SERVICE',
+        transport: Transport.RMQ,
+        options: {
+          urls: ['amqp://localhost:5672'],
+          queue: 'auditoria_queue',
+          queueOptions: {
+            durable: true,
+          },
+        },
+      },
+    ]),
     TypeOrmModule.forFeature([HistoriaClinicaOrmEntity]),
     PacienteModule,
     EspecialistaModule,
