@@ -1,4 +1,12 @@
-import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  ManyToOne,
+  JoinColumn,
+} from 'typeorm';
+
+import { HistoriaClinicaSnapshotOrmEntity } from './historia-clinica-snapshot.orm-entity';
 
 @Entity('auditoria_historia')
 export class AuditoriaOrmEntity {
@@ -16,4 +24,8 @@ export class AuditoriaOrmEntity {
 
   @Column()
   fecha: Date;
+
+  @ManyToOne(() => HistoriaClinicaSnapshotOrmEntity)
+  @JoinColumn({ name: 'historiaId' })
+  historiaClinica: HistoriaClinicaSnapshotOrmEntity;
 }

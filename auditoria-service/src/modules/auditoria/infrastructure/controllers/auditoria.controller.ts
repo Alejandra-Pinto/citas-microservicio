@@ -9,4 +9,9 @@ export class AuditoriaController {
   async obtenerTodas() {
     return this.auditoriaService.obtenerTodas();
   }
+
+  @Get('listar')
+  async obtenerTodasConHC() {
+    return this.auditoriaService.obtenerTodasConHC();
+  }
 }

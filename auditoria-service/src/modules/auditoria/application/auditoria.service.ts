@@ -18,4 +18,13 @@ export class AuditoriaService {
       },
     });
   }
+
+  async obtenerTodasConHC() {
+    return this.auditoriaRepo.find({
+      relations: ['historiaClinica'],
+      order: {
+        fecha: 'DESC',
+      },
+    });
+  }
 }
